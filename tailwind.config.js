@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       fontFamily: {
         Roboto: ["Roboto", ...defaultTheme.fontFamily.sans],
+        Abril: ["Abril Fatface", ...defaultTheme.fontFamily.sans],
       },
     },
   },
