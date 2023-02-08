@@ -1,5 +1,4 @@
-import { useAddress } from "@thirdweb-dev/react";
-import { useDisconnect } from "@thirdweb-dev/react";
+import { useAddress, useDisconnect } from "@thirdweb-dev/react";
 
 interface Props {
   openModal: () => void;
@@ -7,6 +6,14 @@ interface Props {
 
 const ConnectWallet = ({ openModal }: Props) => {
   const address = useAddress();
+
+  const truncateRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/;
+
+  const truncateAddress = (address: string) => {
+    const match = address.match(truncateRegex);
+    if (!match) return address;
+    return `${match[1]}…${match[2]}`;
+  };
 
   const disconnect = useDisconnect();
 
@@ -17,7 +24,7 @@ const ConnectWallet = ({ openModal }: Props) => {
           onClick={disconnect}
           className="xl:ml-auto xl:basis-[8%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-sm hover:bg-transparent hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all"
         >
-          {address}
+          {truncateAddress(address)}
         </button>
       ) : (
         <button
