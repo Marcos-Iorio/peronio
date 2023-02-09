@@ -23,8 +23,8 @@ const ConnectWallet = ({ openModal }: Props) => {
   return (
     <>
       {address && (
-        <Menu as="div" className="relative contents">
-          <Menu.Button className="group z-20 xl:ml-auto xl:basis-[9%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-md hover:bg-[#0B4D76] hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all flex flex-row justify-center items-center">
+        <Menu as="div" className="relative contents z-50">
+          <Menu.Button className="group z-20 2xl:ml-auto 2xl:basis-[9%] xl:ml-auto xl:basis-[15%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-md hover:bg-[#0B4D76] hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all flex flex-row justify-center items-center">
             {truncateAddress(address)}
             <ChevronDownIcon
               className="ml-2 -mr-1 h-5 w-5 text-[#1B262C] group-hover:text-[#00B7C2] delay-100 transition-all"
@@ -39,7 +39,7 @@ const ConnectWallet = ({ openModal }: Props) => {
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Menu.Items className="absolute flex flex-col gap-3 justify-center p-3 right-0 top-[20%] z-10 mt-2 w-56 h-52 origin-top-left border-solid border-2 border-[#00B7C2] rounded-md bg-[#0B4D76]/50 backdrop-blur-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="absolute flex flex-col gap-3 justify-center p-3 right-0 top-[20%] z-30 mt-2 w-56 h-52 origin-top-left border-solid border-2 border-[#00B7C2] rounded-md bg-[#0B4D76]/50 backdrop-blur-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <Menu.Item
                 as="div"
                 className="font-Robot p-2 flex flex-row w-full items-center text-lg text-[#00b7c2] rounded-md hover:bg-[#1B262C] bg-[#0B4D76]"
@@ -115,7 +115,7 @@ const ConnectWallet = ({ openModal }: Props) => {
       {!address && (
         <button
           onClick={() => openModal()}
-          className="xl:ml-auto xl:basis-[8%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-md hover:bg-transparent hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all"
+          className="2xl:ml-auto 2xl:basis-[8%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-md hover:bg-transparent hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all"
         >
           Conectar
         </button>

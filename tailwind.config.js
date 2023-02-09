@@ -11,6 +11,9 @@ module.exports = {
         Roboto: ["Roboto", ...defaultTheme.fontFamily.sans],
         Abril: ["Abril Fatface", ...defaultTheme.fontFamily.sans],
       },
+      backgroundImage: {
+        'sol': "url('/public/sol-bg.svg')"
+      }
     },
   },
 

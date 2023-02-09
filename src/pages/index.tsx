@@ -1,27 +1,34 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
 import type { NextPage } from "next";
+import styled from '@emotion/styled'
+
+import AnimatedUnderline from "../components/animatedUnderline/AnimatedUnderline";
+
+const Main = styled.main`
+height: 100%;
+width: 100%;
+background-image: url("/sol-bg.svg");
+background-size: contain;
+background-repeat: no-repeat;
+background-position: center center;
+`;
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <main className='flex flex-col items-center'>
-        <h1 className='mt-10 text-8xl'>Bienvenido</h1>
-
-        <div className='mt-10'>
-          <h2 className='text-4xl mb-5'>Instalado: </h2>
-          <div className='flex flex-col items-center space-y-5'>
-            <a href='http://thirdweb.com/'>Thirdweb</a>
-            <a href='https://tailwindcss.com/'>Tailwind</a>
-            <a href='https://nextjs.org/'>Nextjs</a>
-          </div>
+    <Main>
+      <header className="h-full w-full min-h-screen xl:p-20 text-center flex flex-col items-center">
+        <div className="relative h-fit w-fit xl:mb-10">
+          <h1 className="font-Abril text-center w-full h-full xl:text-[7rem]">Peronio</h1>
+          <AnimatedUnderline/>
         </div>
-
-        <div className='mt-10'>
-          <ConnectWallet />
-        </div>
-      </main>
-    </div>
+        <p className="font-Robot xl:text-3xl">Comprá, vendé, intercambiá y revisá precios historicos!</p>
+      </header>
+      <div>
+        
+      </div>
+    </Main>
   );
 };
 
 export default Home;
+
+
