@@ -10,9 +10,7 @@ import usePeronio from "./usePeronio";
 export const usePeronioRead = (method: string, args = []) => {
   const contract = usePeronio();
 
-  return useContractRead(contract, method, {
-    args,
-  });
+  return useContractRead(contract, method, { args });
 };
 
 export default usePeronioRead;

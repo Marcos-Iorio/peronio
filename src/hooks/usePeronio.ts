@@ -6,8 +6,8 @@ import { useContract } from "wagmi";
  */
 export const usePeronio = () => {
   return useContract({
-    addressOrName: peronioContract.address,
-    contractInterface: peronioContract.abi,
+    address: peronioContract.address,
+    abi: peronioContract.abi,
   });
 };
 

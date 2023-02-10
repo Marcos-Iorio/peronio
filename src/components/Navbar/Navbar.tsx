@@ -4,11 +4,7 @@ import ConnectWallet from "../ConnectWalletButton/ConnectWallet";
 
 import logo from "/public/logo-white.png";
 
-interface NavbarProps {
-  openModal: () => void;
-}
-
-const Navbar = (props: NavbarProps) => {
+const Navbar = () => {
   return (
     <nav className="2xl:flex 2xl:flex-col xl:flex xl:flex-col w-full items-center z-50">
       <div className="2xl:flex 2xl:flex-row 2xl:w-full 2xl:py-5 2xl:px-12 2xl:items-center xl:flex xl:flex-row xl:w-full xl:py-5 xl:px-12 xl:items-center ">
@@ -40,7 +36,7 @@ const Navbar = (props: NavbarProps) => {
         </ul>
         </div>
         
-        <ConnectWallet openModal={props.openModal} />
+        <ConnectWallet />
       </div>
       <div className="bg-[#00B7C2] 2xl:w-[95%] 2xl:h-px xl:w-[93%] xl:h-px"></div>
     </nav>

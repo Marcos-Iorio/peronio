@@ -31,7 +31,7 @@ const Home: NextPage = () => {
           Comprá, vendé, intercambiá y revisá precios historicos!
         </p>
       </header>
-      <div className="flex flex-col gap-5 justify-center xl:px-40 xl:pb-16">
+      <div className="flex flex-col gap-5 justify-center xl:px-20 2xl:px-40 xl:pb-16">
         <Charts />
       </div>
     </Main>
