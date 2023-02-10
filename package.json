@@ -16,6 +16,7 @@
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.14",
     "@next/font": "13.1.6",
+    "@peronio/core": "^2.0.1",
     "@thirdweb-dev/react": "^3",
     "@thirdweb-dev/sdk": "^3",
     "@types/recharts": "^1.8.24",
