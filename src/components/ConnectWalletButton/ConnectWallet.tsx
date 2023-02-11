@@ -12,14 +12,19 @@ const StyledDiv = styled.div`
 `;
 
 const ConnectWallet = () => {
+  const { address } = useAccount(); // address when connected
   return (
     <>
-        {/* <Menu as="div" className="relative contents z-50">
+      {/* <Menu as="div" className="relative contents z-50">
           <Menu.Button className="group z-20 2xl:ml-auto 2xl:basis-[9%] xl:ml-auto xl:basis-[15%] font-Roboto bg-[#00B7C2] text-[#1B262C] font-bold h-10 rounded-md hover:bg-[#0B4D76] hover:border-solid hover:border-[#00B7C2] hover:border hover:text-[#00B7C2] delay-100 transition-all flex flex-row justify-center items-center"> */}
-            <StyledDiv>
-              <ConnectKitButton label="Conectar monedero" showBalance={true} showAvatar={false}/>
-            </StyledDiv>
-            {/* <ChevronDownIcon
+      <StyledDiv>
+        <ConnectKitButton
+          label='Conectar monedero'
+          showBalance={true}
+          showAvatar={false}
+        />
+      </StyledDiv>
+      {/* <ChevronDownIcon
               className="ml-2 -mr-1 h-5 w-5 text-[#1B262C] group-hover:text-[#00B7C2] delay-100 transition-all"
               aria-hidden="true"
             />
