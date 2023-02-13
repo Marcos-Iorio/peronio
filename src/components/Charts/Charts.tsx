@@ -56,8 +56,6 @@ const dataEx = [
 ];
 
 const Charts = () => {
-  const {data, isError, isLoading} = usePeronioRead("collateralRatio", [])
-
   return (
     <>
       <div className="flex flex-row gap-5 min-w-full max-w-max">
@@ -67,11 +65,19 @@ const Charts = () => {
               <div className="font-Roboto xl:text-3xl font-bold">1.60</div>
               <div className="font-Roboto text-lg">1.8%</div>
             </div>
-            <div className="font-Roboto xl:text-2xl font-bold">Precio PE/ARS</div>
-            <div className="flex flex-row rounded-md border-solid border-[#00B7C2] border-2 bg-[#0B86D2]/20 backdrop-blur-sm gap-5 px-2">
-              <div className="font-Abril text-lg font-normal">24H</div>
-              <div className="font-Abril text-lg font-normal">1W</div>
-              <div className="font-Abril text-lg font-normal">1M</div>
+            <div className="font-Roboto xl:text-2xl font-bold">
+              Precio PE/ARS
+            </div>
+            <div className="flex flex-row rounded-md border-solid border-[#00B7C2] border-2 bg-[#0B86D2]/20 backdrop-blur-sm gap-3 p-2">
+              <div className="font-Abril text-lg font-normal  bg-[#0B4D76] hover:bg-[#06304b] p-2 rounded-md">
+                24H
+              </div>
+              <div className="font-Abril text-lg font-normal bg-[#0B4D76] hover:bg-[#06304b] p-2 rounded-md">
+                1W
+              </div>
+              <div className="font-Abril text-lg font-normal  bg-[#0B4D76] hover:bg-[#06304b] p-2 rounded-md">
+                1M
+              </div>
             </div>
           </div>
           <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-full">
@@ -88,9 +94,9 @@ const Charts = () => {
             >
               <defs>
                 <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0}/>
-              </linearGradient>
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
               </defs>
               <XAxis dataKey="name" />
               <Area
