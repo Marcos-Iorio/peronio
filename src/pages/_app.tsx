@@ -1,10 +1,13 @@
 import { AppProps } from "next/app";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar/Navbar";
+import MobileNavbar from "../components/Navbar/MobileNavbar";
 
 import { WagmiConfig, createClient } from "wagmi";
 import { polygon } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
+
+import { useMediaQuery } from 'react-responsive'
 
 const client = createClient(
   getDefaultClient({
@@ -16,6 +19,8 @@ const client = createClient(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const isMobile = useMediaQuery({query: '(max-width: 768px)'})
+
   return (
     <WagmiConfig client={client}>
       <ConnectKitProvider
@@ -35,7 +40,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           "--ck-primary-button-background": "#00B7C2",
         }}
       >
-        <Navbar />
+        {isMobile ? <MobileNavbar/> : <Navbar />}
         <Component {...pageProps} />
       </ConnectKitProvider>
     </WagmiConfig>

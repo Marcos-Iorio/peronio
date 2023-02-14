@@ -43,8 +43,8 @@ const Modal = (props: Props) => {
         >
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
-              <Dialog.Panel className="2xl:mx-auto 2xl:max-w-sm 2xl:rounded-lg 2xl:bg-[#0B4D76] 2xl:p-10">
-                <Dialog.Title className="2xl:text-white font-Abril text-2xl pb-5">
+              <Dialog.Panel className="mx-auto max-w-sm rounded-lg bg-[#0B4D76] p-10">
+                <Dialog.Title className="text-white font-Abril text-2xl pb-5">
                   {props.title}
                 </Dialog.Title>
                 <p className="font-Roboto">{props.text}</p>
