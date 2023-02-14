@@ -12,30 +12,30 @@ const Navbar = () => {
           <Image src={logo} alt="Logo Peronio" width={150} height={150}></Image>
         </div>
         <div className="relative">
-        <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-10 2xl:items-center xl:basis-1/2 xl:flex xl:flex-row xl:gap-10 xl:items-center">
-          <li>
-            <Link href="/emitir" className="text-white font-Roboto">
-              Emitir
-            </Link>
-          </li>
-          <li>
-            <Link href="/retirar" className="text-white font-Roboto">
-              Retirar
-            </Link>
-          </li>
-          <li>
-            <Link href="/migrar" className="text-white font-Roboto">
-              Migrar
-            </Link>
-          </li>
-          <li>
-            <Link href="/exchange" className="text-white font-Roboto">
-              Exchange
-            </Link>
-          </li>
-        </ul>
+          <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-10 2xl:items-center xl:basis-1/2 xl:flex xl:flex-row xl:gap-10 xl:items-center">
+            <li>
+              <Link href="/emitir" className="text-white font-Roboto">
+                Emitir
+              </Link>
+            </li>
+            <li>
+              <Link href="/retirar" className="text-white font-Roboto">
+                Retirar
+              </Link>
+            </li>
+            <li>
+              <Link href="/migrar" className="text-white font-Roboto">
+                Migrar
+              </Link>
+            </li>
+            <li>
+              <Link href="/exchange" className="text-white font-Roboto">
+                Exchange
+              </Link>
+            </li>
+          </ul>
         </div>
-        
+
         <ConnectWallet />
       </div>
       <div className="bg-[#00B7C2] 2xl:w-[95%] 2xl:h-px xl:w-[93%] xl:h-px"></div>

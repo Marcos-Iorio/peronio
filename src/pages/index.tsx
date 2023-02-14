@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import styled from "@emotion/styled";
+import { useState } from "react";
 
 import AnimatedUnderline from "../components/animatedUnderline/AnimatedUnderline";
 import Charts from "../components/Charts/Charts";
@@ -11,7 +12,7 @@ const Main = styled.main`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
-
+  padding-bottom: 100px;
   @media (min-width: 1280px) {
     min-height: 100vh;
   }
@@ -34,6 +35,9 @@ const Home: NextPage = () => {
       <div className="flex flex-col gap-5 justify-center xl:px-20 2xl:px-40 xl:pb-16">
         <Charts />
       </div>
+      <h3 className="text-4xl font-Abril text-center">
+        Chequeá nuestro exchange <span className="text-yellow-400">BLOCKS</span>
+      </h3>
     </Main>
   );
 };

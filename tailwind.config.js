@@ -7,13 +7,17 @@ module.exports = {
 
   theme: {
     extend: {
+      boxShadow: {
+        "modal-button": "0px 0px 30px 5px rgba(253,204,159,1)",
+        "modal-button-hover": "0px 0px 30px 10px rgba(253,204,159,1)",
+      },
       fontFamily: {
         Roboto: ["Roboto", ...defaultTheme.fontFamily.sans],
         Abril: ["Abril Fatface", ...defaultTheme.fontFamily.sans],
       },
       backgroundImage: {
-        'sol': "url('/public/sol-bg.svg')"
-      }
+        sol: "url('/public/sol-bg.svg')",
+      },
     },
   },
 
