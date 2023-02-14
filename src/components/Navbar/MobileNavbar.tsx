@@ -99,10 +99,6 @@ const liVariant = {
   },
 };
 
-const fadeInStart = { opacity: 0 };
-const fadeInEnd = { opacity: 1 };
-const fadeInTransition = { duration: 1 };
-
 const MobileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -111,7 +107,7 @@ const MobileNavbar = () => {
       <motion.nav
         initial={closed}
         animate={menuOpen ? "opened" : "closed"}
-        className="flex justify-between px-10 py-3"
+        className="flex justify-between px-3 py-3 items-center"
       >
         <div>
           <motion.button
