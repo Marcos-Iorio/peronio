@@ -2,7 +2,7 @@ import {motion} from 'framer-motion'
 
 const AnimatedUnderline = () => {
     return(
-        <motion.svg style={{position: "absolute", bottom: 0, left: 0}} width="307" height="12" viewBox="0 0 307 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <motion.svg className="mobile:h-auto mobile:w-32 xl:w-full xl:h-full" viewBox="0 0 307 12" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_375_35)">
               <motion.path initial={{pathLength: 0, opacity: 0 }} animate={{pathLength: 1, opacity: 1 }} transition={{duration: 1, ease: "easeInOut" }}  d="M306.641 2.21647C307.092 2.26801 306.933 1.61853 307 1.50513C306.239 1.64946 306.657 2.38142 306.641 2.21647Z" fill="#F24040"/>
               <motion.path initial={{pathLength: 0, opacity: 0 }} animate={{pathLength: 1, opacity: 1 }} transition={{duration: 1, ease: "easeInOut" }}  d="M299.159 3.69072L299.293 3.43298L298.189 4.08247L299.159 3.69072Z" fill="#F24040"/>

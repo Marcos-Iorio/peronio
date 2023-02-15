@@ -6,8 +6,8 @@ import logo from "/public/logo-white.png";
 
 const Navbar = () => {
   return (
-    <nav className="2xl:flex 2xl:flex-col xl:flex xl:flex-col w-full items-center z-50">
-      <div className="2xl:flex 2xl:flex-row 2xl:w-full 2xl:py-5 2xl:px-12 2xl:items-center xl:flex xl:flex-row xl:w-full xl:py-5 xl:px-12 xl:items-center ">
+    <nav className="2xl:flex 2xl:flex-col xl:flex xl:flex-col lg:flex-col w-full items-center z-50">
+      <div className="2xl:flex 2xl:flex-row 2xl:w-full 2xl:py-5 2xl:px-12 2xl:items-center xl:flex xl:flex-row lg:flex-row xl:w-full xl:py-5 xl:px-12 xl:items-center ">
         <div className="basis-2/12">
           <Image src={logo} alt="Logo Peronio" width={150} height={150}></Image>
         </div>

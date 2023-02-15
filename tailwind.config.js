@@ -19,6 +19,10 @@ module.exports = {
         sol: "url('/public/sol-bg.svg')",
       },
     },
+    screens: {
+      'mobile': '320px',
+      'xl': '1280px'
+    },
   },
 
   plugins: [],

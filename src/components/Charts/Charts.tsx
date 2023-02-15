@@ -77,15 +77,15 @@ const Charts = () => {
 
   return (
     <>
-      <div className="flex flex-row gap-5 min-w-full max-w-max">
+      <div className="flex xl:flex-row mobile:flex-col mobile:min-h-full gap-5">
         <div className="p-5 xl:basis-4/6 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] flex flex-col">
-          <div className="flex flex-row w-full justify-between">
+          <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
             <div className="flex flex-row gap-3">
-              <div className="font-Roboto xl:text-3xl font-bold">1.60</div>
-              <div className="font-Roboto text-lg">1.8%</div>
+              <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">1.60</div>
+              <div className="font-Roboto text-lg mobile:text-xl">1.8%</div>
             </div>
-            <div className="font-Roboto xl:text-2xl font-bold flex flex-row gap-5">
-              <p className="text-2xl font-Roboto">Precio PE/ARS</p>
+            <div className="font-Roboto xl:text-2xl font-bold flex flex-row mobile:justify-between mobile:mb-2 gap-5">
+              <p className="xL:text-2xl mobile:text-xl font-Roboto">Precio PE/ARS</p>
               <button
                 type="button"
                 onClick={() => setShowPriceModal(true)}
@@ -104,7 +104,7 @@ const Charts = () => {
                 />
               )}
             </div>
-            <div className="flex flex-row rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
+            <div className="flex flex-row mobile:justify-evenly rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
               <div className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
                 24H
               </div>
@@ -159,7 +159,7 @@ const Charts = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row gap-5 min-w-full flex-nowrap flex-grow-0-1 max-h-[20rem]">
+      <div className="flex mobile:flex-col xl:flex-row gap-5 min-w-full flex-nowrap flex-grow-0-1 max-h-[20rem]">
         <div className="p-5 xl:basis-[15%] 2xl:basis-[20%] w-full border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]">
           <div className="flex flex-col h-full w-full items-center justify-center align-middle">
             <div className="flex flex-row w-full justify-between">
@@ -194,7 +194,7 @@ const Charts = () => {
         <div className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:max-w-[80%] flex flex-col">
           <div className="flex flex-row w-full justify-center">
             <p className="text-2xl font-Roboto">0.0041</p>
-            <div className="font-Roboto xl:text-xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
+            <div className="font-Roboto xl:text-xl mobile:text-2xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
               <p>Liquidity pool</p>
               <span>(PE/USDT)</span>
             </div>
@@ -236,7 +236,7 @@ const Charts = () => {
             Bóveda
           </p>
           <div className="flex 2xl:flex-row xl:flex-col justify-center w-full 2xl:h-full">
-            <div className="xl:hidden 2xl:flex flex flex-col w-full justify-center 2xl:items-center rounded-md bg-[#1b1b1b]/30 box-content">
+            <div className="mobile:hidden xl:hidden 2xl:flex flex flex-col w-full justify-center 2xl:items-center rounded-md bg-[#1b1b1b]/30 box-content">
               <p className="font-Roboto text-2xl text-center h-fit">Bóveda</p>
               <motion.div
                 initial={{ y: -100 }}
@@ -261,7 +261,7 @@ const Charts = () => {
               <div className="flex flex-col w-full">
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
-                  <p className="text-center font-Roboto xl:text-2xl 2xl:text-3xl">
+                  <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     10.000
                   </p>
                 </div>
@@ -269,15 +269,15 @@ const Charts = () => {
               <div className="flex flex-col w-full">
                 <p className=" font-Roboto text-md">PE en circulación</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
-                  <p className="text-center font-Roboto xl:text-2xl 2xl:text-3xl">
+                  <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     2.500.000
                   </p>
                 </div>
               </div>
               <div className="flex flex-col w-full">
-                <p className=" font-Roboto text-md">Rrecio PE por USDT</p>
+                <p className=" font-Roboto text-md">Precio PE por USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
-                  <p className="text-center font-Roboto xl:text-2xl 2xl:text-3xl">
+                  <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     0.004
                   </p>
                 </div>

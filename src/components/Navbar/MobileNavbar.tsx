@@ -103,7 +103,7 @@ const MobileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <main className="h-full overflow-y-hidde">
+    <div className="h-full">
       <motion.nav
         initial={closed}
         animate={menuOpen ? "opened" : "closed"}
@@ -195,7 +195,7 @@ const MobileNavbar = () => {
           </motion.div>
         </motion.div>
       </motion.nav>
-    </main>
+    </div>
   );
 };
 
