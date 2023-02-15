@@ -20,8 +20,11 @@ module.exports = {
       },
     },
     screens: {
-      'mobile': '320px',
-      'xl': '1280px'
+      mobile: "320px",
+      xl: "1280px",
+      "2xl": "1500px",
+      laptop: "1024px",
+      md: "768px",
     },
   },
 
