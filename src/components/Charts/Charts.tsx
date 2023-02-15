@@ -159,7 +159,7 @@ const Charts = () => {
           </div>
         </div>
       </div>
-      <div className="flex mobile:flex-col xl:flex-row gap-5 min-w-full flex-nowrap flex-grow-0-1 max-h-[20rem]">
+      <div className="flex mobile:flex-col xl:flex-row gap-5 min-w-full flex-nowrap flex-grow-0-1 xl:max-h-[20rem]">
         <div className="p-5 xl:basis-[15%] 2xl:basis-[20%] w-full border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]">
           <div className="flex flex-col h-full w-full items-center justify-center align-middle">
             <div className="flex flex-row w-full justify-between">

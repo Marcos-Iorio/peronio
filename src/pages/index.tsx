@@ -22,6 +22,7 @@ const Main = styled.main`
     background-size: cover;
     overflow-y: auto;
     min-height: 100%;
+    padding-bottom: 20px;
   }
 `;
 
@@ -39,12 +40,12 @@ const Home: NextPage = () => {
           Comprá, vendé, intercambiá y revisá precios historicos!
         </p>
       </header>
-      <div className="flex xl:flex-col mobile:flex-col mobile:overflow-y-hidden mobile:h-full mobile:max-h-full mobile:min-h-full gap-5 justify-center mobile:px-7 pb-10 pt-10 xl:px-20 2xl:px-40 xl:pb-16">
-        <Charts />
-      </div>
-      <h3 className="mobile:mt-auto text-4xl mobile:3xl font-Abril text-center">
-        Chequeá nuestro exchange <span className="text-yellow-400">BLOCKS</span>
-      </h3>
+        <div className="flex xl:flex-col mobile:flex-col mobile:overflow-y-hidden mobile:h-full mobile:max-h-full mobile:min-h-full gap-5 justify-center mobile:px-7 pb-10 pt-10 xl:px-20 2xl:px-40 xl:pb-16">
+          <Charts />
+        </div>
+        <h3 className="mobile:mt-auto text-4xl mobile:3xl font-Abril text-center">
+          Chequeá nuestro exchange <span className="text-yellow-400">BLOCKS</span>
+        </h3>
     </Main>
   );
 };
