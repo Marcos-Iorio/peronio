@@ -29,8 +29,8 @@ const hideNavItemsVariant = {
     opacity: 1,
     y: "0%",
     transition: {
-      delay: 1.1,
-      duration: 0.5,
+      delay: 0.5,
+      duration: 0.3,
       ease: "easeInOut",
     },
   },
@@ -41,15 +41,15 @@ const mobileMenuVariant = {
     y: "0%",
     transition: {
       delay: 0.15,
-      duration: 1.1,
+      duration: 0.8,
       ease: [0.74, 0, 0.19, 1.02],
     },
   },
   closed: {
     y: "-100%",
     transition: {
-      delay: 0.35,
-      duration: 0.63,
+      delay: 0.15,
+      duration: 0.33,
       ease: [0.74, 0, 0.19, 1.02],
     },
   },
@@ -59,7 +59,7 @@ const fadeInVariant = {
   opened: {
     opacity: 1,
     transition: {
-      delay: 1.2,
+      delay: 1,
     },
   },
   closed: { opacity: 0 },
@@ -68,7 +68,7 @@ const fadeInVariant = {
 const ulVariant = {
   opened: {
     transition: {
-      delayChildren: 1,
+      delayChildren: 0.5,
       staggerChildren: 0.18,
     },
   },
@@ -85,7 +85,7 @@ const liVariant = {
     opacity: 1,
     y: "0%",
     transition: {
-      duration: 0.65,
+      duration: 0.25,
       ease: "easeOut",
     },
   },
@@ -135,7 +135,7 @@ const MobileNavbar = () => {
         >
           <motion.div
             variants={fadeInVariant}
-            className="flex flex-row w-full justify-between"
+            className="flex flex-row w-full justify-between items-center"
           >
             <div>
               <Image src={logo} alt="Peronio logo" width={100} height={50} />
@@ -143,7 +143,7 @@ const MobileNavbar = () => {
             <motion.button
               variants={fadeInVariant}
               onClick={() => setMenuOpen(false)}
-              className="z-50 self-end"
+              className="z-50 self-start bg-black/5 rounded-lg hover:bg-black/20 p-2"
             >
               <TfiClose className="text-white w-6 h-6" />
             </motion.button>
