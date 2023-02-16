@@ -2,9 +2,6 @@ import {
   AreaChart,
   Area,
   XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
   ResponsiveContainer,
 } from "recharts";
 
@@ -13,14 +10,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-import usePeronioRead from "../../hooks/usePeronioRead";
-
-interface HomeModalProps {
-  isOpen: boolean;
-  openModal: () => void;
-  title: string;
-  text: string;
-}
 
 const dataEx = [
   {
@@ -67,6 +56,38 @@ const dataEx = [
   },
 ];
 
+const showChartsVariants = {
+  visible: {
+    transition: {
+      delayChildren: 1,
+      staggerChildren: 0.18,
+    }
+  },
+  hidden: {
+    transition:{
+      staggerChildren: 0.06,
+      staggerDirection: -1
+    }
+  }
+}
+
+const chartVariant = {
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+  hidden: {
+    opacity: 0,
+    transition: {
+      duration: 0.25,
+      ease: "easeInOut",
+    },
+  },
+}
+
 import imagenBoveda from "/public/boveda.svg";
 import Modal from "../Modal/Modal";
 
@@ -77,8 +98,8 @@ const Charts = () => {
 
   return (
     <>
-      <div className="flex laptop:flex-row mobile:flex-col mobile:min-h-full gap-5">
-        <div className="p-5 xl:basis-4/6 laptop:basis-1/2 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] laptop:max-w-[50%] flex flex-col">
+      <motion.div variants={showChartsVariants} initial="hidden" animate="visible" className="flex laptop:flex-row mobile:flex-col mobile:min-h-full gap-5">
+        <motion.div variants={chartVariant} className="p-5 xl:basis-4/6 laptop:basis-1/2 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] laptop:max-w-[50%] flex flex-col">
           <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
             <div className="flex flex-row gap-3">
               <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">
@@ -148,8 +169,8 @@ const Charts = () => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-        <div className="p-5 xl:basis-2/6 laptop:basis-1/2 2xl:basis-1/5 min-w-max border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md">
+        </motion.div>
+        <motion.div variants={chartVariant} className="p-5 xl:basis-2/6 laptop:basis-1/2 2xl:basis-1/5 min-w-max border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md">
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
               <p className="text-lg font-Roboto text-center">USDT/PE</p>
@@ -161,10 +182,10 @@ const Charts = () => {
               <p className="text-center text-6xl">380</p>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="flex mobile:flex-col xl:flex-row xl:flex-nowrap xl:min-w-full gap-5 2xl:min-w-full 2xl:flex-nowrap laptop:flex-row laptop:max-w-fit laptop:flex-wrap xl:max-h-[20rem]">
-        <div className="p-5 2xl:basis-[20%] laptop:basis-1/2 laptop:max-w-fit border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]">
+        </motion.div>
+      </motion.div>
+      <motion.div variants={showChartsVariants} initial="hidden" animate="visible" className="flex mobile:flex-col xl:flex-row xl:flex-nowrap xl:min-w-full gap-5 2xl:min-w-full 2xl:flex-nowrap laptop:flex-row laptop:max-w-fit laptop:flex-wrap xl:max-h-[20rem]">
+        <motion.div variants={chartVariant} className="p-5 2xl:basis-[20%] laptop:basis-1/2 laptop:max-w-fit border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]">
           <div className="flex flex-col h-full w-full items-center justify-center align-middle">
             <div className="flex flex-row w-full justify-between">
               <p className="text-2xl font-Roboto">Equilibrado</p>
@@ -194,8 +215,8 @@ const Charts = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col">
+        </motion.div>
+        <motion.div variants={chartVariant} className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col">
           <div className="flex flex-row w-full justify-center">
             <p className="text-2xl font-Roboto">0.0041</p>
             <div className="font-Roboto xl:text-xl mobile:text-2xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
@@ -234,8 +255,8 @@ const Charts = () => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-        <div className="p-3 xl:basis-2/6 xl:min-w-[33%] laptop:basis-full 2xl:basis-2/5 laptop:w-full 2xl:max-w-[40%]  border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md ">
+        </motion.div>
+        <motion.div variants={chartVariant} className="p-3 xl:basis-2/6 xl:max-w-[31%] laptop:basis-full 2xl:basis-2/5 laptop:w-full 2xl:max-w-[40%]  border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md ">
           <p className="2xl:hidden laptop:hidden xl:block font-Roboto text-2xl text-center h-fit">
             Bóveda
           </p>
@@ -289,8 +310,8 @@ const Charts = () => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </>
   );
 };

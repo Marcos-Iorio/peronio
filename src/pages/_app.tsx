@@ -8,6 +8,7 @@ import { polygon } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
 import { useMediaQuery } from 'react-responsive'
+import WizardModal from "../components/WizardModal/WizardModal";
 
 const client = createClient(
   getDefaultClient({
@@ -43,6 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {isMobile ? <MobileNavbar/> : <Navbar />}
         <Component {...pageProps} />
       </ConnectKitProvider>
+      <WizardModal/>
     </WagmiConfig>
   );
 }
