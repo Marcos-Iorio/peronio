@@ -195,8 +195,11 @@ const MobileNavbar = () => {
           </motion.div>
         </motion.div>
       </motion.nav>
+      <div className="bg-[#00B7C2] w-[93%] mx-3 h-px"></div>
     </div>
   );
 };
 
 export default MobileNavbar;
+
+
