@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -102,6 +103,14 @@ const liVariant = {
 const MobileNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const closeMenuHandler = () => {
+    setTimeout(() => {
+      setMenuOpen(false);
+    }, 500);
+  };
+
+  const router = useRouter();
+
   return (
     <div className="h-full">
       <motion.nav
@@ -153,30 +162,70 @@ const MobileNavbar = () => {
             variants={ulVariant}
             className="self-center w-full text-center basis-1/2 mt-14 flex flex-col gap-2"
           >
-            <motion.li className="py-5 text-3xl bg-black/5 rounded-md hover:bg-black/20">
+            <motion.li
+              className={`py-5 text-3xl rounded-md ${
+                router.pathname == "/emitir"
+                  ? "bg-[#00B7C2]"
+                  : "bg-black/5 hover:bg-black/20"
+              }`}
+            >
               <motion.div variants={liVariant}>
-                <Link href="/emitir" className="text-white font-Abril">
+                <Link
+                  href="/emitir"
+                  onClick={closeMenuHandler}
+                  className="text-white font-Abril"
+                >
                   Emitir
                 </Link>
               </motion.div>
             </motion.li>
-            <motion.li className="py-5 text-3xl bg-black/5 rounded-md hover:bg-black/20">
+            <motion.li
+              className={`py-5 text-3xl rounded-md ${
+                router.pathname == "/retirar"
+                  ? "bg-[#00B7C2]"
+                  : "bg-black/5 hover:bg-black/20"
+              }`}
+            >
               <motion.div variants={liVariant}>
-                <Link href="/retirar" className="text-white font-Abril">
+                <Link
+                  href="/retirar"
+                  onClick={closeMenuHandler}
+                  className="text-white font-Abril"
+                >
                   Retirar
                 </Link>
               </motion.div>
             </motion.li>
-            <motion.li className="py-5 text-3xl bg-black/5 rounded-md hover:bg-black/20">
+            <motion.li
+              className={`py-5 text-3xl rounded-md ${
+                router.pathname == "/migrar"
+                  ? "bg-[#00B7C2]"
+                  : "bg-black/5 hover:bg-black/20"
+              }`}
+            >
               <motion.div variants={liVariant}>
-                <Link href="/migrar" className="text-white font-Abril">
+                <Link
+                  href="/migrar"
+                  onClick={closeMenuHandler}
+                  className="text-white font-Abril"
+                >
                   Migrar
                 </Link>
               </motion.div>
             </motion.li>
-            <motion.li className="py-5 text-3xl bg-black/5 rounded-md hover:bg-black/20">
+            <motion.li
+              className={`py-5 text-3xl rounded-md ${
+                router.pathname == "/exchange"
+                  ? "bg-[#00B7C2]"
+                  : "bg-black/5 hover:bg-black/20"
+              }`}
+            >
               <motion.div variants={liVariant}>
-                <Link href="/exchange" className="text-white font-Abril">
+                <Link
+                  href="/exchange"
+                  onClick={closeMenuHandler}
+                  className="text-white font-Abril"
+                >
                   Exchange
                 </Link>
               </motion.div>
@@ -201,5 +250,3 @@ const MobileNavbar = () => {
 };
 
 export default MobileNavbar;
-
-
