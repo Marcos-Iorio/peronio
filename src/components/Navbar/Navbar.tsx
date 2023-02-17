@@ -8,9 +8,9 @@ const Navbar = () => {
   return (
     <nav className="2xl:flex 2xl:flex-col laptop:flex laptop:flex-col lg:flex-col md:flex-col md:flex w-full items-center z-50">
       <div className="2xl:flex 2xl:flex-row 2xl:w-full 2xl:py-5 2xl:px-12 2xl:items-center laptop:flex laptop:flex-row lg:flex-row md:flex md:flex-row md:py-5 md:px-7 md:w-full laptop:w-full laptop:py-5 laptop:px-12 laptop:items-center ">
-        <div className="basis-2/12">
+        <Link href="/" className="basis-2/12">
           <Image src={logo} alt="Logo Peronio" width={150} height={150}></Image>
-        </div>
+        </Link>
         <div className="relative md:basis-2/3 md:ml-7">
           <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-10 2xl:items-center laptop:basis-1/2 laptop:flex laptop:flex-row laptop:gap-10 laptop:items-center md:basis-2/3 md:flex md:flex-row md:gap-10 md:items-center">
             <li>
