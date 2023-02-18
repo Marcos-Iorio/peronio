@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 
 import {
@@ -8,7 +8,7 @@ import {
   AiOutlineGithub,
   AiOutlineInstagram,
   AiFillTwitterCircle,
-  AiFillYoutube,
+  AiFillYoutube
 } from "react-icons/ai";
 import { FaDiscord, FaTelegram } from "react-icons/fa";
 import { TfiClose } from "react-icons/tfi";
@@ -16,6 +16,8 @@ import { TfiClose } from "react-icons/tfi";
 import logo from "/public/logo-white.png";
 import ConnectWallet from "../ConnectWalletButton/ConnectWallet";
 import Link from "next/link";
+import menu from "../../constants/menu";
+import MobileNavElement from "./MobileNavElement";
 
 const hideNavItemsVariant = {
   opened: {
@@ -23,8 +25,8 @@ const hideNavItemsVariant = {
     y: "-100%",
     transition: {
       duration: 0.5,
-      ease: "easeInOut",
-    },
+      ease: "easeInOut"
+    }
   },
   closed: {
     opacity: 1,
@@ -32,9 +34,9 @@ const hideNavItemsVariant = {
     transition: {
       delay: 0.5,
       duration: 0.3,
-      ease: "easeInOut",
-    },
-  },
+      ease: "easeInOut"
+    }
+  }
 };
 
 const mobileMenuVariant = {
@@ -43,61 +45,42 @@ const mobileMenuVariant = {
     transition: {
       delay: 0.15,
       duration: 0.8,
-      ease: [0.74, 0, 0.19, 1.02],
-    },
+      ease: [0.74, 0, 0.19, 1.02]
+    }
   },
   closed: {
     y: "-100%",
     transition: {
       delay: 0.15,
       duration: 0.33,
-      ease: [0.74, 0, 0.19, 1.02],
-    },
-  },
+      ease: [0.74, 0, 0.19, 1.02]
+    }
+  }
 };
 
 const fadeInVariant = {
   opened: {
     opacity: 1,
     transition: {
-      delay: 1,
-    },
+      delay: 1
+    }
   },
-  closed: { opacity: 0 },
+  closed: { opacity: 0 }
 };
 
 const ulVariant = {
   opened: {
     transition: {
       delayChildren: 0.5,
-      staggerChildren: 0.18,
-    },
+      staggerChildren: 0.18
+    }
   },
   closed: {
     transition: {
       staggerChildren: 0.06,
-      staggerDirection: -1,
-    },
-  },
-};
-
-const liVariant = {
-  opened: {
-    opacity: 1,
-    y: "0%",
-    transition: {
-      duration: 0.25,
-      ease: "easeOut",
-    },
-  },
-  closed: {
-    opacity: 0,
-    y: "100%",
-    transition: {
-      duration: 0.25,
-      ease: "easeInOut",
-    },
-  },
+      staggerDirection: -1
+    }
+  }
 };
 
 const MobileNavbar = () => {
@@ -162,75 +145,15 @@ const MobileNavbar = () => {
             variants={ulVariant}
             className="self-center w-full text-center basis-1/2 mt-14 flex flex-col gap-2"
           >
-            <motion.li
-              className={`py-5 text-3xl rounded-md ${
-                router.pathname == "/emitir"
-                  ? "bg-[#00B7C2]"
-                  : "bg-black/5 hover:bg-black/20"
-              }`}
-            >
-              <motion.div variants={liVariant}>
-                <Link
-                  href="/emitir"
-                  onClick={closeMenuHandler}
-                  className="text-white font-Abril"
-                >
-                  Emitir
-                </Link>
-              </motion.div>
-            </motion.li>
-            <motion.li
-              className={`py-5 text-3xl rounded-md ${
-                router.pathname == "/retirar"
-                  ? "bg-[#00B7C2]"
-                  : "bg-black/5 hover:bg-black/20"
-              }`}
-            >
-              <motion.div variants={liVariant}>
-                <Link
-                  href="/retirar"
-                  onClick={closeMenuHandler}
-                  className="text-white font-Abril"
-                >
-                  Retirar
-                </Link>
-              </motion.div>
-            </motion.li>
-            <motion.li
-              className={`py-5 text-3xl rounded-md ${
-                router.pathname == "/migrar"
-                  ? "bg-[#00B7C2]"
-                  : "bg-black/5 hover:bg-black/20"
-              }`}
-            >
-              <motion.div variants={liVariant}>
-                <Link
-                  href="/migrar"
-                  onClick={closeMenuHandler}
-                  className="text-white font-Abril"
-                >
-                  Migrar
-                </Link>
-              </motion.div>
-            </motion.li>
-            <motion.li
-              className={`py-5 text-3xl rounded-md ${
-                router.pathname == "/exchange"
-                  ? "bg-[#00B7C2]"
-                  : "bg-black/5 hover:bg-black/20"
-              }`}
-            >
-              <motion.div variants={liVariant}>
-                <Link
-                  href="/exchange"
-                  onClick={closeMenuHandler}
-                  className="text-white font-Abril"
-                >
-                  Exchange
-                </Link>
-              </motion.div>
-            </motion.li>
+            {menu.map((item, index) => (
+              <MobileNavElement
+                menuItem={item}
+                onClick={closeMenuHandler}
+                key={index}
+              />
+            ))}
           </motion.ul>
+
           <motion.div
             variants={fadeInVariant}
             className="flex flex-row gap-6 justify-center mt-20 bg-black/5 rounded-md p-5 w-full"
