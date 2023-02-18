@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -15,7 +14,6 @@ import { TfiClose } from "react-icons/tfi";
 
 import logo from "/public/logo-white.png";
 import ConnectWallet from "../ConnectWalletButton/ConnectWallet";
-import Link from "next/link";
 import menu from "../../constants/menu";
 import MobileNavElement from "./MobileNavElement";
 
@@ -91,8 +89,6 @@ const MobileNavbar = () => {
       setMenuOpen(false);
     }, 500);
   };
-
-  const router = useRouter();
 
   return (
     <div className="h-full">
