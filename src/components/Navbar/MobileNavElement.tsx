@@ -32,7 +32,7 @@ const MobileNavElement = ({ menuItem, onClick }: MobileNavElementProps) => {
   const router = useRouter();
   return (
     <motion.li
-      className={`py-5 text-3xl rounded-md ${
+      className={`py-5 text-3xl cursor-pointer rounded-md ${
         router.pathname == "/emitir"
           ? "bg-[#00B7C2]"
           : "bg-black/5 hover:bg-black/20"
