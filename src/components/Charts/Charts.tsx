@@ -83,7 +83,6 @@ const chartVariant = {
 };
 
 import imagenBoveda from "/public/boveda.svg";
-import Modal from "../Modal/Modal";
 import InfoPopover from "../InfoPopover/InfoPopover";
 
 const Charts = () => {
