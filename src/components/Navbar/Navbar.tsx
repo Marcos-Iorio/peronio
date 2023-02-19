@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import logo from "/public/logo-white.png";
 
 const Navbar = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <nav className="2xl:flex 2xl:flex-col laptop:flex laptop:flex-col lg:flex-col md:flex-col md:flex w-full items-center z-50">
@@ -17,22 +17,46 @@ const Navbar = () => {
         </Link>
         <div className="relative md:basis-2/3 md:ml-7">
           <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-10 2xl:items-center laptop:basis-1/2 laptop:flex laptop:flex-row laptop:gap-10 laptop:items-center md:basis-2/3 md:flex md:flex-row md:gap-10 md:items-center">
-            <li className={router.pathname === '/emitir' ? 'bg-[#00B7C2]/90 rounded-lg p-2': 'hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100'}>
+            <li
+              className={
+                router.pathname === "/emitir"
+                  ? "bg-[#00B7C2]/90 rounded-lg p-2"
+                  : "hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100"
+              }
+            >
               <Link href="/emitir" className="text-white font-Roboto">
                 Emitir
               </Link>
             </li>
-            <li className={router.pathname === '/retirar' ? 'bg-[#00B7C2]/90 rounded-lg p-2': 'hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100'}>
+            <li
+              className={
+                router.pathname === "/retirar"
+                  ? "bg-[#00B7C2]/90 rounded-lg p-2"
+                  : "hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100"
+              }
+            >
               <Link href="/retirar" className="text-white font-Roboto">
                 Retirar
               </Link>
             </li>
-            <li className={router.pathname === '/migrar' ? 'bg-[#00B7C2]/90 rounded-lg p-2': 'hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100'}>
+            <li
+              className={
+                router.pathname === "/migrar"
+                  ? "bg-[#00B7C2]/90 rounded-lg p-2"
+                  : "hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100"
+              }
+            >
               <Link href="/migrar" className="text-white font-Roboto">
                 Migrar
               </Link>
             </li>
-            <li className={router.pathname === '/exchange' ? 'bg-[#00B7C2]/90 rounded-lg p-2': 'hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100'}>
+            <li
+              className={
+                router.pathname === "/exchange"
+                  ? "bg-[#00B7C2]/90 rounded-lg p-2"
+                  : "hover:bg-black/10 hover:rounded-lg p-2 cursor-pointer transition-all ease-in delay-100"
+              }
+            >
               <Link href="/exchange" className="text-white font-Roboto">
                 Exchange
               </Link>
