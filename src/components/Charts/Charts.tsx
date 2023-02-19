@@ -1,105 +1,104 @@
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  ResponsiveContainer,
-} from "recharts";
+import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
 
 import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-
 const dataEx = [
   {
     name: "Page A",
     uv: 4000,
     pv: 2400,
-    amt: 2400,
+    amt: 2400
   },
   {
     name: "Page B",
     uv: 3000,
     pv: 1398,
-    amt: 2210,
+    amt: 2210
   },
   {
     name: "Page C",
     uv: 2000,
     pv: 9800,
-    amt: 2290,
+    amt: 2290
   },
   {
     name: "Page D",
     uv: 2780,
     pv: 3908,
-    amt: 2000,
+    amt: 2000
   },
   {
     name: "Page E",
     uv: 1890,
     pv: 4800,
-    amt: 2181,
+    amt: 2181
   },
   {
     name: "Page F",
     uv: 2390,
     pv: 3800,
-    amt: 2500,
+    amt: 2500
   },
   {
     name: "Page G",
     uv: 3490,
     pv: 4300,
-    amt: 2100,
-  },
+    amt: 2100
+  }
 ];
 
 const showChartsVariants = {
   visible: {
     transition: {
       delayChildren: 1,
-      staggerChildren: 0.18,
+      staggerChildren: 0.18
     }
   },
   hidden: {
-    transition:{
+    transition: {
       staggerChildren: 0.06,
       staggerDirection: -1
     }
   }
-}
+};
 
 const chartVariant = {
   visible: {
     opacity: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut",
-    },
+      ease: "easeOut"
+    }
   },
   hidden: {
     opacity: 0,
     transition: {
       duration: 0.25,
-      ease: "easeInOut",
-    },
-  },
-}
+      ease: "easeInOut"
+    }
+  }
+};
 
 import imagenBoveda from "/public/boveda.svg";
 import Modal from "../Modal/Modal";
+import InfoPopover from "../InfoPopover/InfoPopover";
 
 const Charts = () => {
-  const [showPriceModal, setShowPriceModal] = useState(false);
-  const [showGaugeModal, setShowGaugeModal] = useState(false);
-  const [showLiquidityModal, setShowLiquidityModal] = useState(false);
-
   return (
     <>
-      <motion.div variants={showChartsVariants} initial="hidden" animate="visible" className="flex laptop:flex-row mobile:flex-col mobile:min-h-full gap-5">
-        <motion.div variants={chartVariant} className="p-5 xl:basis-4/6 laptop:basis-1/2 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] laptop:max-w-[50%] flex flex-col">
+      <motion.div
+        variants={showChartsVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex laptop:flex-row mobile:flex-col mobile:min-h-full gap-5"
+      >
+        <motion.div
+          variants={chartVariant}
+          className="p-5 xl:basis-4/6 laptop:basis-1/2 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] laptop:max-w-[50%] flex flex-col"
+        >
           <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
             <div className="flex flex-row gap-3">
               <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">
@@ -111,23 +110,7 @@ const Charts = () => {
               <p className="xL:text-2xl mobile:text-xl font-Roboto">
                 Precio PE/ARS
               </p>
-              <button
-                type="button"
-                onClick={() => setShowPriceModal(true)}
-                data-model="precio_pe/ars_modal"
-                className="text-lg font-Roboto rounded-full bg-[#00B7C2] w-7 h-7 text-center hover:bg-transparent hover:border-[#00B7C2] hover:border-solid hover:border"
-              >
-                ?
-              </button>
-              {showPriceModal && (
-                <Modal
-                  modalName="price_modal"
-                  isOpen={showPriceModal}
-                  title="¿Cómo se estima el precio del peronio"
-                  text="lorem ipsum"
-                  setModal={setShowPriceModal}
-                />
-              )}
+              <InfoPopover title='¿Que significa "Precio PE/ARS"?' text="asd" />
             </div>
             <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
               <div className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
@@ -150,7 +133,7 @@ const Charts = () => {
                 top: 40,
                 right: 0,
                 left: 0,
-                bottom: 0,
+                bottom: 0
               }}
             >
               <defs>
@@ -170,7 +153,10 @@ const Charts = () => {
             </AreaChart>
           </ResponsiveContainer>
         </motion.div>
-        <motion.div variants={chartVariant} className="p-5 xl:basis-2/6 laptop:basis-1/2 2xl:basis-1/5 min-w-max border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md">
+        <motion.div
+          variants={chartVariant}
+          className="p-5 xl:basis-2/6 laptop:basis-1/2 2xl:basis-1/5 min-w-max border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md"
+        >
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
               <p className="text-lg font-Roboto text-center">USDT/PE</p>
@@ -184,14 +170,20 @@ const Charts = () => {
           </div>
         </motion.div>
       </motion.div>
-      <motion.div variants={showChartsVariants} initial="hidden" animate="visible" className="flex mobile:flex-col xl:flex-row xl:flex-nowrap xl:min-w-full gap-5 2xl:min-w-full 2xl:flex-nowrap laptop:flex-row laptop:max-w-fit laptop:flex-wrap xl:max-h-[20rem]">
-        <motion.div variants={chartVariant} className="p-5 2xl:basis-[20%] laptop:basis-1/2 laptop:max-w-fit border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]">
+      <motion.div
+        variants={showChartsVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex mobile:flex-col xl:flex-row xl:flex-nowrap xl:min-w-full gap-5 2xl:min-w-full 2xl:flex-nowrap laptop:flex-row laptop:max-w-fit laptop:flex-wrap xl:max-h-[20rem]"
+      >
+        <motion.div
+          variants={chartVariant}
+          className="p-5 2xl:basis-[20%] laptop:basis-1/2 laptop:max-w-fit border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]"
+        >
           <div className="flex flex-col h-full w-full items-center justify-center align-middle">
             <div className="flex flex-row w-full justify-between">
               <p className="text-2xl font-Roboto">Equilibrado</p>
-              <span className="text-lg font-Roboto rounded-full bg-[#00B7C2] w-7 h-7 text-center">
-                ?
-              </span>
+              <InfoPopover title="¿Cómo funciona el indicador?" text="asd" />
             </div>
             <div className="rounded-md bg-[#1b1b1b]/30 box-content">
               <div className="flex flex-col justify-center items-center py-3">
@@ -216,16 +208,17 @@ const Charts = () => {
             </div>
           </div>
         </motion.div>
-        <motion.div variants={chartVariant} className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col">
-          <div className="flex flex-row w-full justify-center">
+        <motion.div
+          variants={chartVariant}
+          className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col"
+        >
+          <div className="flex flex-row w-full justify-between">
             <p className="text-2xl font-Roboto">0.0041</p>
             <div className="font-Roboto xl:text-xl mobile:text-2xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
               <p>Liquidity pool</p>
               <span>(PE/USDT)</span>
             </div>
-            <span className="text-lg font-Roboto rounded-full bg-[#00B7C2] w-7 h-7 text-center ml-auto">
-              ?
-            </span>
+            <InfoPopover title='¿Que es "el Liquidity Pool"?' text="asd" />
           </div>
           <ResponsiveContainer className="h-full w-full">
             <AreaChart
@@ -236,7 +229,7 @@ const Charts = () => {
                 top: 40,
                 right: 0,
                 left: 0,
-                bottom: 0,
+                bottom: 0
               }}
             >
               <defs>
@@ -256,7 +249,10 @@ const Charts = () => {
             </AreaChart>
           </ResponsiveContainer>
         </motion.div>
-        <motion.div variants={chartVariant} className="p-3 xl:basis-2/6 xl:max-w-[31%] laptop:basis-full 2xl:basis-2/5 laptop:w-full 2xl:max-w-[40%]  border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md ">
+        <motion.div
+          variants={chartVariant}
+          className="p-3 xl:basis-2/6 xl:max-w-[31%] laptop:basis-full 2xl:basis-2/5 laptop:w-full 2xl:max-w-[40%]  border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md "
+        >
           <p className="2xl:hidden laptop:hidden xl:block font-Roboto text-2xl text-center h-fit">
             Bóveda
           </p>
@@ -271,7 +267,7 @@ const Charts = () => {
                   stiffness: 2000,
                   repeat: Infinity,
                   repeatType: "mirror",
-                  duration: 5,
+                  duration: 5
                 }}
                 className="flex justify-center"
               >
