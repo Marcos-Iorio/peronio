@@ -9,7 +9,11 @@ import NavElement from "./NavElement";
 import menu from "../../constants/menu";
 import WizardButton from "../WizardButton/WizardButton";
 
-const Navbar = () => {
+interface INavbar {
+  openModal: (value: boolean) => void;
+}
+
+const Navbar = ({ openModal }: INavbar) => {
   const router = useRouter();
 
   let hasMetamaskOrCoinbase: boolean | undefined;
@@ -32,7 +36,11 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        {hasMetamaskOrCoinbase ? <ConnectWallet /> : <WizardButton />}
+        {hasMetamaskOrCoinbase ? (
+          <ConnectWallet />
+        ) : (
+          <WizardButton open={openModal} />
+        )}
       </div>
       <div className="bg-[#00B7C2] 2xl:w-[95%] 2xl:h-px laptop:w-[93%] laptop:h-px md:w-[93%] md:h-px"></div>
     </nav>

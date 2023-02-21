@@ -1,4 +1,5 @@
 import { AppProps } from "next/app";
+import { useState } from "react";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import MobileNavbar from "../components/Navbar/MobileNavbar";
@@ -20,6 +21,12 @@ const client = createClient(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [openWizardModal, setOpenWizardModal] = useState(false);
+
+  const closeModalHandler = () => {
+    setOpenWizardModal(false);
+  };
+
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
@@ -41,10 +48,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           "--ck-primary-button-background": "#00B7C2"
         }}
       >
-        {isMobile ? <MobileNavbar /> : <Navbar />}
+        {isMobile ? (
+          <MobileNavbar />
+        ) : (
+          <Navbar openModal={setOpenWizardModal} />
+        )}
         <Component {...pageProps} />
       </ConnectKitProvider>
-      <WizardModal />
+      {openWizardModal && <WizardModal onClose={closeModalHandler} />}
     </WagmiConfig>
   );
 }
