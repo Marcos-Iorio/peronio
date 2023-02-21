@@ -7,9 +7,17 @@ import { useRouter } from "next/router";
 import logo from "/public/logo-white.png";
 import NavElement from "./NavElement";
 import menu from "../../constants/menu";
+import WizardButton from "../WizardButton/WizardButton";
 
 const Navbar = () => {
   const router = useRouter();
+
+  let hasMetamaskOrCoinbase: boolean | undefined;
+
+  if (typeof window !== "undefined") {
+    hasMetamaskOrCoinbase =
+      window.ethereum?.isCoinbaseWallet || window.ethereum?.isMetaMask;
+  }
 
   return (
     <nav className="2xl:flex 2xl:flex-col laptop:flex laptop:flex-col lg:flex-col md:flex-col md:flex w-full items-center z-50">
@@ -24,7 +32,7 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
-        <ConnectWallet />
+        {hasMetamaskOrCoinbase ? <ConnectWallet /> : <WizardButton />}
       </div>
       <div className="bg-[#00B7C2] 2xl:w-[95%] 2xl:h-px laptop:w-[93%] laptop:h-px md:w-[93%] md:h-px"></div>
     </nav>

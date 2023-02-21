@@ -7,7 +7,7 @@ import { WagmiConfig, createClient } from "wagmi";
 import { polygon } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
-import { useMediaQuery } from 'react-responsive'
+import { useMediaQuery } from "react-responsive";
 import WizardModal from "../components/WizardModal/WizardModal";
 
 const client = createClient(
@@ -15,12 +15,12 @@ const client = createClient(
     appName: "Peronio dApp",
     //infuraId: process.env.NEXT_PUBLIC_INFURA_ID,
     //alchemyId:  process.env.NEXT_PUBLIC_ALCHEMY_ID,
-    chains: [polygon],
+    chains: [polygon]
   })
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isMobile = useMediaQuery({query: '(max-width: 768px)'})
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   return (
     <WagmiConfig client={client}>
@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           language: "es-ES",
           hideNoWalletCTA: true,
           embedGoogleFonts: true,
-          walletConnectCTA: "both",
+          walletConnectCTA: "both"
         }}
         customTheme={{
           "--ck-connectbutton-font-size": "16px",
@@ -38,13 +38,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           "--ck-connectbutton-box-shadow": "#00B7C2",
           "--ck-body-background": "#1B262C",
           "--ck-body-background-transparent": "#1B262C",
-          "--ck-primary-button-background": "#00B7C2",
+          "--ck-primary-button-background": "#00B7C2"
         }}
       >
-        {isMobile ? <MobileNavbar/> : <Navbar />}
+        {isMobile ? <MobileNavbar /> : <Navbar />}
         <Component {...pageProps} />
       </ConnectKitProvider>
-      <WizardModal/>
+      <WizardModal />
     </WagmiConfig>
   );
 }
