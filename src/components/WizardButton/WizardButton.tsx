@@ -1,14 +1,16 @@
-interface IWizardButton {
-  open: (value: boolean) => void;
-}
+import {useContext} from 'react'
+import { IWizardContext } from '../../../types/wizard';
+import { WizardContext } from '../../contexts/WizardContext';
 
-const WizardButton = ({ open }: IWizardButton) => {
+const WizardButton = () => {
+  const {openModalHandler} = useContext(WizardContext)
+
   return (
     <button
-      onClick={() => open(true)}
-      className="bg-[#00B7C2] rounded-xl text-Roboto font-bold py-2 px-5 text-white ml-auto shadow-wizard-button animate-neon "
+      onClick={openModalHandler}
+      className="border-[#00B7C2] border-solid border-2 rounded-xl text-Roboto text-sm font-normal py-2 px-5 text-white shadow-wizard-button"
     >
-      Comenzar Instalador
+      ¿Cómo comenzar?
     </button>
   );
 };

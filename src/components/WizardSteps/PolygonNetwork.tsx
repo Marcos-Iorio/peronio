@@ -1,10 +1,17 @@
 import { useWizard } from "react-use-wizard";
+import { useNetwork, useSwitchNetwork } from 'wagmi'
+import { polygon } from "wagmi/chains";
 
 import Image from "next/image";
 
 import manoPeron from "/public/mano-peron.png";
 
 const PolygonNetwork = () => {
+  const { chain } = useNetwork()
+  const network = useSwitchNetwork({
+    chainId: 137,
+  })
+
   return (
     <div className="flex flex-col px-10 py-3 relative h-full">
       <h1 className="font-Abril text-3xl mb-5">Usando la red Polygon</h1>
@@ -15,7 +22,7 @@ const PolygonNetwork = () => {
       <p className="text-Roboto text-xl">
         Hay muchas más redes, como BSC de Binance o la Mainnet de Ethereum.
       </p>
-      <button className="rounded-lg mt-auto mb-24 bg-[#FDCC9F] py-3 px-5 shadow-modal-button text-[#0B4D76] font-bold font-Roboto text-xl text-center hover:shadow-modal-button-hover transition-all delay-150 w-2/3">
+      <button onClick={() => network} className="rounded-lg mt-auto mb-24 bg-[#FDCC9F] py-3 px-5 shadow-modal-button text-[#0B4D76] font-bold font-Roboto text-xl text-center hover:shadow-modal-button-hover transition-all delay-150 w-2/3">
         Cambiar a red Polygon
       </button>
       <Image

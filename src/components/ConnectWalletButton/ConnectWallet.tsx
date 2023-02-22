@@ -6,7 +6,10 @@ import { useMediaQuery } from "react-responsive";
 const StyledDiv = styled.div`
   cursor: pointer;
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
   margin-left: auto;
 `;
 
@@ -15,6 +18,7 @@ const ConnectWallet = () => {
   const { address } = useAccount(); // address when connected
   return (
     <StyledDiv>
+      <p className="w-full font-Roboto">1 PE = 1.62ARS</p>
       {isMobile ? (
         <ConnectKitButton
           label="Conectar monedero"
@@ -24,7 +28,7 @@ const ConnectWallet = () => {
       ) : (
         <ConnectKitButton
           label="Conectar monedero"
-          showBalance={true}
+          showBalance={false}
           showAvatar={false}
         />
       )}

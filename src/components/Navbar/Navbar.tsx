@@ -8,12 +8,9 @@ import menu from "../../constants/menu";
 import WizardButton from "../WizardButton/WizardButton";
 import { useEffect } from "react";
 
-interface INavbar {
-  openModal: (value: boolean) => void;
-}
 let hasMetamaskOrCoinbase: boolean | undefined;
 
-const Navbar = ({ openModal }: INavbar) => {
+const Navbar = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       hasMetamaskOrCoinbase =
@@ -27,18 +24,15 @@ const Navbar = ({ openModal }: INavbar) => {
         <Link href="/" className="basis-2/12">
           <Image src={logo} alt="Logo Peronio" width={150} height={150}></Image>
         </Link>
-        <div className="relative md:basis-2/3 md:ml-7">
-          <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-10 2xl:items-center laptop:basis-1/2 laptop:flex laptop:flex-row laptop:gap-10 laptop:items-center md:basis-2/3 md:flex md:flex-row md:gap-10 md:items-center">
+        <div className="relative md:basis-1/2 md:ml-7">
+          <ul className="2xl:basis-1/2 2xl:flex 2xl:flex-row 2xl:gap-8 2xl:items-center laptop:basis-1/2 laptop:flex laptop:flex-row laptop:gap-5 laptop:items-center md:basis-2/3 md:flex md:flex-row md:gap-10 md:items-center">
             {menu.map((item, index) => (
               <NavElement key={index} menuItem={item} />
             ))}
+            <WizardButton/>
           </ul>
         </div>
-        {hasMetamaskOrCoinbase ? (
           <ConnectWallet />
-        ) : (
-          <WizardButton open={openModal} />
-        )}
       </div>
       <div className="bg-[#00B7C2] 2xl:w-[95%] 2xl:h-px laptop:w-[93%] laptop:h-px md:w-[93%] md:h-px"></div>
     </nav>

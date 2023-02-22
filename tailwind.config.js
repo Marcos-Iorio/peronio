@@ -23,7 +23,7 @@ module.exports = {
       boxShadow: {
         "modal-button": "0px 0px 30px 5px rgba(253,204,159,1)",
         "modal-button-hover": "0px 0px 30px 10px rgba(253,204,159,1)",
-        "wizard-button": "0px 0px 30px 5px rgb(0, 183, 194)"
+        "wizard-button": "0px 0px 15px 1px rgb(0, 183, 194)"
       },
       fontFamily: {
         Roboto: ["Roboto", ...defaultTheme.fontFamily.sans],

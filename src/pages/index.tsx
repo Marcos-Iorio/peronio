@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useContext } from "react";
+import WizardModal from "../components/WizardModal/WizardModal";
+import { WizardContext } from "../contexts/WizardContext";
 
 import AnimatedUnderline from "../components/animatedUnderline/AnimatedUnderline";
 import Charts from "../components/Charts/Charts";
@@ -28,6 +30,8 @@ const Main = styled.main`
 `;
 
 const Home: NextPage = () => {
+  const {isOpen} = useContext(WizardContext)
+
   return (
     <>
       <Head>
@@ -53,6 +57,7 @@ const Home: NextPage = () => {
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
+        {isOpen && <WizardModal/>}
       </Main>
     </>
   );
