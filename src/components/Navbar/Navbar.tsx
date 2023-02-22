@@ -2,26 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 import ConnectWallet from "../ConnectWalletButton/ConnectWallet";
 
-import { useRouter } from "next/router";
-
 import logo from "/public/logo-white.png";
 import NavElement from "./NavElement";
 import menu from "../../constants/menu";
 import WizardButton from "../WizardButton/WizardButton";
+import { useEffect } from "react";
 
 interface INavbar {
   openModal: (value: boolean) => void;
 }
+let hasMetamaskOrCoinbase: boolean | undefined;
 
 const Navbar = ({ openModal }: INavbar) => {
-  const router = useRouter();
-
-  let hasMetamaskOrCoinbase: boolean | undefined;
-
-  if (typeof window !== "undefined") {
-    hasMetamaskOrCoinbase =
-      window.ethereum?.isCoinbaseWallet || window.ethereum?.isMetaMask;
-  }
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      hasMetamaskOrCoinbase =
+        window.ethereum?.isCoinbaseWallet || window.ethereum?.isMetaMask;
+    }
+  }, []);
 
   return (
     <nav className="2xl:flex 2xl:flex-col laptop:flex laptop:flex-col lg:flex-col md:flex-col md:flex w-full items-center z-50">
