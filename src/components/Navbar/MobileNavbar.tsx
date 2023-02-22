@@ -16,6 +16,7 @@ import logo from "/public/logo-white.png";
 import ConnectWallet from "../ConnectWalletButton/ConnectWallet";
 import menu from "../../constants/menu";
 import MobileNavElement from "./MobileNavElement";
+import WizardButton from "../WizardButton/WizardButton";
 
 const hideNavItemsVariant = {
   opened: {
@@ -148,6 +149,7 @@ const MobileNavbar = () => {
                 key={index}
               />
             ))}
+            <WizardButton />
           </motion.ul>
 
           <motion.div

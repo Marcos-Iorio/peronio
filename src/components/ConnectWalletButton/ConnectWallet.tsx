@@ -1,24 +1,37 @@
 import { ConnectKitButton } from "connectkit";
-import { useAccount } from "wagmi";
 import styled from "@emotion/styled";
 import { useMediaQuery } from "react-responsive";
+import Image from "next/image";
+
+import logoP from "/public/logoP.svg";
 
 const StyledDiv = styled.div`
   cursor: pointer;
   position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: 20px;
   margin-left: auto;
+  @media (min-width: 1280px) {
+    flex-direction: row;
+  }
+
+  @media (max-width: 1200px) {
+    flex-direction: column-reverse;
+    justify-content: center;
+  }
 `;
 
 const ConnectWallet = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-  const { address } = useAccount(); // address when connected
+
   return (
     <StyledDiv>
-      <p className="w-full font-Roboto">1 PE = 1.62ARS</p>
+      <div className="flex flex-row justify-center items-center gap-3">
+        <Image src={logoP} alt="Logo P" width={30} height={30} />
+        <p className="w-full font-Roboto">1 PE = 1.62ARS</p>
+      </div>
+
       {isMobile ? (
         <ConnectKitButton
           label="Conectar monedero"

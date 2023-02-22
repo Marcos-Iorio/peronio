@@ -10,38 +10,21 @@ import WalletInstallation from "../WizardSteps/WalletInstallation";
 import PolygonNetwork from "../WizardSteps/PolygonNetwork";
 import WalletConnect from "../WizardSteps/WalletConnect";
 import { WizardContext } from "../../contexts/WizardContext";
-import { useAccount } from "wagmi";
-
-
-let hasMetamaskOrCoinbase: boolean | undefined;
-let startedIndex = 0;
-
+import AddingToken from "../WizardSteps/AddingToken";
 
 const Overlay = () => {
-  const {closeModalHandler} = useContext(WizardContext)
+  const { closeModalHandler } = useContext(WizardContext);
 
   return (
     <div
       onClick={closeModalHandler}
-      className="fixed left-0 top-0 h-full w-full bg-black/50 backdrop-blur-sm grid place-content-center z-10 cursor-pointer"
-    >
-    </div>
+      className="fixed left-0 top-0 h-full w-full bg-black/50 backdrop-blur-sm grid place-content-center z-10 cursor-pointer mobile:z-50"
+    ></div>
   );
 };
 
 const WizardModal = () => {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      hasMetamaskOrCoinbase =
-        window.ethereum?.isCoinbaseWallet || window.ethereum?.isMetaMask;
-    }
-    
-    if (hasMetamaskOrCoinbase) {
-      startedIndex = 1;
-    } else {
-      startedIndex = 0;
-    } 
-  },[])
+  const { activeStep } = useContext(WizardContext);
 
   const modalVariants = {
     hidden: {
@@ -68,14 +51,14 @@ const WizardModal = () => {
 
   return (
     <>
-      <Overlay/>
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50">
+      <Overlay />
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full xl:h-fit">
         <motion.div
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={modalVariants}
-          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[600px] 2xl:h-[600px]"
+          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[600px] 2xl:h-[600px] mobile:h-full mobile:w-full"
         >
           <div className="absolute -top-[100px] z-10 left-1/2 -translate-x-1/2">
             <div className="relative">
@@ -94,30 +77,29 @@ const WizardModal = () => {
             height={200}
             className="text-center"
           />
-          <div className="flex flex-row w-full h-full gap-0 justify-start items-start">
-            <div className="basis-1/2 h-full">
-              <Wizard startIndex={startedIndex}>
+          <div className="flex xl:flex-row mobile:flex-col w-full h-full gap-0 justify-start items-start">
+            <div className="xl:basis-1/2 h-full mobile:basis-full">
+              <Wizard startIndex={activeStep}>
                 <WalletInstallation />
-                <WalletConnect/>
+                <WalletConnect />
                 <PolygonNetwork />
+                <AddingToken />
               </Wizard>
             </div>
-            <div className="content-box w-fit basis-1/2">
+            <div className="content-box w-fit basis-1/2 mobile:hidden xl:block">
               <Image
                 src={sol}
                 width={500}
                 height={500}
                 alt="Sol de la patría Argentina"
                 style={{ filter: "drop-shadow(2px 4px 6px black);" }}
-                className="laptop:w-[350px] laptop:h-[350px]"
+                className="laptop:w-[350px] laptop:h-[350px] xl:w-[400px] xl:h-auto"
               />
             </div>
           </div>
         </motion.div>
       </div>
-      
     </>
-      
   );
 };
 

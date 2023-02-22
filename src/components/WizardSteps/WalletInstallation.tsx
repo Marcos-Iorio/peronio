@@ -6,7 +6,7 @@ import manoPeron from "/public/mano-peron.png";
 
 const WalletInstallation = () => {
   return (
-    <div className="flex flex-col px-10 py-3 relative h-full">
+    <div className="flex flex-col px-10 py-3 relative h-full mobile:px-0">
       <h1 className="font-Abril text-3xl mb-5">¿Cómo arrancar?</h1>
       <p className="text-Roboto text-xl ">
         Vamos a instalar una Wallet. Hay muchas en el mercado, las más famosas
