@@ -7,8 +7,9 @@ import { WagmiConfig, createClient } from "wagmi";
 import { polygon } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../hooks/useMediaQuery";
 import WizardProvider from "../contexts/WizardContext";
+import Footer from "../components/Footer/Footer";
 
 const client = createClient(
   getDefaultClient({
@@ -20,7 +21,7 @@ const client = createClient(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <WizardProvider>
@@ -44,6 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           {isMobile ? <MobileNavbar /> : <Navbar />}
           <Component {...pageProps} />
+          <Footer/>
         </ConnectKitProvider>
       </WagmiConfig>
     </WizardProvider>

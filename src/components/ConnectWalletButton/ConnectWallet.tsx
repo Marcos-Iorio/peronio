@@ -1,6 +1,6 @@
 import { ConnectKitButton } from "connectkit";
 import styled from "@emotion/styled";
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "../../hooks/useMediaQuery";
 import Image from "next/image";
 
 import logoP from "/public/logoP.svg";
@@ -22,8 +22,6 @@ const StyledDiv = styled.div`
 `;
 
 const ConnectWallet = () => {
-  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
-
   return (
     <StyledDiv>
       <div className="flex flex-row justify-center items-center gap-3">
@@ -31,19 +29,11 @@ const ConnectWallet = () => {
         <p className="w-full font-Roboto">1 PE = 1.62ARS</p>
       </div>
 
-      {isMobile ? (
-        <ConnectKitButton
+      <ConnectKitButton
           label="Conectar monedero"
           showBalance={false}
           showAvatar={false}
         />
-      ) : (
-        <ConnectKitButton
-          label="Conectar monedero"
-          showBalance={false}
-          showAvatar={false}
-        />
-      )}
     </StyledDiv>
   );
 };
