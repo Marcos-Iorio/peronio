@@ -12,7 +12,7 @@ const PolygonNetwork = () => {
       <h1 className="font-Abril text-3xl mb-5">¡Estás usando Polygon!</h1>
       <p className="text-Roboto text-xl ">
         Polygon es una blockchain corriendo en la capa 2 del ecosistema Ethereum
-        con fees muy bajos y transacciones rápidas es ideal Peronio.
+        con fees muy bajos y transacciones rápidas es ideal para Peronio.
       </p>
       <p className="text-Roboto text-xl">
         Pasemos a agregar Peronio a tu monedero

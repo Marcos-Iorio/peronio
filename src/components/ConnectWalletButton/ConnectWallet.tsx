@@ -6,7 +6,6 @@ import Image from "next/image";
 import logoP from "/public/logoP.svg";
 
 const StyledDiv = styled.div`
-  cursor: pointer;
   position: relative;
   display: flex;
   align-items: center;

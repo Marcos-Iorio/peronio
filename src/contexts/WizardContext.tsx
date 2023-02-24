@@ -42,7 +42,11 @@ const WizardProvider = ({ children }: IWizardModal) => {
     } else {
       setActiveStep(0);
     }
-  }, [address]);
+  }, [address, isConnected]);
+
+  const handleConnection = () => {
+    setIsConnected(true);
+  };
 
   return (
     <WizardContext.Provider
@@ -51,7 +55,8 @@ const WizardProvider = ({ children }: IWizardModal) => {
         isConnected,
         activeStep,
         openModalHandler,
-        closeModalHandler
+        closeModalHandler,
+        handleConnection
       }}
     >
       {children}

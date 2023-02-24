@@ -9,4 +9,5 @@ export interface IWizardContext {
   activeStep: number;
   setActiveStep?: (value: number) => void;
   closeModalHandler?: () => void;
+  handleConnection?: () => void;
 }

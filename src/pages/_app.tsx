@@ -1,5 +1,5 @@
 import { AppProps } from "next/app";
-import { useContext, useState } from "react";
+
 import "../styles/globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import MobileNavbar from "../components/Navbar/MobileNavbar";
@@ -43,16 +43,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             "--ck-primary-button-background": "#00B7C2"
           }}
         >
-          {isMobile ? (
-            <MobileNavbar />
-          ) : (
-            <Navbar/>
-          )}
+          {isMobile ? <MobileNavbar /> : <Navbar />}
           <Component {...pageProps} />
         </ConnectKitProvider>
-      </WagmiConfig>  
+      </WagmiConfig>
     </WizardProvider>
-      
   );
 }
 
