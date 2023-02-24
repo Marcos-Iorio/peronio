@@ -41,7 +41,7 @@ const Home: NextPage = () => {
       <Main>
         <header className="h-fit w-full xl:p-20 2xl:pt-10 text-center flex flex-col items-center">
           <div className="relative h-fit w-fit mb-3 xl:mb-10 laptop:mt-10">
-            <h1 className="font-Abril text-center w-full h-full mobile:text-5xl xl:text-[7rem]">
+            <h1 className="font-Abril text-center w-full h-full mobile:text-5xl xl:text-[7rem] mobile:mt-10">
               Peronio
             </h1>
             <AnimatedUnderline />
@@ -53,7 +53,7 @@ const Home: NextPage = () => {
         <div className="flex laptop:flex-col mobile:flex-col mobile:overflow-y-hidden mobile:h-full mobile:max-h-full mobile:min-h-full gap-5 justify-center mobile:px-7 pb-10 pt-10 laptop:px-20 2xl:px-40 laptop:pb-16">
           <Charts />
         </div>
-        <h3 className="mobile:mt-auto text-4xl mobile:3xl font-Abril text-center">
+        <h3 className="mobile:mt-auto text-4xl mobile:3xl font-Abril text-center xl:mb-10">
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>

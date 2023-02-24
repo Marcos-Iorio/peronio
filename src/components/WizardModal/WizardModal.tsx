@@ -58,7 +58,7 @@ const WizardModal = () => {
           animate="visible"
           exit="exit"
           variants={modalVariants}
-          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[600px] 2xl:h-[600px] mobile:h-full mobile:w-full"
+          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] mobile:h-full mobile:w-full"
         >
           <div className="absolute -top-[100px] z-10 left-1/2 -translate-x-1/2">
             <div className="relative">
@@ -75,10 +75,10 @@ const WizardModal = () => {
             alt="Logo Peronio"
             width={200}
             height={200}
-            className="text-center"
+            className="text-center laptop:w-[150px] laptop:h-auto 2xl:w-[200px] 2xl:h-[200px]"
           />
           <div className="flex xl:flex-row mobile:flex-col w-full h-full gap-0 justify-start items-start">
-            <div className="xl:basis-1/2 h-full mobile:basis-full">
+            <div className="laptop:basis-full 2xl:basis-1/2 h-full mobile:basis-full">
               <Wizard startIndex={activeStep}>
                 <WalletInstallation />
                 <WalletConnect />
@@ -86,14 +86,14 @@ const WizardModal = () => {
                 <AddingToken />
               </Wizard>
             </div>
-            <div className="content-box w-fit basis-1/2 mobile:hidden xl:block">
+            <div className="content-box w-fit basis-1/2 mobile:hidden laptop:hidden 2xl:block text-center">
               <Image
                 src={sol}
                 width={500}
                 height={500}
                 alt="Sol de la patría Argentina"
                 style={{ filter: "drop-shadow(2px 4px 6px black);" }}
-                className="laptop:w-[350px] laptop:h-[350px] xl:w-[400px] xl:h-auto"
+                className="laptop:w-[300px] laptop:h-auto 2xl:w-[500px] xl:h-auto"
               />
             </div>
           </div>

@@ -94,7 +94,7 @@ const MobileNavbar = () => {
   return (
     <div className="h-full">
       <motion.nav
-        initial={closed}
+        initial={"closed"}
         animate={menuOpen ? "opened" : "closed"}
         className="flex justify-between px-3 py-3 items-center"
       >
@@ -120,7 +120,7 @@ const MobileNavbar = () => {
         </div>
         <motion.div
           variants={mobileMenuVariant}
-          className="fixed top-0 left-0 h-full w-full flex flex-col items-center bg-[#1B262C] z-50 py-10 px-10 gap-10"
+          className="fixed overflow-y-auto top-0 left-0 h-full w-full flex flex-col items-center bg-[#1B262C] z-50 py-10 px-10 gap-10"
         >
           <motion.div
             variants={fadeInVariant}
