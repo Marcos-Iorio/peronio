@@ -5,12 +5,13 @@ import Image from "next/image";
 
 import peronCafecito from "/public/peron.png";
 import logo from "/public/logo-white.png";
-import sol from "/public/sol-bg.svg";
+import sol from "/public/sol.png";
 import WalletInstallation from "../WizardSteps/WalletInstallation";
 import PolygonNetwork from "../WizardSteps/PolygonNetwork";
 import WalletConnect from "../WizardSteps/WalletConnect";
 import { WizardContext } from "../../contexts/WizardContext";
 import AddingToken from "../WizardSteps/AddingToken";
+import Box3d from "../Box3d/Box3d";
 
 const Overlay = () => {
   const { closeModalHandler } = useContext(WizardContext);
@@ -86,7 +87,7 @@ const WizardModal = () => {
                 <AddingToken />
               </Wizard>
             </div>
-            <div className="content-box w-fit basis-1/2 mobile:hidden laptop:hidden 2xl:block text-center">
+            <Box3d>
               <Image
                 src={sol}
                 width={500}
@@ -95,7 +96,7 @@ const WizardModal = () => {
                 style={{ filter: "drop-shadow(2px 4px 6px black);" }}
                 className="laptop:w-[300px] laptop:h-auto 2xl:w-[500px] xl:h-auto"
               />
-            </div>
+            </Box3d>
           </div>
         </motion.div>
       </div>
