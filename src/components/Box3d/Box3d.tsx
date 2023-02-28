@@ -2,7 +2,7 @@ import {
   JSXElementConstructor,
   ReactElement,
   useEffect,
-  useState,
+  useState
 } from "react";
 import styled from "@emotion/styled";
 
@@ -19,10 +19,23 @@ interface I3dBoxProps {
 }
 
 const Container = styled.div`
-  display: flex;
   justify-content: center;
   width: 100%;
   flex-basis: 50%;
+  @media (min-width: 360px) {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    display: none;
+  }
+
+  @media (min-width: 1280px) {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-basis: 50%;
+  }
 `;
 
 const Box = styled.div`
@@ -32,12 +45,12 @@ const Box = styled.div`
 `;
 
 const Box3d = ({
-  rotateForce = 5,
+  rotateForce = 10,
   className = "",
   perspective = "800px",
   minWidth = "300px",
   minHeight = "300px",
-  children,
+  children
 }: I3dBoxProps) => {
   const [rotateXDeg, setRotateXDeg] = useState(0);
   const [rotateYDeg, setRotateYDeg] = useState(0);
@@ -65,13 +78,13 @@ const Box3d = ({
       style={{
         perspective: perspective,
         minWidth: minWidth,
-        minHeight: minHeight,
+        minHeight: minHeight
       }}
     >
       <Box
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateX(${rotateXDeg}deg) rotateY(${rotateYDeg}deg)`,
+          transform: `rotateX(${rotateXDeg}deg) rotateY(${rotateYDeg}deg)`
         }}
       >
         {children}

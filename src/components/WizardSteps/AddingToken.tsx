@@ -54,19 +54,19 @@ const AddingToken = () => {
   };
 
   return (
-    <div className="flex 2xl:flex-col xl:flex-row xl:gap-10 justify-center items-center px-10 py-3 relative h-full">
+    <div className="flex 2xl:flex-col laptop:flex-row xl:flex-col xl:gap-10 justify-center px-10 py-3 relative h-full">
       <div>
         <h1 className="font-Abril text-3xl mb-5">¡Agregando Peronio y USDT!</h1>
         <p className="text-Roboto text-xl ">
-          Vamos a agregar P y USDT, son las 2 tokens que necesitarás para empezar
-          a usar Peronio.
+          Vamos a agregar P y USDT, son las 2 tokens que necesitarás para
+          empezar a usar Peronio.
         </p>
         <p className="text-Roboto text-xl">
           Para hacer transacciones vas a necesitas MATIC, la moneda nativa de
           Polygon.
         </p>
       </div>
-      
+
       {!peronioIsAdded ? (
         <button
           onClick={addPeronio}
@@ -88,7 +88,7 @@ const AddingToken = () => {
         width={60}
         height={60}
         alt="Mano de Perón"
-        className="absolute -bottom-10 z-0 laptop:right-32 2xl:left-14"
+        className="absolute 2xl:-bottom-[23px] xl:bottom-[11px] xl:left-14 z-0 laptop:right-32 2xl:left-14 xl:w-10 xl:h-auto 2xl:w-[60px] 2xl:h-[auto]"
       />
     </div>
   );
