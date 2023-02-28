@@ -13,7 +13,6 @@ interface I3dBoxProps {
   height?: string;
   minWidth?: string;
   minHeight?: string;
-  basis: string;
   rotateForce?: number;
   children?: ReactElement<any, any> | ReactElement<any, any>[];
 }
