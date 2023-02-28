@@ -1,7 +1,9 @@
 import { Wizard } from "react-use-wizard";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+
+import * as Icon from "react-icons/cg";
 
 import peronCafecito from "/public/peron.png";
 import logo from "/public/logo-white.png";
@@ -25,7 +27,7 @@ const Overlay = () => {
 };
 
 const WizardModal = () => {
-  const { activeStep } = useContext(WizardContext);
+  const { activeStep, closeModalHandler } = useContext(WizardContext);
 
   const modalVariants = {
     hidden: {
@@ -53,7 +55,7 @@ const WizardModal = () => {
   return (
     <>
       <Overlay />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full xl:h-fit">
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -61,6 +63,12 @@ const WizardModal = () => {
           variants={modalVariants}
           className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] xl:h-[500px] mobile:h-full mobile:w-full"
         >
+          <button
+            onClick={closeModalHandler}
+            className="absolute top-4 right-4 p-3 hover:rounded-full hover:bg-[#083a58] transition-all ease-linear text-[#00B7C2]"
+          >
+            <Icon.CgClose className="h-8 w-8" />
+          </button>
           <div className="absolute -top-[100px] z-10 left-1/2 -translate-x-1/2">
             <div className="relative">
               <Image
