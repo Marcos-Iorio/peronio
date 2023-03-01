@@ -21,7 +21,7 @@ const client = createClient(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 900px)");
 
   return (
     <WizardProvider>
