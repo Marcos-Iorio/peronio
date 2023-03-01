@@ -1,16 +1,19 @@
 import { Wizard } from "react-use-wizard";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
+import * as Icon from "react-icons/cg";
+
 import peronCafecito from "/public/peron.png";
 import logo from "/public/logo-white.png";
-import sol from "/public/sol-bg.svg";
+import sol from "/public/sol.png";
 import WalletInstallation from "../WizardSteps/WalletInstallation";
 import PolygonNetwork from "../WizardSteps/PolygonNetwork";
 import WalletConnect from "../WizardSteps/WalletConnect";
 import { WizardContext } from "../../contexts/WizardContext";
 import AddingToken from "../WizardSteps/AddingToken";
+import Box3d from "../Box3d/Box3d";
 
 const Overlay = () => {
   const { closeModalHandler } = useContext(WizardContext);
@@ -24,7 +27,7 @@ const Overlay = () => {
 };
 
 const WizardModal = () => {
-  const { activeStep } = useContext(WizardContext);
+  const { activeStep, closeModalHandler } = useContext(WizardContext);
 
   const modalVariants = {
     hidden: {
@@ -52,14 +55,20 @@ const WizardModal = () => {
   return (
     <>
       <Overlay />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full xl:h-fit">
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
         <motion.div
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={modalVariants}
-          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] mobile:h-full mobile:w-full"
+          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] xl:h-[500px] mobile:h-full mobile:w-full"
         >
+          <button
+            onClick={closeModalHandler}
+            className="absolute top-4 right-4 p-3 hover:rounded-full hover:bg-[#083a58] transition-all ease-linear text-[#00B7C2]"
+          >
+            <Icon.CgClose className="h-8 w-8" />
+          </button>
           <div className="absolute -top-[100px] z-10 left-1/2 -translate-x-1/2">
             <div className="relative">
               <Image
@@ -77,8 +86,8 @@ const WizardModal = () => {
             height={200}
             className="text-center laptop:w-[150px] laptop:h-auto 2xl:w-[200px] 2xl:h-[200px]"
           />
-          <div className="flex xl:flex-row mobile:flex-col w-full h-full gap-0 justify-start items-start">
-            <div className="laptop:basis-full 2xl:basis-1/2 h-full mobile:basis-full">
+          <div className="flex laptop:flex-row xl:flex-row mobile:flex-col w-full h-full gap-0 justify-start items-start">
+            <div className="laptop:basis-full xl:basis-1/2 2xl:basis-1/2 h-full mobile:basis-full">
               <Wizard startIndex={activeStep}>
                 <WalletInstallation />
                 <WalletConnect />
@@ -86,16 +95,16 @@ const WizardModal = () => {
                 <AddingToken />
               </Wizard>
             </div>
-            <div className="content-box w-fit basis-1/2 mobile:hidden laptop:hidden 2xl:block text-center">
+            <Box3d>
               <Image
                 src={sol}
                 width={500}
                 height={500}
                 alt="Sol de la patría Argentina"
                 style={{ filter: "drop-shadow(2px 4px 6px black);" }}
-                className="laptop:w-[300px] laptop:h-auto 2xl:w-[500px] xl:h-auto"
+                className="laptop:w-[300px] laptop:h-auto 2xl:w-[500px] xl:w-[350px] xl:h-auto"
               />
-            </div>
+            </Box3d>
           </div>
         </motion.div>
       </div>

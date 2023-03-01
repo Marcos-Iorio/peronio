@@ -1,5 +1,4 @@
 import { AppProps } from "next/app";
-
 import "../styles/globals.css";
 import Navbar from "../components/Navbar/Navbar";
 import MobileNavbar from "../components/Navbar/MobileNavbar";
@@ -22,7 +21,7 @@ const client = createClient(
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <WizardProvider>
@@ -46,7 +45,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         >
           {isMobile ? <MobileNavbar /> : <Navbar />}
           <Component {...pageProps} />
-          <Footer/>
+          <Footer />
         </ConnectKitProvider>
       </WagmiConfig>
     </WizardProvider>
