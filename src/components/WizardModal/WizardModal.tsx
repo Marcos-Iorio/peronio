@@ -55,13 +55,13 @@ const WizardModal = () => {
   return (
     <>
       <Overlay />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
+      <div className="fixed 2xl:top-1/2 2xl:left-1/2 2xl:-translate-x-1/2 2xl:-translate-y-1/2 laptop:top-2/3 laptop:left-1/2 laptop:-translate-x-1/2 laptop:-translate-y-2/3 mobile:translate-y-[23rem] mobile:bottom-0 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
         <motion.div
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={modalVariants}
-          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] xl:h-[500px] mobile:h-full mobile:w-full"
+          className="relative z-50 bg-[#0B4D76] border-2 border-solid border-[#00B7C2] p-10 rounded-lg flex flex-col items-center 2xl:w-[1000px] laptop:w-[950px] laptop:h-[400px] 2xl:h-[600px] xl:h-[500px] mobile:h-2/3 mobile:w-full"
         >
           <button
             onClick={closeModalHandler}
