@@ -30,7 +30,7 @@ const Main = styled.main`
 `;
 
 const Home: NextPage = () => {
-  const {isOpen} = useContext(WizardContext)
+  const { isOpen } = useContext(WizardContext);
 
   return (
     <>
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
-        {isOpen && <WizardModal/>}
+        {isOpen && <WizardModal />}
       </Main>
     </>
   );

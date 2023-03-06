@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { WizardContext } from "../../contexts/WizardContext";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
 
 const liVariant = {
   opened: {
@@ -28,7 +28,7 @@ const WizardButton = () => {
     <motion.button
       onClick={openModalHandler}
       variants={liVariant}
-      className="border-[#00B7C2] border-solid border-2 rounded-xl text-Roboto xl:text-sm font-normal xl:py-2 xl:px-5 xl:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
+      className="border-[#00B7C2] border-solid border-2 rounded-xl text-Roboto laptop:text-sm font-normal laptop:py-2 laptop:px-10 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
     >
       ¿Cómo comenzar?
     </motion.button>

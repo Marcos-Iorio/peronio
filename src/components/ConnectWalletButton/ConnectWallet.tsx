@@ -15,9 +15,11 @@ const StyledDiv = styled.div`
     flex-direction: row;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1279px) {
     flex-direction: column-reverse;
     justify-content: center;
+    width: fit-content;
+    flex-basis: 10%;
   }
 `;
 
@@ -30,10 +32,10 @@ const ConnectWallet = () => {
       </div>
 
       <ConnectKitButton
-          label="Conectar monedero"
-          showBalance={false}
-          showAvatar={false}
-        />
+        label="Conectar monedero"
+        showBalance={false}
+        showAvatar={false}
+      />
     </StyledDiv>
   );
 };
