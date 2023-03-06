@@ -55,7 +55,7 @@ const WizardModal = () => {
   return (
     <>
       <Overlay />
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
+      <div className="fixed 2xl:top-1/2 2xl:left-1/2 2xl:-translate-x-1/2 2xl:-translate-y-1/2 mobile:top-1/2 mobile:left-1/2 mobile:-translate-x-1/2 mobile:-translate-y-1/2 laptop:top-2/3 laptop:-translate-y-2/3 z-50 mobile:h-full mobile:w-full laptop:w-fit xl:h-fit">
         <motion.div
           initial="hidden"
           animate="visible"
