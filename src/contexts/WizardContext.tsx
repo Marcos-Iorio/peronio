@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { IWizardContext, IWizardModal } from "../../types/wizard";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 
 const initialState = {
   isOpen: false,
