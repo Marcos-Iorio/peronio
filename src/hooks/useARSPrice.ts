@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import uniswapAbi from "../../abi/IUniswapV2Pair.json";
+import { useContractRead } from "wagmi";
 
 const USD_URL = "https://api.bluelytics.com.ar/v2/latest";
 

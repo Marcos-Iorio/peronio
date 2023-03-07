@@ -3,7 +3,9 @@ import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
 import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import imagenBoveda from "/public/boveda.svg";
+import InfoPopover from "../InfoPopover/InfoPopover";
+import usePairs from "../../hooks/usePairs";
 
 const dataEx = [
   {
@@ -82,10 +84,9 @@ const chartVariant = {
   }
 };
 
-import imagenBoveda from "/public/boveda.svg";
-import InfoPopover from "../InfoPopover/InfoPopover";
-
 const Charts = () => {
+  const [usdcReserve, peReserve] = usePairs();
+
   return (
     <>
       <motion.div
