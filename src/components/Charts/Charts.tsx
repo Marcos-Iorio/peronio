@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import imagenBoveda from "/public/boveda.svg";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
+import useARSPrice from "../../hooks/useARSPrice";
 
 const dataEx = [
   {
@@ -85,7 +86,8 @@ const chartVariant = {
 };
 
 const Charts = () => {
-  const [usdcReserve, peReserve] = usePairs();
+  const [, , pePrice] = usePairs();
+  const arsPrice = useARSPrice();
 
   return (
     <>
@@ -165,7 +167,7 @@ const Charts = () => {
             <div className="w-full h-[1px] my-2 bg-[#00B7C2]"></div>
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
               <p className="text-lg font-Roboto text-center">Dólar Blue.</p>
-              <p className="text-center text-6xl">380</p>
+              <p className="text-center text-6xl">{arsPrice}</p>
             </div>
           </div>
         </motion.div>

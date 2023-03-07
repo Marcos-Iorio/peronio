@@ -1,5 +1,10 @@
 export interface IData {
-  reserve0: string;
-  reserve1: string;
+  reserve0: IReserve;
+  reserve1: IReserve;
   blockTimestampLast: number;
+}
+
+interface IReserve {
+  _hex: string;
+  _isBigNumber: boolean;
 }
