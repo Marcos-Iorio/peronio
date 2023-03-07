@@ -5,6 +5,7 @@ import useARSPrice from "../../hooks/useARSPrice";
 import Image from "next/image";
 
 import logoP from "/public/logoP.svg";
+import { useEffect } from "react";
 
 const StyledDiv = styled.div`
   position: relative;
@@ -33,7 +34,7 @@ const ConnectWallet = () => {
       <div className="flex flex-row justify-center items-center gap-3">
         <Image src={logoP} alt="Logo P" width={30} height={30} />
         <p className="w-full font-Roboto">
-          1 PE = {Number(pePrice * arsPrice).toFixed(2)}
+          1 PE = {Number(pePrice * arsPrice).toFixed(3)}
         </p>
       </div>
 
