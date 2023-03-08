@@ -1,9 +1,11 @@
 import { ConnectKitButton } from "connectkit";
 import styled from "@emotion/styled";
-import useMediaQuery from "../../hooks/useMediaQuery";
+import usePairs from "../../hooks/usePairs";
+import useARSPrice from "../../hooks/useARSPrice";
 import Image from "next/image";
 
 import logoP from "/public/logoP.svg";
+import { useEffect } from "react";
 
 const StyledDiv = styled.div`
   position: relative;
@@ -24,11 +26,16 @@ const StyledDiv = styled.div`
 `;
 
 const ConnectWallet = () => {
+  const [, , pePrice] = usePairs();
+  const arsPrice = useARSPrice();
+
   return (
     <StyledDiv>
       <div className="flex flex-row justify-center items-center gap-3">
         <Image src={logoP} alt="Logo P" width={30} height={30} />
-        <p className="w-full font-Roboto">1 PE = 1.62ARS</p>
+        <p className="w-full font-Roboto">
+          1 PE = {Number(pePrice * arsPrice).toFixed(3)}
+        </p>
       </div>
 
       <ConnectKitButton

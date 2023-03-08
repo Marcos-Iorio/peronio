@@ -3,7 +3,10 @@ import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
 import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import imagenBoveda from "/public/boveda.svg";
+import InfoPopover from "../InfoPopover/InfoPopover";
+import usePairs from "../../hooks/usePairs";
+import useARSPrice from "../../hooks/useARSPrice";
 
 const dataEx = [
   {
@@ -82,10 +85,12 @@ const chartVariant = {
   }
 };
 
-import imagenBoveda from "/public/boveda.svg";
-import InfoPopover from "../InfoPopover/InfoPopover";
-
 const Charts = () => {
+  const [usdcReserve, , pePrice] = usePairs();
+  const arsPrice = useARSPrice();
+
+  const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
+
   return (
     <>
       <motion.div
@@ -101,7 +106,7 @@ const Charts = () => {
           <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
             <div className="flex flex-row gap-3">
               <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">
-                1.60
+                {arsPricePerPe} 
               </div>
               <div className="font-Roboto text-lg mobile:text-xl">1.8%</div>
             </div>
@@ -164,7 +169,7 @@ const Charts = () => {
             <div className="w-full h-[1px] my-2 bg-[#00B7C2]"></div>
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
               <p className="text-lg font-Roboto text-center">Dólar Blue.</p>
-              <p className="text-center text-6xl">380</p>
+              <p className="text-center text-6xl">{arsPrice}</p>
             </div>
           </div>
         </motion.div>
@@ -186,7 +191,7 @@ const Charts = () => {
             </div>
             <div className="rounded-md bg-[#1b1b1b]/30 box-content">
               <div className="flex flex-col justify-center items-center py-3">
-                <p className="text-4xl font-Roboto">0.0041</p>
+                <p className="text-3xl font-Roboto">{pePrice.toFixed(4)}</p>
                 <p className="text-2xl font-Roboto">+3%</p>
               </div>
               <div className="mt-auto h-full relative">
@@ -212,7 +217,7 @@ const Charts = () => {
           className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col"
         >
           <div className="flex flex-row w-full justify-between">
-            <p className="text-2xl font-Roboto">0.0041</p>
+            <p className="text-2xl font-Roboto">{pePrice.toFixed(4)}</p>
             <div className="font-Roboto xl:text-xl mobile:text-2xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
               <p>Liquidity pool</p>
               <span>(PE/USDT)</span>
@@ -283,7 +288,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    10.000
+                    {usdcReserve.toFixed(3)}
                   </p>
                 </div>
               </div>
@@ -299,7 +304,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Precio PE por USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    0.004
+                  {pePrice.toFixed(4)}
                   </p>
                 </div>
               </div>

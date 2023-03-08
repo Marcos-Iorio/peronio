@@ -11,8 +11,6 @@ import useMediaQuery from "../hooks/useMediaQuery";
 import WizardProvider from "../contexts/WizardContext";
 import Footer from "../components/Footer/Footer";
 
-import usePairs from "../hooks/usePairs";
-
 const client = createClient(
   getDefaultClient({
     appName: "Peronio dApp",
@@ -24,8 +22,6 @@ const client = createClient(
 
 function MyApp({ Component, pageProps }: AppProps) {
   const isMobile = useMediaQuery("(max-width: 1023px)");
-
-  const [usdcReserve, peReserve] = usePairs();
 
   return (
     <WizardProvider>
