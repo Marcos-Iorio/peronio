@@ -7,6 +7,7 @@ import imagenBoveda from "/public/boveda.svg";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
+import formatMoney from "../../utils/formatMoney";
 
 const dataEx = [
   {
@@ -91,6 +92,8 @@ const Charts = () => {
 
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
 
+  const moneyFormatted = formatMoney(usdcReserve);
+
   return (
     <>
       <motion.div
@@ -106,7 +109,7 @@ const Charts = () => {
           <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
             <div className="flex flex-row gap-3">
               <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">
-                {arsPricePerPe} 
+                {arsPricePerPe}
               </div>
               <div className="font-Roboto text-lg mobile:text-xl">1.8%</div>
             </div>
@@ -288,7 +291,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    {usdcReserve.toFixed(3)}
+                    {moneyFormatted}
                   </p>
                 </div>
               </div>
@@ -304,7 +307,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Precio PE por USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                  {pePrice.toFixed(4)}
+                    {pePrice.toFixed(4)}
                   </p>
                 </div>
               </div>

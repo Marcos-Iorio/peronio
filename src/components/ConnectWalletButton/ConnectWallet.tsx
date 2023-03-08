@@ -35,6 +35,7 @@ const ConnectWallet = () => {
         <Image src={logoP} alt="Logo P" width={30} height={30} />
         <p className="w-full font-Roboto">
           1 PE = {Number(pePrice * arsPrice).toFixed(3)}
+          <span className="text-yellow-400"> AR$</span>
         </p>
       </div>
 

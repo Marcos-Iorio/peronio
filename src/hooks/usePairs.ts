@@ -20,8 +20,6 @@ const usePairs = () => {
     setPePrice(usdcReserve / peReserve);
   }, [data?.reserve0._hex, data?.reserve1._hex, peReserve, usdcReserve]);
 
-  console.log(usdcReserve)
-
   return [usdcReserve, peReserve, pePrice];
 };
 
