@@ -1,6 +1,5 @@
 import { Address, useContractRead } from "wagmi";
 import usePeronio from "./usePeronio";
-
 import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
 
 /**
@@ -10,21 +9,16 @@ import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
  * @example https://wagmi.sh/react/hooks/useContractRead
  */
 export const usePeronioRead = (method: string, args = []) => {
+  const contractConfig = {
+    address: peronioContract.address,
+    abi: peronioContract.abi
+  };
   const contract = usePeronio();
 
-  const contractInfo = {
-    addressOrName: contract?.address,
-    contractInterface: contract?.abi,
-    functionName: method,
-    args: args,
-  };
-
-  /*  console.log(contractInfo); */
-
   return useContractRead({
-    address: peronioContract.address as Address,
-    abi: peronioContract.abi,
-    functionName: "buyingPrice",
+    address: contractConfig.address as Address,
+    abi: contractConfig.abi,
+    functionName: method
   });
 };
 
