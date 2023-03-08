@@ -7,7 +7,7 @@ import imagenBoveda from "/public/boveda.svg";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
-import formatMoney from "../../utils/formatMoney";
+import formatPrice from "../../utils/formatPrice";
 
 const dataEx = [
   {
@@ -92,7 +92,7 @@ const Charts = () => {
 
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
 
-  const moneyFormatted = formatMoney(usdcReserve);
+  const moneyFormatted = formatPrice(usdcReserve);
 
   return (
     <>

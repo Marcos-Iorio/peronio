@@ -1,4 +1,4 @@
-const formatMoney = (
+const formatPrice = (
   amount: number,
   decimalCount = 2,
   decimal = ",",
@@ -31,4 +31,4 @@ const formatMoney = (
   }
 };
 
-export default formatMoney;
+export default formatPrice;
