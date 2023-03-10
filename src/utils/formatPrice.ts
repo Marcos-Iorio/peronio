@@ -1,34 +1,27 @@
-const formatPrice = (
-  amount: number,
-  decimalCount = 2,
-  decimal = ",",
-  thousands = "."
+import { formatUnits } from "ethers/lib/utils";
+import { ethers } from "ethers";
+
+export const formatFixedNumber = (
+  number: ethers.FixedNumber,
+  displayDecimals = 18,
+  decimals = 18
 ) => {
-  try {
-    decimalCount = Math.abs(decimalCount);
-    decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
-    const negativeSign = amount < 0 ? "-" : "";
-
-    let i: string = Number(
-      (amount = Number(Math.abs(Number(amount) || 0).toFixed(decimalCount)))
-    ).toString();
-    let j = i.length > 3 ? i.length % 3 : 0;
-
-    return (
-      negativeSign +
-      (j ? i.substr(0, j) + thousands : "") +
-      i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousands) +
-      (decimalCount
-        ? decimal +
-          Math.abs(amount - Number(i))
-            .toFixed(decimalCount)
-            .slice(2)
-        : "")
-    );
-  } catch (e) {
-    console.log(e);
-  }
+  // Remove decimal
+  const [leftSide] = number.toString().split(".");
+  return formatBigNumber(
+    ethers.BigNumber.from(leftSide),
+    displayDecimals,
+    decimals
+  );
 };
 
-export default formatPrice;
+export const formatBigNumber = (
+  number: ethers.BigNumber,
+  displayDecimals = 18,
+  decimals = 18
+) => {
+  const remainder = number.mod(
+    ethers.BigNumber.from(10).pow(decimals - displayDecimals)
+  );
+  return formatUnits(number.sub(remainder), decimals);
+};

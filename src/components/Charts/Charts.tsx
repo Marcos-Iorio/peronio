@@ -7,7 +7,6 @@ import imagenBoveda from "/public/boveda.svg";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
-import formatPrice from "../../utils/formatPrice";
 
 const dataEx = [
   {
@@ -86,13 +85,13 @@ const chartVariant = {
   }
 };
 
+import { formatUnits } from "ethers/lib/utils.js";
+
 const Charts = () => {
   const [usdcReserve, , pePrice] = usePairs();
   const arsPrice = useARSPrice();
 
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
-
-  const moneyFormatted = formatPrice(usdcReserve);
 
   return (
     <>
@@ -291,7 +290,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    {moneyFormatted}
+                    2000
                   </p>
                 </div>
               </div>
