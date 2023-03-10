@@ -1,27 +1,9 @@
 import { formatUnits } from "ethers/lib/utils";
 import { ethers } from "ethers";
 
-export const formatFixedNumber = (
-  number: ethers.FixedNumber,
-  displayDecimals = 18,
-  decimals = 18
-) => {
-  // Remove decimal
-  const [leftSide] = number.toString().split(".");
-  return formatBigNumber(
-    ethers.BigNumber.from(leftSide),
-    displayDecimals,
-    decimals
-  );
-};
+export const formatBalance = (amount: number) => {
+  const bigNumber = ethers.BigNumber.from(amount);
+  const fixedNumber = (amount / 10 ** 18).toFixed(2).toLocaleString('es-AR');
 
-export const formatBigNumber = (
-  number: ethers.BigNumber,
-  displayDecimals = 18,
-  decimals = 18
-) => {
-  const remainder = number.mod(
-    ethers.BigNumber.from(10).pow(decimals - displayDecimals)
-  );
-  return formatUnits(number.sub(remainder), decimals);
-};
+  return fixedNumber;
+}

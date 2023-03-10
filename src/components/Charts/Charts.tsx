@@ -85,13 +85,15 @@ const chartVariant = {
   }
 };
 
-import { formatUnits } from "ethers/lib/utils.js";
+import { formatBalance } from "../../utils/formatPrice";
 
 const Charts = () => {
   const [usdcReserve, , pePrice] = usePairs();
   const arsPrice = useARSPrice();
 
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
+
+  console.log(formatBalance(usdcReserve))
 
   return (
     <>
