@@ -14,7 +14,7 @@ const FMT = {
 export const formatBalance = (
   amount: number | BigNumber,
   decimals = 18,
-  decimalsToCut = -4
+  displayDecimals = 18
 ): string => {
   BigNumber.config({ FORMAT: FMT });
 
@@ -24,5 +24,5 @@ export const formatBalance = (
 
   const beforeDecimal = balanceBN.div(divisor);
 
-  return beforeDecimal.toFormat(undefined).slice(0, decimalsToCut);
+  return beforeDecimal.toFormat(undefined).slice(0, displayDecimals);
 };
