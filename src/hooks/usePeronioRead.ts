@@ -8,12 +8,12 @@ import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
  * @param args
  * @example https://wagmi.sh/react/hooks/useContractRead
  */
-export const usePeronioRead = (method: string, args = []) => {
+export const usePeronioRead = (method: string, args = []): any => {
   const contractConfig = {
     address: peronioContract.address,
     abi: peronioContract.abi
   };
-  const contract = usePeronio();
+  /* const contract = usePeronio(); */
 
   return useContractRead({
     address: contractConfig.address as Address,

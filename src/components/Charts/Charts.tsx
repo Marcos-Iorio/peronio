@@ -7,6 +7,8 @@ import imagenBoveda from "/public/boveda.svg";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
+import { formatBalance } from "../../utils/formatPrice";
+import useTotalSupply from "../../hooks/useTotalSupply";
 
 const dataEx = [
   {
@@ -85,15 +87,15 @@ const chartVariant = {
   }
 };
 
-import { formatBalance } from "../../utils/formatPrice";
-
 const Charts = () => {
   const [usdcReserve, , pePrice] = usePairs();
   const arsPrice = useARSPrice();
+  const totalSupply = useTotalSupply();
 
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
 
-  console.log(formatBalance(usdcReserve))
+  const fmtBalance = formatBalance(usdcReserve, 6, -4);
+  const fmtTotalSupply = formatBalance(totalSupply, 6, -4);
 
   return (
     <>
@@ -292,7 +294,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    2000
+                    {fmtBalance}
                   </p>
                 </div>
               </div>
@@ -300,7 +302,7 @@ const Charts = () => {
                 <p className=" font-Roboto text-md">PE en circulación</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    2.500.000
+                    {fmtTotalSupply}
                   </p>
                 </div>
               </div>

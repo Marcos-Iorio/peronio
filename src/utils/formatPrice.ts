@@ -1,9 +1,28 @@
-import { formatUnits } from "ethers/lib/utils";
-import { ethers } from "ethers";
+import BigNumber from "bignumber.js";
 
-export const formatBalance = (amount: number) => {
-  const bigNumber = ethers.BigNumber.from(amount);
-  const fixedNumber = (amount / 10 ** 18).toFixed(2).toLocaleString('es-AR');
+const FMT = {
+  prefix: "",
+  decimalSeparator: ",",
+  groupSeparator: ".",
+  groupSize: 3,
+  secondaryGroupSize: 0,
+  fractionGroupSeparator: " ",
+  fractionGroupSize: 0,
+  suffix: ""
+};
 
-  return fixedNumber;
-}
+export const formatBalance = (
+  amount: number | BigNumber,
+  decimals = 18,
+  decimalsToCut = -4
+): string => {
+  BigNumber.config({ FORMAT: FMT });
+
+  const balanceBN = new BigNumber(amount);
+  const decimalsBN = new BigNumber(decimals);
+  const divisor = new BigNumber(10).pow(decimalsBN);
+
+  const beforeDecimal = balanceBN.div(divisor);
+
+  return beforeDecimal.toFormat(undefined).slice(0, decimalsToCut);
+};

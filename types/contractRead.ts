@@ -1,10 +1,12 @@
-export interface IData {
-  reserve0: IReserve;
-  reserve1: IReserve;
+export interface IDataReserves {
+  reserve0: IDataAttributes;
+  reserve1: IDataAttributes;
   blockTimestampLast: number;
 }
 
-interface IReserve {
+export interface IDataAttributes {
   _hex: string;
   _isBigNumber: boolean;
 }
+
+export interface IReturnedContract {}
