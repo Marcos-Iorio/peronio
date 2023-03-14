@@ -95,7 +95,11 @@ const Charts = () => {
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
 
   const fmtBalance = formatBalance(usdcReserve, 6, 8);
-  const fmtTotalSupply = formatBalance(totalSupply / arsPricePerPe, 6, 12);
+  const fmtTotalSupply = formatBalance(
+    totalSupply / Number(arsPricePerPe),
+    6,
+    12
+  );
 
   return (
     <>
