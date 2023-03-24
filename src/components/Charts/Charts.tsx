@@ -9,6 +9,7 @@ import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
 import { formatBalance } from "../../utils/formatPrice";
 import useTotalSupply from "../../hooks/useTotalSupply";
+import useFetchedPairAddress from "../../hooks/useFetchedPairAddress";
 
 const dataEx = [
   {
@@ -100,6 +101,10 @@ const Charts = () => {
     6,
     12
   );
+
+  const data = useFetchedPairAddress();
+
+  console.log(data);
 
   return (
     <>
