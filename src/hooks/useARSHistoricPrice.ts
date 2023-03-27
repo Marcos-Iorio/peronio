@@ -28,4 +28,4 @@ const useARSHistoricPrice = () => {
   return prices
 }
 
-export default useARSHistoricPrice
+export default useARSHistoricPrice;

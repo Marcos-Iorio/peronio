@@ -17,6 +17,8 @@ const useFetchedPairAddress = ({
   token1Address,
   timeWindow,
   currentSwapPrice
-}: useFetchPairPricesParams) => {};
+}: useFetchPairPricesParams) => {
+  
+};
 
 export default useFetchedPairAddress;
