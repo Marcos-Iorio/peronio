@@ -5,20 +5,18 @@ import fetchPairDayDatas from "../querys/fetchPairDayDatas";
 import useARSHistoricPrice from "./useARSHistoricPrice";
 import createChartData from "../utils/createChartData";
 
-const URL = "https://api.thegraph.com/subgraphs/name/nlgonzalez/peronio-dapp";
-
 const useFetcherPairPrices = (time: PairDataTimeWindow) => {
   const historicalArsPrices = useARSHistoricPrice();
 
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
-    switch(time){
-      case 'DAY':
+    switch (time) {
+      case "DAY":
         const dayResult = await fetchPairHourDatas(24);
-        createChartData(dayResult.pairHourDatas, historicalArsPrices);
+        createChartData(dayResult.data.fetchPairHourDatas, historicalArsPrices);
         break;
-      case 'WEEK':
+      case "WEEK":
         const weekResult = await fetchPairDayDatas(7);
         break;
       case "MONTH":
