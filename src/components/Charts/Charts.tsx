@@ -101,6 +101,7 @@ const Charts = () => {
     12
   );
 
+
   return (
     <>
       <motion.div
