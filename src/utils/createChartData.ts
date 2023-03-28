@@ -1,40 +1,22 @@
 import { isEqual } from "date-fns";
+import { IArs, IArsArray, IReservesArray } from "../../types/fetchPair";
 import formatDate from "./formatDate";
 import getPePrice from "./getPePrice";
-
-interface IReserves {
-  reserve0: number;
-  reserve1: number;
-  hourStartUnix: number;
-}
-
-interface IReservesArray {
-  reserves: IReserves[];
-}
-
-interface IArs {
-  date: string;
-  price: number;
-}
-
-type IArsArray = IArs[];
 
 const createChartData = (data: IReservesArray, historicArsPrice: IArsArray) => {
   const newArray: IArs[] = [];
 
-  data.reserves.forEach((value, index) => {
+  data.forEach((value, index) => {
     const formattedDate = formatDate(value.hourStartUnix);
     const pePrice = getPePrice(value.reserve0, value.reserve1);
 
-    if (formattedDate === historicArsPrice[index].date) {
-      newArray.push({
-        date: historicArsPrice[index].date,
-        price: pePrice * historicArsPrice[index].price
-      });
-    }
+    newArray.push({
+    date: formattedDate,
+    price: historicArsPrice[index].price !== undefined ? pePrice * historicArsPrice[index].price : 0
+    });
   });
 
-  return newArray;
+  return newArray.reverse().sort();
 };
 
 export default createChartData;

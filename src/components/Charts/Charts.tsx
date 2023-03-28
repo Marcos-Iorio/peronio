@@ -1,4 +1,4 @@
-import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, XAxis, ResponsiveContainer, YAxis, Tooltip } from "recharts";
 
 import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
@@ -9,53 +9,11 @@ import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
 import { formatBalance } from "../../utils/formatPrice";
 import useTotalSupply from "../../hooks/useTotalSupply";
-import fetchPairHourDatas from "../../querys/fetchPairHourDatas";
-import { useEffect } from "react";
-
-const dataEx = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
-  }
-];
+import useFetcherPairPrices from "../../hooks/useFetchedPairPrices";
+import { PairDataTimeWindowEnum } from "../../../types/utils";
+import { useEffect, useState } from "react";
+import HoverUpdater from "./HoverUpdater";
+import { IArsArray } from "../../../types/fetchPair";
 
 const showChartsVariants = {
   visible: {
@@ -89,7 +47,31 @@ const chartVariant = {
   }
 };
 
+const dateFormattingByTimewindow: Record<PairDataTimeWindowEnum, Intl.DateTimeFormatOptions> = {
+  [PairDataTimeWindowEnum.DAY]: {
+    hour: '2-digit',
+    minute: '2-digit',
+  },
+  [PairDataTimeWindowEnum.WEEK]: {
+    month: 'short',
+    day: '2-digit',
+  },
+  [PairDataTimeWindowEnum.MONTH]: {
+    month: 'short',
+    day: '2-digit',
+  },
+  [PairDataTimeWindowEnum.YEAR]: {
+    month: 'short',
+    day: '2-digit',
+  },
+}
+
 const Charts = () => {
+  const [timeWindow, setTimeWindow] = useState<PairDataTimeWindowEnum>(1);
+  const [hoverValue, setHoverValue] = useState<number | undefined>()
+  const [hoverDate, setHoverDate] = useState<string | undefined>()
+  const [arsPriceData, setArsPriceData] = useState<IArsArray>([]);
+
   const [usdcReserve, , pePrice] = usePairs();
   const arsPrice = useARSPrice();
   const totalSupply = useTotalSupply();
@@ -103,6 +85,25 @@ const Charts = () => {
     12
   );
 
+
+  const dateFormatting = dateFormattingByTimewindow[timeWindow]
+  
+ /*  const changeTimeWindowHandler = (time: number) => {
+    const TIME_IN_WORDS = [
+      {
+        1: 'DAY',
+        2: 'WEEK',
+        3: 'MONTH'
+      }
+    ]
+
+    const data = useFetcherPairPrices(TIME_IN_WORDS);
+    setArsPriceData(data);
+    setTimeWindow(time);
+  } */
+
+  const data = useFetcherPairPrices('DAY');
+  
   return (
     <>
       <motion.div
@@ -129,27 +130,31 @@ const Charts = () => {
               <InfoPopover title='¿Que significa "Precio PE/ARS"?' text="asd" />
             </div>
             <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
-              <div className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
+              <button /* onClick={changeTimeWindowHandler} */ style={{backgroundColor: timeWindow === 1 ? '3b3b3b': ''}} className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
                 24H
-              </div>
-              <div className="font-Abril text-lg font-normal bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
+              </button>
+              <button /* onClick={changeTimeWindowHandler} */  style={{backgroundColor: timeWindow === 2 ? '3b3b3b': ''}} className="font-Abril text-lg font-normal bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
                 1W
-              </div>
-              <div className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
+              </button>
+              <button /* onClick={changeTimeWindowHandler} */  style={{backgroundColor: timeWindow === 3 ? '3b3b3b': ''}} className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md">
                 1M
-              </div>
+              </button>
             </div>
           </div>
           <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-full">
             <AreaChart
               width={300}
               height={200}
-              data={dataEx}
+              data={data}
               margin={{
                 top: 40,
                 right: 0,
                 left: 0,
                 bottom: 0
+              }}
+              onMouseLeave={() => {
+                if (setHoverDate) setHoverDate(undefined)
+                if (setHoverValue) setHoverValue(undefined)
               }}
             >
               <defs>
@@ -158,13 +163,16 @@ const Charts = () => {
                   <stop offset="80%" stopColor="#82ca9d" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="name" />
+              <XAxis dataKey="date" tickFormatter={(time) => time.toLocaleString('es-es', dateFormatting)}
+          minTickGap={8}/>
+              <YAxis dataKey="price" axisLine={false} tickLine={false} domain={['auto', 'auto']} hide />
               <Area
                 type="linear"
-                dataKey="uv"
+                dataKey="price"
                 fillOpacity={1}
                 stroke="#82ca9d"
                 fill="url(#colorPrice)"
+                strokeWidth={2}
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -240,7 +248,7 @@ const Charts = () => {
             <AreaChart
               width={300}
               height={200}
-              data={dataEx}
+              data={data}
               margin={{
                 top: 40,
                 right: 0,
