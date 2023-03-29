@@ -3,10 +3,10 @@ import { createClient } from "urql";
 const URL = "https://api.thegraph.com/subgraphs/name/nlgonzalez/peronio-dapp";
 
 const fetchPairDayDatas = async (time: number) => {
-    const query = `
-     query ($first: Int!) {
+  const query = `
+     query ($time: Int!) {
         pairDayDatas(
-            first: 10
+            first: $time
             where: {pairAddress: "0x93cbcad1f9642a80e38d980fb872215237d91794"}
             orderBy: date
             orderDirection: desc
@@ -17,14 +17,14 @@ const fetchPairDayDatas = async (time: number) => {
         }
       }
     `;
-  
-    const client = createClient({
-      url: URL
-    });
 
-    const data = await client.query(query, {time}).toPromise();
+  const client = createClient({
+    url: URL
+  });
 
-    return data;
-}
+  const data = await client.query(query, { time }).toPromise();
 
-export default fetchPairDayDatas
+  return data;
+};
+
+export default fetchPairDayDatas;
