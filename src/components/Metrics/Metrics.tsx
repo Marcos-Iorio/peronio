@@ -1,11 +1,4 @@
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  ResponsiveContainer,
-  YAxis,
-  Tooltip
-} from "recharts";
+import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
 
 import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
@@ -16,18 +9,7 @@ import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
 import { formatBalance } from "../../utils/formatPrice";
 import useTotalSupply from "../../hooks/useTotalSupply";
-import {
-  PairDataTimeWindow,
-  PairDataTimeWindowEnum
-} from "../../../types/utils";
-import { useEffect, useState } from "react";
-import { IArsArray } from "../../../types/fetchPair";
-import getPairPrices from "../../utils/getPairPrices";
-import useARSHistoricPrice from "../../hooks/useARSHistoricPrice";
-import HoverUpdater from "./HoverUpdater";
-import { getTimeWindowChange } from "../../utils/getTimeWindowChange";
-
-import { isSameDay, subDays } from "date-fns";
+import PairChartWrapper from "./Charts/PairChartWrapper";
 
 const showChartsVariants = {
   visible: {
@@ -61,42 +43,7 @@ const chartVariant = {
   }
 };
 
-const dateFormattingByTimewindow: Record<
-  PairDataTimeWindowEnum,
-  Intl.DateTimeFormatOptions
-> = {
-  [PairDataTimeWindowEnum.DAY]: {
-    hour: "2-digit",
-    minute: "2-digit"
-  },
-  [PairDataTimeWindowEnum.WEEK]: {
-    month: "short",
-    day: "2-digit"
-  },
-  [PairDataTimeWindowEnum.MONTH]: {
-    month: "short",
-    day: "2-digit"
-  },
-  [PairDataTimeWindowEnum.YEAR]: {
-    month: "short",
-    day: "2-digit"
-  }
-};
-
-const findArsPrice = (prices: any[], date: string | number | Date) => {
-  let priceFound: any;
-  let lookupDate = new Date(date);
-  while (priceFound === undefined) {
-    // eslint-disable-next-line no-loop-func
-    priceFound = prices.find((price) =>
-      isSameDay(new Date(price.date), lookupDate)
-    );
-    lookupDate = subDays(lookupDate, 1);
-  }
-  return priceFound;
-};
-
-const getChartColors = ({
+export const getChartColors = ({
   isChangePositive
 }: {
   isChangePositive: boolean;
@@ -106,20 +53,11 @@ const getChartColors = ({
     : { gradient1: "#ED4B9E", gradient2: "#ED4B9E", stroke: "#ED4B9E " };
 };
 
-const Charts = () => {
-  const [timeWindow, setTimeWindow] = useState<PairDataTimeWindowEnum>(0);
-  const [hoverValue, setHoverValue] = useState<number | undefined>();
-  const [hoverDate, setHoverDate] = useState<string | undefined>();
-  const [currentDate, setCurrentDate] = useState<string>();
-  const [arsPriceData, setArsPriceData] = useState<IArsArray>([]);
-  const [pairPriceData, setPairPriceData] = useState<IArsArray>([]);
-
-  const [usdcReserve, , pePrice] = usePairs();
+const Metrics = () => {
   const arsPrice = useARSPrice();
-  const totalSupply = useTotalSupply();
-  const historicArsPrices = useARSHistoricPrice();
-
+  const [usdcReserve, , pePrice] = usePairs();
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
+  const totalSupply = useTotalSupply();
 
   const fmtBalance = formatBalance(usdcReserve, 6, 8);
   const fmtTotalSupply = formatBalance(
@@ -127,65 +65,6 @@ const Charts = () => {
     6,
     12
   );
-
-  const dateFormatting = dateFormattingByTimewindow[timeWindow];
-  const { changePercentage, changeValue } = getTimeWindowChange(arsPriceData);
-  const isChangePositive = changeValue >= 0;
-
-  const colors = getChartColors({ isChangePositive });
-  const valueToDisplay = hoverValue?.toFixed(3) || arsPricePerPe;
-
-  const changeTimeWindowHandler = async (time: number) => {
-    let options: PairDataTimeWindow;
-
-    if (time === 0) {
-      options = "DAY";
-    } else if (time === 1) {
-      options = "WEEK";
-    } else {
-      options = "MONTH";
-    }
-
-    const data = await getPairPrices(options, historicArsPrices);
-    setArsPriceData(data);
-    setTimeWindow(time);
-  };
-
-  useEffect(() => {
-    const data = getPairPrices("DAY", historicArsPrices).then((response) =>
-      setArsPriceData(response)
-    );
-    setTimeWindow(0);
-  }, [historicArsPrices]);
-
-  useEffect(() => {
-    if (!historicArsPrices || historicArsPrices.length === 0) {
-      setArsPriceData([]);
-      return;
-    }
-    const arsPricedValues = arsPriceData.map((pairPrice) => {
-      return {
-        ...pairPrice,
-        value:
-          findArsPrice(historicArsPrices, pairPrice.date)?.price /
-          pairPrice.price
-      };
-    });
-
-    setPairPriceData(arsPricedValues.splice(0, 31));
-  }, [historicArsPrices, arsPriceData]);
-
-  useEffect(() => {
-    const currentDate = new Date().toLocaleString("es-es", {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
-
-    setCurrentDate(currentDate);
-  }, []);
 
   return (
     <>
@@ -199,122 +78,7 @@ const Charts = () => {
           variants={chartVariant}
           className="p-5 xl:basis-4/6 laptop:basis-1/2 2xl:basis-4/5 border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-h-[20rem] 2xl:min-h-[25rem] xl:max-w-[80%] laptop:max-w-[50%] flex flex-col"
         >
-          <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
-            <div className="flex flex-row gap-3">
-              <div className="flex flex-col">
-                <div className="font-Roboto xl:text-3xl mobile:text-3xl font-bold">
-                  {valueToDisplay}
-                </div>
-                <div>{hoverDate || currentDate}</div>
-              </div>
-              <div
-                style={{ color: isChangePositive ? "#31D0AA" : "#ED4B9E" }}
-                className="font-Roboto text-lg mobile:text-xl"
-              >{`${isChangePositive ? "+" : ""}${changeValue.toFixed(
-                3
-              )} (${changePercentage}%)`}</div>
-            </div>
-            <div className="font-Roboto xl:text-2xl font-bold flex flex-row mobile:justify-between mobile:mb-2 gap-5">
-              <p className="xL:text-2xl mobile:text-xl font-Roboto">
-                Precio PE/ARS
-              </p>
-              <InfoPopover title='¿Que significa "Precio PE/ARS"?' text="asd" />
-            </div>
-            <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
-              <button
-                onClick={() => changeTimeWindowHandler(0)}
-                style={{
-                  backgroundColor: timeWindow === 0 ? "#00B7C2" : "#1b1b1b"
-                }}
-                className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
-              >
-                24H
-              </button>
-              <button
-                onClick={() => changeTimeWindowHandler(1)}
-                style={{
-                  backgroundColor: timeWindow === 1 ? "#00B7C2" : "#1b1b1b"
-                }}
-                className="font-Abril text-lg font-normal bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
-              >
-                1W
-              </button>
-              <button
-                onClick={() => changeTimeWindowHandler(2)}
-                style={{
-                  backgroundColor: timeWindow === 2 ? "#00B7C2" : "#1b1b1b"
-                }}
-                className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
-              >
-                1M
-              </button>
-            </div>
-          </div>
-          <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-full">
-            <AreaChart
-              width={300}
-              height={200}
-              data={pairPriceData}
-              margin={{
-                top: 0,
-                right: 5,
-                left: 5,
-                bottom: 5
-              }}
-              onMouseLeave={() => {
-                if (setHoverDate) setHoverDate(undefined);
-                if (setHoverValue) setHoverValue(undefined);
-              }}
-            >
-              <defs>
-                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor={colors.gradient1}
-                    stopOpacity={0.3}
-                  />
-                  <stop
-                    offset="80%"
-                    stopColor={colors.gradient2}
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-              </defs>
-              <XAxis
-                dataKey="date"
-                tickFormatter={(time) =>
-                  time.toLocaleString("es-es", dateFormatting)
-                }
-                minTickGap={8}
-              />
-              <YAxis
-                dataKey="price"
-                axisLine={false}
-                tickLine={false}
-                domain={["auto", "auto"]}
-                hide
-              />
-              <Tooltip
-                contentStyle={{ display: "none" }}
-                formatter={(tooltipValue, name, props) => (
-                  <HoverUpdater
-                    locale={"es-es"}
-                    payload={props.payload}
-                    setHoverValue={setHoverValue}
-                    setHoverDate={setHoverDate}
-                  />
-                )}
-              />
-              <Area
-                type="linear"
-                dataKey="price"
-                fillOpacity={1}
-                stroke={colors.stroke}
-                fill="url(#colorPrice)"
-                strokeWidth={2}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <PairChartWrapper arsPrice={arsPrice} />
         </motion.div>
         <motion.div
           variants={chartVariant}
@@ -387,7 +151,7 @@ const Charts = () => {
             <AreaChart
               width={300}
               height={200}
-              data={arsPriceData}
+              data={[]}
               margin={{
                 top: 40,
                 right: 0,
@@ -475,4 +239,4 @@ const Charts = () => {
   );
 };
 
-export default Charts;
+export default Metrics;

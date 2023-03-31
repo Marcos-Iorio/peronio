@@ -5,7 +5,7 @@ import WizardModal from "../components/WizardModal/WizardModal";
 import { WizardContext } from "../contexts/WizardContext";
 
 import AnimatedUnderline from "../components/animatedUnderline/AnimatedUnderline";
-import Charts from "../components/Charts/Charts";
+import Metrics from "../components/Metrics/Metrics";
 import Head from "next/head";
 
 const Main = styled.main`
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
           </p>
         </header>
         <div className="flex laptop:flex-col mobile:flex-col mobile:overflow-y-hidden mobile:h-full mobile:max-h-full mobile:min-h-full gap-5 justify-center mobile:px-7 pb-10 pt-10 laptop:px-20 2xl:px-40 laptop:pb-16">
-          <Charts />
+          <Metrics />
         </div>
         <h3 className="mobile:mt-auto text-4xl mobile:3xl font-Abril text-center xl:mb-10">
           Chequeá nuestro exchange{" "}
