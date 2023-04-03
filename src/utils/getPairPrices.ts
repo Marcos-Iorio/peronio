@@ -7,28 +7,32 @@ import { IArsArray } from "../../types/fetchPair";
 
 const getPairPrices = async (
   time: PairDataTimeWindow,
-  historicArsPrice: IArsArray
+  historicArsPrice: IArsArray,
+  isLpData: boolean
 ) => {
   switch (time) {
     case "DAY":
       const dayResult = await fetchPairHourDatas(12);
       const dayData = createChartData(
         dayResult.data.pairHourDatas,
-        historicArsPrice
+        historicArsPrice,
+        false
       );
       return dayData;
     case "WEEK":
       const weekResult = await fetchPairDayDatas(8);
       const weekData = createChartData(
         weekResult.data.pairDayDatas,
-        historicArsPrice
+        historicArsPrice,
+        isLpData
       );
       return weekData;
     case "MONTH":
       const monthResult = await fetchPairDayDatas(31);
       const monthData = createChartData(
         monthResult.data.pairDayDatas,
-        historicArsPrice
+        historicArsPrice,
+        false
       );
       return monthData;
     default:

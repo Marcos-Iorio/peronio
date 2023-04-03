@@ -51,8 +51,8 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
   const valueToDisplay = hoverValue?.toFixed(3) || arsPricePerPe;
 
   useEffect(() => {
-    const data = getPairPrices("DAY", historicArsPrices).then((response) =>
-      setArsPriceData(response)
+    const data = getPairPrices("DAY", historicArsPrices, false).then(
+      (response) => setArsPriceData(response)
     );
     setTimeWindow(0);
   }, [historicArsPrices]);
@@ -97,7 +97,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
       options = "MONTH";
     }
 
-    const data = await getPairPrices(options, historicArsPrices);
+    const data = await getPairPrices(options, historicArsPrices, false);
     setArsPriceData(data);
     setTimeWindow(time);
   };

@@ -10,6 +10,7 @@ import useARSPrice from "../../hooks/useARSPrice";
 import { formatBalance } from "../../utils/formatPrice";
 import useTotalSupply from "../../hooks/useTotalSupply";
 import PairChartWrapper from "./Charts/PairChartWrapper";
+import LpChartWrapper from "./Charts/LpChartWrapper";
 
 const showChartsVariants = {
   visible: {
@@ -135,47 +136,7 @@ const Metrics = () => {
             </div>
           </div>
         </motion.div>
-        <motion.div
-          variants={chartVariant}
-          className="p-5 xl:basis-[37.6%] 2xl:basis-2/5 laptop:basis-1/2 laptop:grow border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md xl:min-w-[37%] 2xl:min-w-[40%] flex flex-col"
-        >
-          <div className="flex flex-row w-full justify-between">
-            <p className="text-2xl font-Roboto">{pePrice.toFixed(4)}</p>
-            <div className="font-Roboto xl:text-xl mobile:text-2xl basis-2/4 2xl:text-2xl font-bold flex flex-col items-center">
-              <p>Liquidity pool</p>
-              <span>(PE/USDT)</span>
-            </div>
-            <InfoPopover title='¿Que es "el Liquidity Pool"?' text="asd" />
-          </div>
-          <ResponsiveContainer className="h-full w-full">
-            <AreaChart
-              width={300}
-              height={200}
-              data={[]}
-              margin={{
-                top: 40,
-                right: 0,
-                left: 0,
-                bottom: 0
-              }}
-            >
-              <defs>
-                <linearGradient id="lineColor" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#DD0FAA" stopOpacity={0.3} />
-                  <stop offset="80%" stopColor="#DD0FAA" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <XAxis dataKey="name" />
-              <Area
-                type="linear"
-                dataKey="uv"
-                fillOpacity={1}
-                stroke="#DD0FAA"
-                fill="url(#lineColor)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </motion.div>
+        <LpChartWrapper animation={chartVariant} pePrice={pePrice} />
         <motion.div
           variants={chartVariant}
           className="p-3 xl:basis-2/6 xl:max-w-[31%] laptop:basis-full 2xl:basis-2/5 laptop:w-full 2xl:max-w-[40%]  border-solid border border-[#00B7C2] bg-[#363636]/50 rounded-md backdrop-blur-md "
