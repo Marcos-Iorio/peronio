@@ -1,5 +1,5 @@
 export interface IReserves {
-  reserve0: number;
+  reserve0: string | number;
   reserve1: number;
   hourStartUnix: number;
   date: number;

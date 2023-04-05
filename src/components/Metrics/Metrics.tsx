@@ -57,7 +57,6 @@ const Metrics = () => {
   const [usdcReserve, , pePrice] = usePairs();
   const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
   const totalSupply = useTotalSupply();
-
   const fmtBalance = formatBalance(usdcReserve, 6, 8);
   const fmtTotalSupply = formatBalance(
     totalSupply / Number(arsPricePerPe),

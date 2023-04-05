@@ -7,20 +7,13 @@ import useARSHistoricPrice from "../../../hooks/useARSHistoricPrice";
 import getPairPrices from "../../../utils/getPairPrices";
 import BasicDataChart from "./BasicDataChart";
 import usePairs from "../../../hooks/usePairs";
+import { getChartColors } from "../Metrics";
+import { formatBalance } from "../../../utils/formatPrice";
 
 interface ILpChartWrapper {
   animation: any;
   pePrice: number;
 }
-const getChartColors = ({
-  isChangePositive
-}: {
-  isChangePositive: boolean;
-}) => {
-  return isChangePositive
-    ? { gradient1: "#00E7B0", gradient2: "#0C8B6C", stroke: "#31D0AA" }
-    : { gradient1: "#ED4B9E", gradient2: "#ED4B9E", stroke: "#ED4B9E " };
-};
 
 const LpChartWrapper = (props: ILpChartWrapper) => {
   const [lpData, setLpData] = useState<IArsArray>([]);
@@ -34,7 +27,9 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
   const { changePercentage, changeValue } = getTimeWindowChange(lpData);
   const isChangePositive = changeValue >= 0;
 
-  const valueToDisplay = hoverValue?.toFixed(5) || pePrice.toFixed(5);
+  const fmtUSDCLiquidity: string = formatBalance(Number(usdcReserve), 6, 5);
+
+  const valueToDisplay = hoverValue || fmtUSDCLiquidity;
 
   const colors = getChartColors({ isChangePositive });
 
@@ -43,8 +38,6 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
       (response) => setLpData(response)
     );
   }, [historicArsPrices]);
-
-  console.log(lpData);
 
   useEffect(() => {
     const currentDate = new Date().toLocaleString("es-es", {
@@ -72,7 +65,10 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
           <p>Liquidity pool</p>
           <span>(PE/USDT)</span>
         </div>
-        <InfoPopover title='¿Que es "el Liquidity Pool"?' text="asd" />
+        <InfoPopover
+          title='¿Que es "el Liquidity Pool"?'
+          text="Liquidity Pool o Pool de liquidez es la forma de referirse al depósito de criptomonedas que se realiza sobre un contrato inteligente, y que sirven para proveer de liquidez en las operaciones de intercambio de los activos depositados. En este caso, cada vez que se compran P, la reserva de valor(USDC) crece y por lo tanto el precio sube."
+        />
       </div>
       <BasicDataChart
         data={lpData}

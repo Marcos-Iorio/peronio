@@ -1,8 +1,16 @@
+import { BigNumber } from "ethers";
 import { IArs, IArsArray, IReservesArray } from "../../types/fetchPair";
 import formatDate from "./formatDate";
+import { formatBalance } from "./formatPrice";
 import getPePrice from "./getPePrice";
 
-const createChartData = (data: IReservesArray, historicArsPrice: IArsArray, isLpData: boolean) => {
+const MAX_LENGTH = 11;
+
+const createChartData = (
+  data: IReservesArray,
+  historicArsPrice: IArsArray,
+  isLpData: boolean
+) => {
   const newArray: IArs[] = [];
 
   if (data === undefined) {
@@ -16,13 +24,22 @@ const createChartData = (data: IReservesArray, historicArsPrice: IArsArray, isLp
 
     const pePrice = getPePrice(value.reserve0, value.reserve1);
 
-    if(isLpData){
+    if (value.reserve0.toString().length < MAX_LENGTH) {
+      value.reserve0 = value.reserve0 + "0";
+    }
+
+    const fmtUSDCLiquidity: string = formatBalance(
+      Number(value.reserve0.toString().replace(".", "")),
+      6,
+      8
+    );
+
+    if (isLpData) {
       newArray.push({
         date: formattedDate,
-        price: pePrice ?? 0,
-            
+        price: parseFloat(fmtUSDCLiquidity)
       });
-    }else{
+    } else {
       newArray.push({
         date: formattedDate,
         price:
@@ -31,9 +48,6 @@ const createChartData = (data: IReservesArray, historicArsPrice: IArsArray, isLp
             : 0
       });
     }
-
-
-    
   });
 
   return newArray.reverse().sort();

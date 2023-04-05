@@ -24,7 +24,7 @@ const InfoPopover = ({ title, text }: IInfoPopover) => {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute top-10 laptop:right-0 mobile:-right-8 z-50 bg-[#00B7C2] rounded-md  max-w-sm w-screen p-5">
+        <Popover.Panel className="absolute top-10 laptop:right-0 mobile:-right-8 z-50 bg-[#00B7C2] rounded-md  max-w-md w-screen p-5">
           {({ close }) => (
             <div className="flex flex-col relative">
               <button
@@ -37,12 +37,7 @@ const InfoPopover = ({ title, text }: IInfoPopover) => {
                 />
               </button>
               <h2 className="font-Abril text-xl font-normal mb-4">{title}</h2>
-              <p className="font-Roboto text-[18px]">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Deleniti sit obcaecati impedit quo, magni fuga corporis error
-                eius debitis sed aspernatur, veritatis iure nemo molestiae
-                officia consequatur similique maxime. Doloribus?
-              </p>
+              <p className="font-Roboto text-[18px]">{text}</p>
             </div>
           )}
         </Popover.Panel>

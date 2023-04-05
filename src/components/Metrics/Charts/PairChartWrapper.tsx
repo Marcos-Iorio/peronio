@@ -122,7 +122,10 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
           <p className="xL:text-2xl mobile:text-xl font-Roboto">
             Precio PE/ARS
           </p>
-          <InfoPopover title='¿Que significa "Precio PE/ARS"?' text="asd" />
+          <InfoPopover
+            title='¿Que significa "Precio PE/ARS"?'
+            text="El gráfico muestra información sobre el precio frente al Peso Argetino en tres períodos diferentes de tiempo."
+          />
         </div>
         <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
           <button
