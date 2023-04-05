@@ -1,16 +1,14 @@
-import { AreaChart, Area, XAxis, ResponsiveContainer } from "recharts";
-
-import GaugeChart from "react-gauge-chart";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import imagenBoveda from "/public/boveda.svg";
-import InfoPopover from "../InfoPopover/InfoPopover";
 import usePairs from "../../hooks/usePairs";
 import useARSPrice from "../../hooks/useARSPrice";
 import { formatBalance } from "../../utils/formatPrice";
 import useTotalSupply from "../../hooks/useTotalSupply";
 import PairChartWrapper from "./Charts/PairChartWrapper";
 import LpChartWrapper from "./Charts/LpChartWrapper";
+
+import GaugeChart from "./Charts/GaugeChart";
 
 const showChartsVariants = {
   visible: {
@@ -108,33 +106,7 @@ const Metrics = () => {
           variants={chartVariant}
           className="p-5 2xl:basis-[20%] laptop:basis-1/2 laptop:max-w-fit border-solid border border-[#00B7C2] bg-[#363636]/50 backdrop-blur-md rounded-md h-full min-h-[20em]"
         >
-          <div className="flex flex-col h-full w-full items-center justify-center align-middle">
-            <div className="flex flex-row w-full justify-between">
-              <p className="text-2xl font-Roboto">Equilibrado</p>
-              <InfoPopover title="¿Cómo funciona el indicador?" text="asd" />
-            </div>
-            <div className="rounded-md bg-[#1b1b1b]/30 box-content">
-              <div className="flex flex-col justify-center items-center py-3">
-                <p className="text-3xl font-Roboto">{pePrice.toFixed(4)}</p>
-                <p className="text-2xl font-Roboto">+3%</p>
-              </div>
-              <div className="mt-auto h-full relative">
-                <p className="absolute left-16 top-1 font-Roboto">0%</p>
-                <p className="absolute right-14 top-1 font-Roboto">+5%</p>
-                <GaugeChart
-                  id="gauge-chart4"
-                  colors={["#ff4e4e", "#ffe851", "#61ff5e"]}
-                  nrOfLevels={3}
-                  arcPadding={0.1}
-                  cornerRadius={3}
-                  needleColor="#fff"
-                  needleBaseColor="#fff"
-                  percent={0.6}
-                  hideText={true}
-                />
-              </div>
-            </div>
-          </div>
+          <GaugeChart pePrice={pePrice} />
         </motion.div>
         <LpChartWrapper animation={chartVariant} pePrice={pePrice} />
         <motion.div
