@@ -6,6 +6,7 @@ import Gauge from "react-gauge-chart";
 import useARSHistoricPrice from "../../../hooks/useARSHistoricPrice";
 import { IArsArray } from "../../../../types/fetchPair";
 import { getTimeWindowChange } from "../../../utils/getTimeWindowChange";
+import usePeronioRead from "../../../hooks/usePeronioRead";
 
 interface IGauge {
   pePrice: number;
@@ -13,9 +14,37 @@ interface IGauge {
 
 const GaugeChart = ({ pePrice }: IGauge) => {
   const [lpData, setLpData] = useState<IArsArray>([]);
+  const [buyingPrice, setBuyingPrice] = useState<number>(0);
   const historicArsPrices = useARSHistoricPrice();
 
   const { changePercentage, changeValue } = getTimeWindowChange(lpData);
+
+  const { data } = usePeronioRead("buyingPrice");
+
+  const intPePrice = Number(pePrice * 1000000).toFixed(0);
+  const rest = buyingPrice - parseInt(intPePrice);
+  const averagePrice = (parseInt(intPePrice) + buyingPrice) / 2;
+  const percentage = (rest / averagePrice) * 100;
+
+  const gaugeIndicator = percentage / 10;
+
+  let title = "";
+  let color = "";
+
+  if (gaugeIndicator * 2 >= 0.7) {
+    title = "Oportunidad";
+    color = "#61ff5e";
+  } else if (gaugeIndicator * 2 <= 0.3) {
+    title = "Oportunidad";
+    color = "#ff4e4e";
+  } else {
+    title = "Equilibrado";
+    color = "#ffe851";
+  }
+  useEffect(() => {
+    const BnValue = Number(data?._hex);
+    setBuyingPrice(BnValue);
+  }, [data]);
 
   useEffect(() => {
     const data = getPairPrices("WEEK", historicArsPrices, true).then(
@@ -26,13 +55,19 @@ const GaugeChart = ({ pePrice }: IGauge) => {
   return (
     <div className="flex flex-col h-full w-full items-center justify-center align-middle">
       <div className="flex flex-row w-full justify-between">
-        <p className="text-2xl font-Roboto">Equilibrado</p>
+        <p style={{ color: color }} className="text-2xl font-Roboto">
+          {title}
+        </p>
         <InfoPopover title="¿Cómo funciona el indicador?" text="asd" />
       </div>
       <div className="rounded-md bg-[#1b1b1b]/30 box-content">
         <div className="flex flex-col justify-center items-center py-3">
-          <p className="text-3xl font-Roboto">{pePrice.toFixed(4)}</p>
-          <p className="text-2xl font-Roboto">{changePercentage}%</p>
+          <p style={{ color: color }} className="text-3xl font-Roboto">
+            {pePrice.toFixed(6)}
+          </p>
+          <p style={{ color: color }} className="text-2xl font-Roboto">
+            {percentage.toFixed(2)}%
+          </p>
         </div>
         <div className="mt-auto h-full relative">
           <p className="absolute left-16 top-1 font-Roboto">0%</p>
@@ -43,9 +78,9 @@ const GaugeChart = ({ pePrice }: IGauge) => {
             nrOfLevels={3}
             arcPadding={0.1}
             cornerRadius={3}
-            needleColor="#fff"
-            needleBaseColor="#fff"
-            percent={1}
+            needleColor={color}
+            needleBaseColor={color}
+            percent={gaugeIndicator * 2}
             hideText={true}
           />
         </div>
