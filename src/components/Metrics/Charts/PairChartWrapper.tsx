@@ -163,6 +163,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
         setHoverValue={setHoverValue}
         data={pairPriceData}
         colors={colors}
+        gradientId="arsColor"
         timeWindow={timeWindow}
       />
     </>

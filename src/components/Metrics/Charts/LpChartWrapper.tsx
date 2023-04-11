@@ -74,6 +74,7 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
         data={lpData}
         colors={colors}
         timeWindow={1}
+        gradientId="lpPrice"
         setHoverDate={setHoverDate}
         setHoverValue={setHoverValue}
       />

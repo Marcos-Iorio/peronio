@@ -19,6 +19,7 @@ interface ILineChart {
     gradient2: string;
     stroke: string;
   };
+  gradientId: string;
   timeWindow: PairDataTimeWindowEnum;
 }
 
@@ -49,6 +50,7 @@ const BasicDataChart = ({
   setHoverValue,
   data,
   colors,
+  gradientId,
   timeWindow
 }: ILineChart) => {
   const dateFormatting = dateFormattingByTimewindow[timeWindow];
@@ -71,7 +73,7 @@ const BasicDataChart = ({
         }}
       >
         <defs>
-          <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor={colors.gradient1} stopOpacity={0.3} />
             <stop offset="80%" stopColor={colors.gradient2} stopOpacity={0} />
           </linearGradient>
@@ -104,7 +106,7 @@ const BasicDataChart = ({
           dataKey="price"
           fillOpacity={1}
           stroke={colors.stroke}
-          fill="url(#colorPrice)"
+          fill={`url(#${gradientId})`}
           strokeWidth={2}
         />
       </AreaChart>

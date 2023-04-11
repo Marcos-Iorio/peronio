@@ -5,7 +5,6 @@ import InfoPopover from "../../InfoPopover/InfoPopover";
 import Gauge from "react-gauge-chart";
 import useARSHistoricPrice from "../../../hooks/useARSHistoricPrice";
 import { IArsArray } from "../../../../types/fetchPair";
-import { getTimeWindowChange } from "../../../utils/getTimeWindowChange";
 import usePeronioRead from "../../../hooks/usePeronioRead";
 
 interface IGauge {
@@ -15,7 +14,7 @@ interface IGauge {
 const GaugeChart = ({ pePrice }: IGauge) => {
   const [lpData, setLpData] = useState<IArsArray>([]);
   const [buyingPrice, setBuyingPrice] = useState<number>(0);
-  const [gaugeIndicator, setGaugeIndicator] = useState<string>("0");
+  const [gaugeIndicator, setGaugeIndicator] = useState<number>(0);
   const historicArsPrices = useARSHistoricPrice();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,15 +29,15 @@ const GaugeChart = ({ pePrice }: IGauge) => {
   let title = "";
   let color = "";
 
-  if (parseFloat(gaugeIndicator) * 2 >= 0.7) {
+  if (percentage > 4.9) {
     title = "Oportunidad";
-    color = "#61ff5e";
-  } else if (parseFloat(gaugeIndicator) * 2 <= 0.3) {
+    color = "#31D0AA";
+  } else if (gaugeIndicator < 0) {
     title = "Oportunidad";
     color = "#ff4e4e";
   } else {
     title = "Equilibrado";
-    color = "#ffe851";
+    color = "#FACC15";
   }
 
   useEffect(() => {
@@ -47,9 +46,9 @@ const GaugeChart = ({ pePrice }: IGauge) => {
   }, [data]);
 
   useEffect(() => {
-    setGaugeIndicator((percentage / 10).toFixed(2));
+    setGaugeIndicator(Number(((percentage / 10) * 1.5).toFixed(2)));
     setIsLoading(false);
-  }, []);
+  }, [percentage]);
 
   useEffect(() => {
     const data = getPairPrices("WEEK", historicArsPrices, true).then(
@@ -80,13 +79,14 @@ const GaugeChart = ({ pePrice }: IGauge) => {
             <p className="absolute right-14 top-1 font-Roboto">+5%</p>
             <Gauge
               id="gauge-chart4"
-              colors={["#ff4e4e", "#ffe851", "#61ff5e"]}
+              colors={["#ff4e4e", "#FACC15", "#31D0AA"]}
+              animate={true}
               nrOfLevels={3}
-              arcPadding={0.1}
-              cornerRadius={3}
+              arcPadding={0}
+              cornerRadius={0}
               needleColor="#fff"
               needleBaseColor="#fff"
-              percent={parseFloat(gaugeIndicator) * 2}
+              percent={gaugeIndicator}
               hideText={true}
             />
           </div>
