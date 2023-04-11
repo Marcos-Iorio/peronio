@@ -7,8 +7,8 @@ import useARSHistoricPrice from "../../../hooks/useARSHistoricPrice";
 import getPairPrices from "../../../utils/getPairPrices";
 import BasicDataChart from "./BasicDataChart";
 import usePairs from "../../../hooks/usePairs";
-import { getChartColors } from "../Metrics";
 import { formatBalance } from "../../../utils/formatPrice";
+import { getChartColors } from "../Metrics";
 
 interface ILpChartWrapper {
   animation: any;
