@@ -9,6 +9,7 @@ import PairChartWrapper from "./Charts/PairChartWrapper";
 import LpChartWrapper from "./Charts/LpChartWrapper";
 
 import GaugeChart from "./Charts/GaugeChart";
+import { useCallback } from "react";
 
 const showChartsVariants = {
   visible: {

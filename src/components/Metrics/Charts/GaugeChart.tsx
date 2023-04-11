@@ -15,9 +15,10 @@ interface IGauge {
 const GaugeChart = ({ pePrice }: IGauge) => {
   const [lpData, setLpData] = useState<IArsArray>([]);
   const [buyingPrice, setBuyingPrice] = useState<number>(0);
+  const [gaugeIndicator, setGaugeIndicator] = useState<string>("0");
   const historicArsPrices = useARSHistoricPrice();
 
-  const { changePercentage, changeValue } = getTimeWindowChange(lpData);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { data } = usePeronioRead("buyingPrice");
 
@@ -26,25 +27,29 @@ const GaugeChart = ({ pePrice }: IGauge) => {
   const averagePrice = (parseInt(intPePrice) + buyingPrice) / 2;
   const percentage = (rest / averagePrice) * 100;
 
-  const gaugeIndicator = percentage / 10;
-
   let title = "";
   let color = "";
 
-  if (gaugeIndicator * 2 >= 0.7) {
+  if (parseFloat(gaugeIndicator) * 2 >= 0.7) {
     title = "Oportunidad";
     color = "#61ff5e";
-  } else if (gaugeIndicator * 2 <= 0.3) {
+  } else if (parseFloat(gaugeIndicator) * 2 <= 0.3) {
     title = "Oportunidad";
     color = "#ff4e4e";
   } else {
     title = "Equilibrado";
     color = "#ffe851";
   }
+
   useEffect(() => {
     const BnValue = Number(data?._hex);
     setBuyingPrice(BnValue);
   }, [data]);
+
+  useEffect(() => {
+    setGaugeIndicator((percentage / 10).toFixed(2));
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     const data = getPairPrices("WEEK", historicArsPrices, true).then(
@@ -60,31 +65,33 @@ const GaugeChart = ({ pePrice }: IGauge) => {
         </p>
         <InfoPopover title="¿Cómo funciona el indicador?" text="asd" />
       </div>
-      <div className="rounded-md bg-[#1b1b1b]/30 box-content">
-        <div className="flex flex-col justify-center items-center py-3">
-          <p style={{ color: color }} className="text-3xl font-Roboto">
-            {pePrice.toFixed(6)}
-          </p>
-          <p style={{ color: color }} className="text-2xl font-Roboto">
-            {percentage.toFixed(2)}%
-          </p>
+      {isLoading ? (
+        <p>Cargando...</p>
+      ) : (
+        <div className="rounded-md bg-[#1b1b1b]/30 box-content">
+          <div className="flex flex-col justify-center items-center py-3">
+            <p className="text-3xl font-Roboto">{pePrice.toFixed(6)}</p>
+            <p style={{ color: color }} className="text-2xl font-Roboto">
+              {percentage.toFixed(2)}%
+            </p>
+          </div>
+          <div className="mt-auto h-full relative">
+            <p className="absolute left-16 top-1 font-Roboto">0%</p>
+            <p className="absolute right-14 top-1 font-Roboto">+5%</p>
+            <Gauge
+              id="gauge-chart4"
+              colors={["#ff4e4e", "#ffe851", "#61ff5e"]}
+              nrOfLevels={3}
+              arcPadding={0.1}
+              cornerRadius={3}
+              needleColor="#fff"
+              needleBaseColor="#fff"
+              percent={parseFloat(gaugeIndicator) * 2}
+              hideText={true}
+            />
+          </div>
         </div>
-        <div className="mt-auto h-full relative">
-          <p className="absolute left-16 top-1 font-Roboto">0%</p>
-          <p className="absolute right-14 top-1 font-Roboto">+5%</p>
-          <Gauge
-            id="gauge-chart4"
-            colors={["#ff4e4e", "#ffe851", "#61ff5e"]}
-            nrOfLevels={3}
-            arcPadding={0.1}
-            cornerRadius={3}
-            needleColor={color}
-            needleBaseColor={color}
-            percent={gaugeIndicator * 2}
-            hideText={true}
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 };
