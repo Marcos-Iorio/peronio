@@ -64,6 +64,8 @@ const Metrics = () => {
     12
   );
 
+  const usdcPerPe = 1 / pePrice;
+
   return (
     <>
       <motion.div
@@ -85,7 +87,7 @@ const Metrics = () => {
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
               <p className="text-lg font-Roboto text-center">USDT/PE</p>
-              <p className="text-center text-6xl">240</p>
+              <p className="text-center text-6xl">{usdcPerPe.toFixed(2)}</p>
             </div>
             <div className="w-full h-[1px] my-2 bg-[#00B7C2]"></div>
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
@@ -159,7 +161,7 @@ const Metrics = () => {
                 <p className=" font-Roboto text-md">Precio PE por USDT</p>
                 <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
-                    {pePrice.toFixed(4)}
+                    {pePrice.toFixed(6)}
                   </p>
                 </div>
               </div>
