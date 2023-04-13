@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { IArsArray } from "../../../../types/fetchPair";
 import {
   PairDataTimeWindow,
@@ -57,22 +57,26 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
     setTimeWindow(0);
   }, [historicArsPrices]);
 
-  useEffect(() => {
+  const arsPricedValues = useMemo(() => {
     if (!historicArsPrices || historicArsPrices.length === 0) {
-      setArsPriceData([]);
-      return;
+      return [];
     }
-    const arsPricedValues = arsPriceData.map((pairPrice) => {
-      return {
-        ...pairPrice,
-        value:
-          findArsPrice(historicArsPrices, pairPrice.date)?.price /
-          pairPrice.price
-      };
-    });
 
-    setPairPriceData(arsPricedValues.splice(0, 31));
-  }, [historicArsPrices, arsPriceData]);
+    return arsPriceData
+      .map((pairPrice) => {
+        return {
+          ...pairPrice,
+          value:
+            findArsPrice(historicArsPrices, pairPrice.date)?.price /
+            pairPrice.price
+        };
+      })
+      .splice(0, 31);
+  }, [arsPriceData, historicArsPrices]);
+
+  useEffect(() => {
+    setPairPriceData(arsPricedValues);
+  }, [arsPricedValues]);
 
   useEffect(() => {
     const currentDate = new Date().toLocaleString("es-es", {
@@ -98,6 +102,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
     }
 
     const data = await getPairPrices(options, historicArsPrices, false);
+
     setArsPriceData(data);
     setTimeWindow(time);
   };

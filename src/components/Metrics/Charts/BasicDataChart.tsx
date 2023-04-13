@@ -56,7 +56,7 @@ const BasicDataChart = ({
   const dateFormatting = dateFormattingByTimewindow[timeWindow];
 
   return (
-    <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-full">
+    <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-fit">
       <AreaChart
         width={300}
         height={200}
@@ -64,7 +64,7 @@ const BasicDataChart = ({
         margin={{
           top: 0,
           right: 5,
-          left: 5,
+          left: 0,
           bottom: 5
         }}
         onMouseLeave={() => {
