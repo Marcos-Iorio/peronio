@@ -9,6 +9,7 @@ import BasicDataChart from "./BasicDataChart";
 import usePairs from "../../../hooks/usePairs";
 import { formatBalance } from "../../../utils/formatPrice";
 import { getChartColors } from "../Metrics";
+import LoadingChart from "./LoadingChart";
 
 interface ILpChartWrapper {
   animation: any;
@@ -20,6 +21,7 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
   const [hoverValue, setHoverValue] = useState<number | undefined>();
   const [hoverDate, setHoverDate] = useState<string | undefined>();
   const [currentDate, setCurrentDate] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [usdcReserve, , pePrice] = usePairs();
   const historicArsPrices = useARSHistoricPrice();
@@ -35,7 +37,10 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
 
   useEffect(() => {
     const data = getPairPrices("WEEK", historicArsPrices, true).then(
-      (response) => setLpData(response)
+      (response) => {
+        setLpData(response);
+        setIsLoading(false);
+      }
     );
   }, [historicArsPrices]);
 
@@ -50,6 +55,10 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
 
     setCurrentDate(currentDate);
   }, []);
+
+  if (isLoading) {
+    return <LoadingChart />;
+  }
 
   return (
     <motion.div

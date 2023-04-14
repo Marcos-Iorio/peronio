@@ -46,7 +46,7 @@ const GaugeChart = ({ pePrice }: IGauge) => {
   }, [data]);
 
   useEffect(() => {
-    setGaugeIndicator(Number(((percentage / 10) * 1.5).toFixed(2)));
+    setGaugeIndicator(Number(((percentage / 10) * 2).toFixed(2)));
     setIsLoading(false);
   }, [percentage]);
 
@@ -80,7 +80,7 @@ const GaugeChart = ({ pePrice }: IGauge) => {
             <Gauge
               id="gauge-chart4"
               colors={["#ff4e4e", "#FACC15", "#31D0AA"]}
-              animate={true}
+              animate={false}
               nrOfLevels={3}
               arcPadding={0}
               cornerRadius={0}

@@ -12,6 +12,7 @@ import InfoPopover from "../../InfoPopover/InfoPopover";
 import { isSameDay, subDays } from "date-fns";
 import { getChartColors } from "../Metrics";
 import ArsPriceChart from "./BasicDataChart";
+import LoadingChart from "./LoadingChart";
 
 interface IChartWrapper {
   arsPrice: number;
@@ -33,6 +34,7 @@ const findArsPrice = (prices: any[], date: string | number | Date) => {
 const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
   const [arsPriceData, setArsPriceData] = useState<IArsArray>([]);
   const [pairPriceData, setPairPriceData] = useState<IArsArray>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [timeWindow, setTimeWindow] = useState<PairDataTimeWindowEnum>(0);
   const [hoverValue, setHoverValue] = useState<number | undefined>();
@@ -52,7 +54,10 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
 
   useEffect(() => {
     const data = getPairPrices("DAY", historicArsPrices, false).then(
-      (response) => setArsPriceData(response)
+      (response) => {
+        setArsPriceData(response);
+        setIsLoading(false);
+      }
     );
     setTimeWindow(0);
   }, [historicArsPrices]);
@@ -106,7 +111,9 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
     setArsPriceData(data);
     setTimeWindow(time);
   };
-
+  if (isLoading) {
+    return <LoadingChart />;
+  }
   return (
     <>
       <div className="flex mobile:flex-col xl:flex-row w-full justify-between">
