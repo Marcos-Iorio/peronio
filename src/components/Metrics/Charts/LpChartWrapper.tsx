@@ -56,10 +56,6 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
     setCurrentDate(currentDate);
   }, []);
 
-  if (isLoading) {
-    return <LoadingChart />;
-  }
-
   return (
     <motion.div
       variants={props.animation}
@@ -86,6 +82,7 @@ const LpChartWrapper = (props: ILpChartWrapper) => {
         gradientId="lpPrice"
         setHoverDate={setHoverDate}
         setHoverValue={setHoverValue}
+        isLoading={isLoading}
       />
     </motion.div>
   );

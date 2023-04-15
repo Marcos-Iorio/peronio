@@ -9,6 +9,7 @@ import {
 } from "recharts";
 import { PairDataTimeWindowEnum } from "../../../../types/utils";
 import HoverUpdater from "../HoverUpdater";
+import LoadingChart from "./LoadingChart";
 
 interface ILineChart {
   setHoverDate: Dispatch<SetStateAction<string | undefined>>;
@@ -21,6 +22,7 @@ interface ILineChart {
   };
   gradientId: string;
   timeWindow: PairDataTimeWindowEnum;
+  isLoading: boolean;
 }
 
 const dateFormattingByTimewindow: Record<
@@ -51,9 +53,14 @@ const BasicDataChart = ({
   data,
   colors,
   gradientId,
-  timeWindow
+  timeWindow,
+  isLoading
 }: ILineChart) => {
   const dateFormatting = dateFormattingByTimewindow[timeWindow];
+
+  if (isLoading) {
+    return <LoadingChart />;
+  }
 
   return (
     <ResponsiveContainer className="xl:h-[15rem] 2xl:h-[20rem] w-fit">

@@ -27,7 +27,9 @@ const LoadingChart = () => {
             transform="matrix(1.04907 0 0 0.971047-194.144662-11.150249)"
             fill="none"
             stroke="#31d0aa"
-            stroke-width="5"
+            stroke-width="1"
+            strokeDasharray={2}
+            strokeDashoffset={2}
           />
         </motion.svg>
 
