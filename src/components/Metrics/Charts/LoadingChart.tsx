@@ -9,8 +9,8 @@ const LoadingChart = () => {
           xmlns="http://www.w3.org/2000/svg"
           xmlnsXlink="http://www.w3.org/1999/xlink"
           viewBox="0 0 750 250"
-          shape-rendering="geometricPrecision"
-          text-rendering="geometricPrecision"
+          shapeRendering="geometricPrecision"
+          textRendering="geometricPrecision"
           className="opacity-75"
         >
           <motion.path
