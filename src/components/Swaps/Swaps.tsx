@@ -2,11 +2,13 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenInfo } from "../../../types/address";
 import { Address, useAccount, useBalance } from "wagmi";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import MaxButton from "./MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
 import usePairs from "../../hooks/usePairs";
 import * as Icon from "react-icons/tb";
+import WizardContext from "../../contexts/WizardContext";
+import { useModal } from "connectkit";
 
 interface ISwaps {
   title: string;
@@ -24,6 +26,12 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
+
+  const { open, setOpen } = useModal();
+
+  const connectWalletHandler = () => {
+    setOpen(true);
+  };
 
   const changeCurrency = {
     usdc: `${pePrice.toFixed(4)} USDC por P`,
@@ -137,13 +145,24 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
             <Icon.TbExchange />
           </button>
         </div>
-        {token0Value !== 0 ? (
+        {!isConnected ? (
+          <button
+            onClick={connectWalletHandler}
+            className="rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30 mx-auto w-full"
+          >
+            Conectar monedero
+          </button>
+        ) : token0Value !== 0 ? (
           token0Value > Number(token0Balance.data?.formatted) ? (
             <button
               disabled
               className="rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-gray-400/20 text-gray-500 mx-auto w-full"
             >
               El saldo es insuficiente
+            </button>
+          ) : !isConnected ? (
+            <button className="rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30 mx-auto w-full">
+              {buttonText}
             </button>
           ) : (
             <button className="rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30 mx-auto w-full">

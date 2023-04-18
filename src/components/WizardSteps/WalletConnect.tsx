@@ -1,5 +1,5 @@
 import { useModal } from "connectkit";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useWizard } from "react-use-wizard";
 import { useAccount } from "wagmi";
 import { WizardContext } from "../../contexts/WizardContext";
@@ -11,7 +11,7 @@ import manoPeron from "/public/mano-peron.png";
 const WalletConnect = () => {
   const { nextStep } = useWizard();
   const { address } = useAccount();
-  const { handleConnection, isConnected } = useContext(WizardContext);
+  const { handleConnection } = useContext(WizardContext);
 
   const { open, setOpen } = useModal();
 
