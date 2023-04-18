@@ -55,7 +55,7 @@ const Emigrar: NextPage = () => {
           </motion.div>
           <Swaps
             title={"Cambiá USDC para emitir P"}
-            token0Info={tokens["MATIC"]}
+            token0Info={tokens["USDC"]}
             token1Info={tokens["P"]}
             buttonText="Emitir P"
           />

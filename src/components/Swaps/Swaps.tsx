@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenInfo } from "../../../types/address";
 import { Address, useAccount, useBalance } from "wagmi";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface ISwaps {
   title: string;
@@ -12,13 +12,29 @@ interface ISwaps {
 }
 
 const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
-  const [token0Value, setToken0Value] = useState<number>(0.0);
+  const [token0Value, setToken0Value] = useState<string | undefined>("0.0");
+  const [token0Formatted, setToken0Formatted] = useState<string>();
 
   const { address, isConnected } = useAccount();
+
   const token0Balance = useBalance({
     address: address,
     token: token0Info.address as Address
   });
+
+  useEffect(() => {
+    if (token0Balance?.data?.formatted) {
+      const formattedNumber =
+        Number(token0Balance.data.formatted) % 1 === 0
+          ? Number(token0Balance.data.formatted).toFixed(0)
+          : Number(token0Balance.data.formatted).toFixed(5);
+      setToken0Formatted(formattedNumber);
+    }
+  }, [token0Balance?.data?.formatted]);
+
+  const changeTokenValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setToken0Value(event.target.value);
+  };
 
   return (
     <motion.div
@@ -39,7 +55,7 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
             />
             <div className="text-Roboto font-bold">{token0Info.name}</div>
             <div className="ml-auto text-Roboto text-sm">
-              Saldo: {Number(token0Balance.data?.formatted).toFixed(5)}
+              Saldo: {token0Formatted}
             </div>
           </div>
           <div className="relative w-full xl:h-24">
@@ -48,9 +64,14 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
               inputMode="decimal"
               pattern="^[0-9]*[.,]?[0-9]*$"
               placeholder="0.0"
+              value={token0Value}
               className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
+              onChange={changeTokenValueHandler}
             />
-            <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
+            <button
+              onClick={() => setToken0Value(token0Balance.data?.formatted)}
+              className="absolute bottom-2 right-2 text-sm rounded-lg border-solid p-1 bg-[#0B4D76]/50"
+            >
               MAX
             </button>
           </div>
@@ -74,7 +95,7 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
               placeholder="0.0"
               className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
             />
-            <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
+            <button className="absolute bottom-2 right-2 rounded-lg text-sm border-solid p-1 bg-[#0B4D76]/50">
               MAX
             </button>
           </div>
