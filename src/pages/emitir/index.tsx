@@ -12,6 +12,7 @@ export const StyledMain = styled.main`
   justify-content: start;
   align-items: center;
   width: 100%;
+  min-height: 100vh;
   background-image: url("/isologo 1.svg");
   background-size: contain !important;
   background-repeat: no-repeat;
