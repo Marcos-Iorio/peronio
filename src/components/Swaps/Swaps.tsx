@@ -10,6 +10,7 @@ import * as Icon from "react-icons/tb";
 import { useModal } from "connectkit";
 import Button from "../Button/Button";
 import InfoPopover from "../InfoPopover/InfoPopover";
+import usePeronioRead from "../../hooks/usePeronioRead";
 
 interface ISwaps {
   title: string;
@@ -19,7 +20,7 @@ interface ISwaps {
 }
 
 const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
-  const [token0Value, setToken0Value] = useState<string | undefined>("0.0");
+  const [token0Value, setToken0Value] = useState<string | undefined>("");
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
   const [toggleCurrencyText, setToggleCurrencyText] = useState<boolean>(true);
@@ -31,6 +32,11 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   const [, , pePrice] = usePairs();
 
   const { open, setOpen } = useModal();
+
+  const data = usePeronioRead("allowance", [
+    "0x4BADCf0DCeaAD060f86D9b34c9E118c8319945AE" as Address,
+    address as Address
+  ]);
 
   const connectWalletHandler = () => {
     setOpen(true);
@@ -80,8 +86,6 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
-
-  console.log(token0Value);
 
   return (
     <section className="flex flex-col gap-3 h-[30rem] w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2">
