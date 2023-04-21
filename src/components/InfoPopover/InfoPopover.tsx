@@ -61,7 +61,7 @@ const InfoPopover = ({ title, text, sm, ydirection }: IInfoPopover) => {
   }
 
   return (
-    <Popover className="relative">
+    <Popover className="relative z-50 inline-flex max-w-full">
       <Popover.Button className="text-lg font-Roboto rounded-full bg-[#00B7C2] w-7 h-7 text-center hover:bg-transparent hover:border-[#00B7C2] hover:border-solid hover:border">
         ?
       </Popover.Button>
@@ -74,7 +74,7 @@ const InfoPopover = ({ title, text, sm, ydirection }: IInfoPopover) => {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute top-10 laptop:right-0 mobile:-right-8 z-50 bg-[#00B7C2] rounded-md  max-w-md w-screen p-5">
+        <Popover.Panel className="absolute top-10 laptop:right-0 mobile:-right-8 z-50 bg-[#00B7C2] rounded-md shrink-0 laptop:min-w-[23rem] p-5">
           {({ close }) => (
             <div className="flex flex-col relative">
               <button
@@ -86,8 +86,8 @@ const InfoPopover = ({ title, text, sm, ydirection }: IInfoPopover) => {
                   style={{ color: "white" }}
                 />
               </button>
-              <h2 className="font-Abril text-xl font-normal mb-4">{title}</h2>
-              <p className="font-Roboto text-[18px]">{text}</p>
+              <h2 className="font-Abril text-md font-normal mb-4">{title}</h2>
+              <p className="font-Roboto text-[16px] w-full">{text}</p>
             </div>
           )}
         </Popover.Panel>

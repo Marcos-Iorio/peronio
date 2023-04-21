@@ -19,7 +19,7 @@ interface ISwaps {
 }
 
 const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
-  const [token0Value, setToken0Value] = useState<string | undefined>("0.0");
+  const [token0Value, setToken0Value] = useState<string | undefined>("");
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
   const [toggleCurrencyText, setToggleCurrencyText] = useState<boolean>(true);
@@ -183,7 +183,7 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
               text="Saldo insuficiente"
             />
           ) : (
-            <Button key="emit-p" text="Emitir P" />
+            <Button key="emit-p" text="Emitir" />
           )}
         </div>
       </motion.div>
