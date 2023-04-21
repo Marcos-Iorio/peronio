@@ -1,13 +1,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenInfo } from "../../../types/address";
-import {
-  Address,
-  useAccount,
-  useBalance,
-  useContractWrite,
-  usePrepareContractWrite
-} from "wagmi";
+import { Address, useAccount, useBalance } from "wagmi";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import MaxButton from "./MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
@@ -18,6 +12,8 @@ import Button from "../Button/Button";
 import InfoPopover from "../InfoPopover/InfoPopover";
 import { TransactionContext } from "../../contexts/TransactionContext";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
+import usePeronioRead from "../../hooks/usePeronioRead";
+import { formatBalance } from "../../utils/formatPrice";
 
 const ButtonStyles = {
   enabled:
@@ -41,34 +37,49 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
   const [connected, setConnected] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
 
   const { open, setOpen } = useModal();
 
-  /* const data = usePeronioRead("allowance", [
-    address as Address,
-    "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4" as Address
-  ]); */
+  const { data: allowanceData, error } = usePeronioRead(
+    "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+    "allowance",
+    [
+      address as Address,
+      "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4" as Address
+    ]
+  );
 
-  const { hasAllowance, hasApproved } = useContext(TransactionContext);
+  const {
+    hasAllowance,
+    hasApproved,
+    setHasApproved,
+    allowanceLeft,
+    setAllowanceLeft
+  } = useContext(TransactionContext);
 
-  const { data, write, err } = usePeronioWrite("approve", [
-    "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4",
-    Number(token0Value)
-  ]);
+  const { data, writeAsync: approve } = usePeronioWrite(
+    token0Info.address,
+    "approve",
+    ["0x78a486306D15E7111cca541F2f1307a1cFCaF5C4", Number(token0Value)]
+  );
+
+  const runApprove = async () => {
+    try {
+      await approve();
+      setHasApproved?.(true);
+    } catch (e: any) {
+      setErrorMessage(e.message);
+      setHasApproved?.(false);
+    }
+  };
 
   const connectWalletHandler = () => {
     setOpen(true);
   };
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsWindowReady(true);
-    }
-  }, []);
 
   const changeCurrency = {
     usdc: `${pePrice.toFixed(4)} USDC por P`,
@@ -109,6 +120,17 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
     setConnected(isConnected);
   }, [isConnected]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsWindowReady(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (Number(allowanceData._hex) > 0) {
+      setAllowanceLeft?.(formatBalance(Number(allowanceData._hex), 0, 3));
+    }
+  }, [allowanceData]);
+
   return (
     <section className="flex flex-col gap-3 h-[30rem] w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2">
       <motion.div
@@ -119,6 +141,9 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
       >
         <div className="flex flex-col p-5 gap-5 h-full">
           <h2 className="font-Roboto text-xl mb-1">{title}</h2>
+          <p className="mb-auto h-full font-Roboto">
+            Tenés disponible para gastar: {allowanceLeft}
+          </p>
           <div className="flex flex-col">
             <div className="flex flex-row w-full gap-5 mb-3">
               <Image
@@ -210,17 +235,19 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
             />
           ) : (
             <div className="flex flex-row gap-4">
-              {!hasApproved && (
+              {hasAllowance && allowanceLeft >= token0Value ? (
                 <button
                   className={`${
                     hasApproved ? ButtonStyles.disabled : ButtonStyles.enabled
                   }`}
-                  onClick={() => write()}
+                  onClick={runApprove}
                 >
                   Aprobar
                 </button>
+              ) : (
+                ""
               )}
-              <Button isDisabled={!hasApproved} key="emit-p" text="Emitir" />
+              <Button isDisabled={hasAllowance} key="emit-p" text="Emitir" />
             </div>
           )}
         </div>
@@ -252,7 +279,11 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
           </span>
         </div>
       </div>
-      {errorMessage && <div>{errorMessage}</div>}
+      {errorMessage && (
+        <div className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300">
+          {errorMessage}
+        </div>
+      )}
     </section>
   );
 };

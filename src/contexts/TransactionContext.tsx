@@ -4,10 +4,11 @@ import {
   ITransactionContextProvider
 } from "../../types/transactions";
 import usePeronioWrite from "../hooks/usePeronioWrite";
+import usePeronioRead from "../hooks/usePeronioRead";
 
 const initialState = {
   hasAllowance: false,
-  allowanceLeft: 0,
+  allowanceLeft: "0",
   hasApproved: false
 };
 
@@ -16,11 +17,11 @@ export const TransactionContext =
 
 const TransactionProvider = ({ children }: ITransactionContextProvider) => {
   const [hasAllowance, setHasAllowance] = useState<boolean>(false);
-  const [allowanceLeft, setAllowanceLeft] = useState<number>(0);
+  const [allowanceLeft, setAllowanceLeft] = useState<string>("");
   const [hasApproved, setHasApproved] = useState<boolean>(false);
 
   useEffect(() => {
-    if (allowanceLeft === 0) {
+    if (allowanceLeft === "0") {
       setHasAllowance(false);
       setHasApproved(false);
     }
@@ -32,6 +33,7 @@ const TransactionProvider = ({ children }: ITransactionContextProvider) => {
         allowanceLeft,
         hasApproved,
         setAllowanceLeft,
+        setHasAllowance,
         setHasApproved
       }}
     >

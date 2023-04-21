@@ -48,9 +48,6 @@ const Emigrar: NextPage = () => {
             transition={{ duration: 1, ease: "easeInOut" }}
             className="xl:flex xl:flex-col laptop:h-full xl:basis-1/2 laptop:basis-1/3 laptop:flex laptop:flex-col laptop:justify-between "
           >
-            <p className="mb-auto h-full">
-              Tenés disponible para gastar: {allowanceLeft}
-            </p>
             <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
               ¿Que es &quot;Emitir&quot;?
             </h1>
