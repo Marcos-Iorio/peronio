@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import Head from "next/head";
 import Swaps from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
+import { useContext } from "react";
+import { TransactionContext } from "../../contexts/TransactionContext";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -30,6 +32,8 @@ export const StyledMain = styled.main`
 `;
 
 const Emigrar: NextPage = () => {
+  const { allowanceLeft } = useContext(TransactionContext);
+
   return (
     <>
       <Head>
@@ -42,8 +46,11 @@ const Emigrar: NextPage = () => {
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1, ease: "easeInOut" }}
-            className="xl:flex xl:flex-col h-full xl:basis-1/2 laptop:basis-1/3"
+            className="xl:flex xl:flex-col laptop:h-full xl:basis-1/2 laptop:basis-1/3 laptop:flex laptop:flex-col laptop:justify-between "
           >
+            <p className="mb-auto h-full">
+              Tenés disponible para gastar: {allowanceLeft}
+            </p>
             <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
               ¿Que es &quot;Emitir&quot;?
             </h1>

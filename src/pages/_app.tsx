@@ -11,6 +11,7 @@ import { useFeeData } from "wagmi";
 import useMediaQuery from "../hooks/useMediaQuery";
 import WizardProvider from "../contexts/WizardContext";
 import Footer from "../components/Footer/Footer";
+import TransactionProvider from "../contexts/TransactionContext";
 
 const client = createClient(
   getDefaultClient({
@@ -25,31 +26,33 @@ function MyApp({ Component, pageProps }: AppProps) {
   const isMobile = useMediaQuery("(max-width: 1023px)");
 
   return (
-    <WizardProvider>
-      <WagmiConfig client={client}>
-        <ConnectKitProvider
-          options={{
-            language: "es-ES",
-            hideNoWalletCTA: true,
-            embedGoogleFonts: true,
-            walletConnectCTA: "both"
-          }}
-          customTheme={{
-            "--ck-connectbutton-font-size": "16px",
-            "--ck-connectbutton-border-radius": "10px",
-            "--ck-connectbutton-background": "#00B7C2",
-            "--ck-connectbutton-box-shadow": "#00B7C2",
-            "--ck-body-background": "#1B262C",
-            "--ck-body-background-transparent": "#1B262C",
-            "--ck-primary-button-background": "#00B7C2"
-          }}
-        >
-          {isMobile ? <MobileNavbar /> : <Navbar />}
-          <Component {...pageProps} />
-          <Footer />
-        </ConnectKitProvider>
-      </WagmiConfig>
-    </WizardProvider>
+    <TransactionProvider>
+      <WizardProvider>
+        <WagmiConfig client={client}>
+          <ConnectKitProvider
+            options={{
+              language: "es-ES",
+              hideNoWalletCTA: true,
+              embedGoogleFonts: true,
+              walletConnectCTA: "both"
+            }}
+            customTheme={{
+              "--ck-connectbutton-font-size": "16px",
+              "--ck-connectbutton-border-radius": "10px",
+              "--ck-connectbutton-background": "#00B7C2",
+              "--ck-connectbutton-box-shadow": "#00B7C2",
+              "--ck-body-background": "#1B262C",
+              "--ck-body-background-transparent": "#1B262C",
+              "--ck-primary-button-background": "#00B7C2"
+            }}
+          >
+            {isMobile ? <MobileNavbar /> : <Navbar />}
+            <Component {...pageProps} />
+            <Footer />
+          </ConnectKitProvider>
+        </WagmiConfig>
+      </WizardProvider>
+    </TransactionProvider>
   );
 }
 

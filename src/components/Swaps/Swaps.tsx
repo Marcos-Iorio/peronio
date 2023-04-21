@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenInfo } from "../../../types/address";
-import { Address, useAccount, useBalance } from "wagmi";
-import { ChangeEvent, useEffect, useState } from "react";
+import {
+  Address,
+  useAccount,
+  useBalance,
+  useContractWrite,
+  usePrepareContractWrite
+} from "wagmi";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import MaxButton from "./MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
 import usePairs from "../../hooks/usePairs";
@@ -10,6 +16,15 @@ import * as Icon from "react-icons/tb";
 import { useModal } from "connectkit";
 import Button from "../Button/Button";
 import InfoPopover from "../InfoPopover/InfoPopover";
+import { TransactionContext } from "../../contexts/TransactionContext";
+import usePeronioWrite from "../../hooks/usePeronioWrite";
+
+const ButtonStyles = {
+  enabled:
+    "rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30 mx-auto w-full",
+  disabled:
+    "rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-gray-400/20 text-gray-500 mx-auto w-full"
+};
 
 interface ISwaps {
   title: string;
@@ -26,11 +41,24 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
   const [connected, setConnected] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
 
   const { open, setOpen } = useModal();
+
+  /* const data = usePeronioRead("allowance", [
+    address as Address,
+    "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4" as Address
+  ]); */
+
+  const { hasAllowance, hasApproved } = useContext(TransactionContext);
+
+  const { data, write, err } = usePeronioWrite("approve", [
+    "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4",
+    Number(token0Value)
+  ]);
 
   const connectWalletHandler = () => {
     setOpen(true);
@@ -80,8 +108,6 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
-
-  console.log(token0Value);
 
   return (
     <section className="flex flex-col gap-3 h-[30rem] w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2">
@@ -183,7 +209,19 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
               text="Saldo insuficiente"
             />
           ) : (
-            <Button key="emit-p" text="Emitir" />
+            <div className="flex flex-row gap-4">
+              {!hasApproved && (
+                <button
+                  className={`${
+                    hasApproved ? ButtonStyles.disabled : ButtonStyles.enabled
+                  }`}
+                  onClick={() => write()}
+                >
+                  Aprobar
+                </button>
+              )}
+              <Button isDisabled={!hasApproved} key="emit-p" text="Emitir" />
+            </div>
           )}
         </div>
       </motion.div>
@@ -214,6 +252,7 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
           </span>
         </div>
       </div>
+      {errorMessage && <div>{errorMessage}</div>}
     </section>
   );
 };
