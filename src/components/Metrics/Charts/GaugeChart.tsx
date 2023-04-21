@@ -21,6 +21,8 @@ const GaugeChart = ({ pePrice }: IGauge) => {
 
   const { data } = usePeronioRead(undefined, "buyingPrice");
 
+  console.log(buyingPrice);
+
   const intPePrice = Number(pePrice * 1000000).toFixed(0);
   const rest = buyingPrice - parseInt(intPePrice);
   const averagePrice = (parseInt(intPePrice) + buyingPrice) / 2;
