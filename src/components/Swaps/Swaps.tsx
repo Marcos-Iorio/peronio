@@ -126,7 +126,7 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
     }
   }, []);
   useEffect(() => {
-    if (Number(allowanceData._hex) > 0) {
+    if (Number(allowanceData?._hex) > 0) {
       setAllowanceLeft?.(formatBalance(Number(allowanceData._hex), 0, 3));
     }
   }, [allowanceData]);
