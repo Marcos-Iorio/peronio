@@ -5,8 +5,12 @@ import { motion } from "framer-motion";
 import Head from "next/head";
 import Swaps from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
-import { useContext } from "react";
-import { TransactionContext } from "../../contexts/TransactionContext";
+import { useContext, useEffect, useState } from "react";
+import useErc20Read from "../../hooks/useERCRead";
+import useErc20Write from "../../hooks/useErc20Write";
+import { Address, useAccount } from "wagmi";
+import { formatBalance } from "../../utils/formatPrice";
+import usePeronioWrite from "../../hooks/usePeronioWrite";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -32,7 +36,59 @@ export const StyledMain = styled.main`
 `;
 
 const Emigrar: NextPage = () => {
-  const { allowanceLeft } = useContext(TransactionContext);
+  const [usdcValue, setUsdcValue] = useState<string | undefined>("");
+  const [connected, setConnected] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [hasApprove, setHasApprove] = useState<boolean>(false);
+  const [hasAllowance, setHasAllowance] = useState<boolean>(false);
+  const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
+  const [amountOfPe, setAmountOfPe] = useState<number>(0);
+
+  const { address, isConnected } = useAccount();
+
+  const { data: allowanceData } = useErc20Read("allowance", [
+    address as Address,
+    tokens["USDC"].address as Address
+  ]);
+
+  const { data, writeAsync: approve } = useErc20Write("approve", [
+    tokens["USDC"].address as Address,
+    Number(usdcValue)
+  ]);
+
+  const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
+    address as Address,
+    usdcValue,
+    amountOfPe
+  ]);
+
+  const runApprove = async () => {
+    try {
+      await approve();
+      setHasApprove(true);
+    } catch (e: any) {
+      setErrorMessage(e.message);
+      setHasApprove(false);
+    }
+  };
+
+  useEffect(() => {
+    setConnected(isConnected);
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (Number(allowanceData?._hex) > 0) {
+      setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
+      setHasAllowance(true);
+    }
+  }, [allowanceData?._hex]);
+
+  useEffect(() => {
+    if (allowanceLeft === "0") {
+      setHasAllowance(false);
+      setHasApprove(false);
+    }
+  }, [allowanceLeft]);
 
   return (
     <>
@@ -62,7 +118,18 @@ const Emigrar: NextPage = () => {
             title={"Cambiá USDC para emitir P"}
             token0Info={tokens["USDC"]}
             token1Info={tokens["P"]}
-            buttonText="Emitir P"
+            buttonText="Emitir"
+            address={address}
+            setToken0Value={setUsdcValue}
+            token0Value={usdcValue}
+            errorMessage={errorMessage}
+            allowanceLeft={allowanceLeft}
+            hasAllowance={hasAllowance}
+            connected={connected}
+            runApprove={runApprove}
+            hasApprove={hasApprove}
+            setAmountOfPe={setAmountOfPe}
+            amountOfPe={amountOfPe}
           />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">

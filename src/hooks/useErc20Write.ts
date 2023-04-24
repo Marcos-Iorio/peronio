@@ -1,14 +1,15 @@
-import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
+import erc20ABI from '../../abi/IErc-20.json'
+import { tokens } from "../constants/addresses";
 import { Address, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const usePeronioWrite = (
+const useErc20Write = (
   method: string,
   args: any[] = []
 ): any => {
     
   const contractConfig = {
-    address: peronioContract.address, //Spender, contract address
-    abi: peronioContract.abi
+    address: tokens['USDC'].address, //Spender, contract address
+    abi: erc20ABI
   };
 
   const { config } = usePrepareContractWrite({
@@ -23,4 +24,4 @@ const usePeronioWrite = (
   });
 };
 
-export default usePeronioWrite;
+export default useErc20Write;

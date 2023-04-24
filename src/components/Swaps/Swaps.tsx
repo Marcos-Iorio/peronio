@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { TokenInfo } from "../../../types/address";
-import { Address, useAccount, useBalance } from "wagmi";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { Address, useBalance } from "wagmi";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState
+} from "react";
 import MaxButton from "./MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
 import usePairs from "../../hooks/usePairs";
@@ -10,10 +16,6 @@ import * as Icon from "react-icons/tb";
 import { useModal } from "connectkit";
 import Button from "../Button/Button";
 import InfoPopover from "../InfoPopover/InfoPopover";
-import { TransactionContext } from "../../contexts/TransactionContext";
-import usePeronioWrite from "../../hooks/usePeronioWrite";
-import usePeronioRead from "../../hooks/usePeronioRead";
-import { formatBalance } from "../../utils/formatPrice";
 
 const ButtonStyles = {
   enabled:
@@ -27,55 +29,44 @@ interface ISwaps {
   token0Info: TokenInfo;
   token1Info: TokenInfo;
   buttonText: string;
+  address: string | undefined;
+  setToken0Value: Dispatch<SetStateAction<string | undefined>>;
+  token0Value: string | undefined;
+  errorMessage: string | undefined;
+  allowanceLeft: string;
+  hasAllowance: boolean;
+  connected: boolean;
+  runApprove: () => void;
+  hasApprove: boolean;
+  setAmountOfPe: Dispatch<SetStateAction<number>>;
+  amountOfPe: number;
 }
 
-const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
-  const [token0Value, setToken0Value] = useState<string | undefined>("");
+const Swaps = ({
+  title,
+  token0Info,
+  token1Info,
+  buttonText,
+  address,
+  setToken0Value,
+  token0Value,
+  errorMessage,
+  allowanceLeft,
+  hasAllowance,
+  connected,
+  runApprove,
+  hasApprove,
+  setAmountOfPe,
+  amountOfPe
+}: ISwaps) => {
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
   const [toggleCurrencyText, setToggleCurrencyText] = useState<boolean>(true);
-  const [amountOfPe, setAmountOfPe] = useState<number>(0);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
-  const [connected, setConnected] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string>();
 
-  const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
 
   const { open, setOpen } = useModal();
-
-  const { data: allowanceData, error } = usePeronioRead(
-    "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
-    "allowance",
-    [
-      address as Address,
-      "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4" as Address
-    ]
-  );
-
-  const {
-    hasAllowance,
-    hasApproved,
-    setHasApproved,
-    allowanceLeft,
-    setAllowanceLeft
-  } = useContext(TransactionContext);
-
-  const { data, writeAsync: approve } = usePeronioWrite(
-    token0Info.address,
-    "approve",
-    ["0x78a486306D15E7111cca541F2f1307a1cFCaF5C4", Number(token0Value)]
-  );
-
-  const runApprove = async () => {
-    try {
-      await approve();
-      setHasApproved?.(true);
-    } catch (e: any) {
-      setErrorMessage(e.message);
-      setHasApproved?.(false);
-    }
-  };
 
   const connectWalletHandler = () => {
     setOpen(true);
@@ -87,12 +78,12 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   };
 
   const token0Balance = useBalance({
-    address: address,
+    address: address as Address,
     token: token0Info.address as Address
   });
 
   const token1Balance = useBalance({
-    address: address,
+    address: address as Address,
     token: token1Info.address as Address
   });
 
@@ -117,19 +108,12 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
   }, [token0Balance.data?.formatted, token1Balance.data?.formatted]);
 
   useEffect(() => {
-    setConnected(isConnected);
-  }, [isConnected]);
-
-  useEffect(() => {
     if (typeof window !== "undefined") {
       setIsWindowReady(true);
     }
   }, []);
-  useEffect(() => {
-    if (Number(allowanceData?._hex) > 0) {
-      setAllowanceLeft?.(formatBalance(Number(allowanceData._hex), 0, 3));
-    }
-  }, [allowanceData]);
+
+  console.log(hasAllowance);
 
   return (
     <section className="flex flex-col gap-3 h-[30rem] w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2">
@@ -235,10 +219,10 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
             />
           ) : (
             <div className="flex flex-row gap-4">
-              {hasAllowance && allowanceLeft >= token0Value ? (
+              {!hasAllowance && allowanceLeft < token0Value ? (
                 <button
                   className={`${
-                    hasApproved ? ButtonStyles.disabled : ButtonStyles.enabled
+                    hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
                   }`}
                   onClick={runApprove}
                 >
@@ -247,7 +231,11 @@ const Swaps = ({ title, token0Info, token1Info, buttonText }: ISwaps) => {
               ) : (
                 ""
               )}
-              <Button isDisabled={hasAllowance} key="emit-p" text="Emitir" />
+              <Button
+                isDisabled={!hasAllowance}
+                key="emit-p"
+                text={buttonText}
+              />
             </div>
           )}
         </div>

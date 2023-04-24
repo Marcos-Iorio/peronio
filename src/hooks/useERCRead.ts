@@ -1,5 +1,6 @@
 import { Address, useContractRead } from "wagmi";
-import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
+import erc20ABI from '../../abi/IErc-20.json'
+import { tokens } from "../constants/addresses";
 
 /**
  * Hook for reading from Peronio contract
@@ -7,13 +8,13 @@ import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
  * @param args
  * @example https://wagmi.sh/react/hooks/useContractRead
  */
-export const usePeronioRead = (
+export const useErc20Read = (
   method: string,
   args: any[] = []
 ): any => {
   const contractConfig = {
-    address: peronioContract.address,
-    abi: peronioContract.abi
+    address: tokens['USDC'].address,
+    abi: erc20ABI
   };
   /* const contract = usePeronio(); */
 
@@ -26,4 +27,4 @@ export const usePeronioRead = (
   });
 };
 
-export default usePeronioRead;
+export default useErc20Read;
