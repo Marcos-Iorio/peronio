@@ -40,6 +40,7 @@ interface ISwaps {
   hasApprove: boolean;
   setAmountOfPe: Dispatch<SetStateAction<number>>;
   amountOfPe: number;
+  mainFunc: () => void;
 }
 
 const Swaps = ({
@@ -57,7 +58,8 @@ const Swaps = ({
   runApprove,
   hasApprove,
   setAmountOfPe,
-  amountOfPe
+  amountOfPe,
+  mainFunc
 }: ISwaps) => {
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
@@ -113,8 +115,6 @@ const Swaps = ({
     }
   }, []);
 
-  console.log(hasAllowance);
-
   return (
     <section className="flex flex-col gap-3 h-[30rem] w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2">
       <motion.div
@@ -137,9 +137,11 @@ const Swaps = ({
                 alt={token0Info.name}
               />
               <div className="text-Roboto font-bold">{token0Info.name}</div>
-              <div className="ml-auto text-Roboto text-sm">
-                Saldo: {token0Formatted}
-              </div>
+              {connected && (
+                <div className="ml-auto text-Roboto text-sm">
+                  Saldo: {token0Formatted}
+                </div>
+              )}
             </div>
             <div className="relative w-full xl:h-24">
               <input
@@ -165,9 +167,11 @@ const Swaps = ({
                 alt={token1Info.name}
               />
               <div className="text-Roboto font-bold">{token1Info.name}</div>
-              <div className="ml-auto text-Roboto text-sm">
-                Saldo: {token1Formatted}
-              </div>
+              {connected && (
+                <div className="ml-auto text-Roboto text-sm">
+                  Saldo: {token1Formatted}
+                </div>
+              )}
             </div>
             <div className="relative w-full xl:h-16">
               <input
@@ -219,7 +223,7 @@ const Swaps = ({
             />
           ) : (
             <div className="flex flex-row gap-4">
-              {!hasAllowance && allowanceLeft < token0Value ? (
+              {!hasApprove && allowanceLeft < token0Value ? (
                 <button
                   className={`${
                     hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
@@ -232,7 +236,8 @@ const Swaps = ({
                 ""
               )}
               <Button
-                isDisabled={!hasAllowance}
+                isDisabled={!hasApprove}
+                onClick={mainFunc}
                 key="emit-p"
                 text={buttonText}
               />

@@ -6,10 +6,8 @@ import { IDataAttributes } from "../../types/contractRead";
 const useTotalSupply = (): number => {
   const [totalSupply, setTotalSupply] = useState<number>(0);
 
-  const { data }: { data: IDataAttributes | undefined } = usePeronioRead(
-    undefined,
-    "totalSupply"
-  );
+  const { data }: { data: IDataAttributes | undefined } =
+    usePeronioRead("totalSupply");
 
   useEffect(() => {
     const BnValue = Number(data?._hex);

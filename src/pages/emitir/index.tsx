@@ -44,6 +44,8 @@ const Emigrar: NextPage = () => {
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
 
+  let buttonText = "Emitir";
+
   const { address, isConnected } = useAccount();
 
   const { data: allowanceData } = useErc20Read("allowance", [
@@ -69,6 +71,17 @@ const Emigrar: NextPage = () => {
     } catch (e: any) {
       setErrorMessage(e.message);
       setHasApprove(false);
+    }
+  };
+
+  const runMint = async () => {
+    try {
+      buttonText = "Emitiendo...";
+      mint();
+      setUsdcValue("");
+      buttonText = "Emitir";
+    } catch (e: any) {
+      setErrorMessage(e.message);
     }
   };
 
@@ -118,7 +131,7 @@ const Emigrar: NextPage = () => {
             title={"Cambiá USDC para emitir P"}
             token0Info={tokens["USDC"]}
             token1Info={tokens["P"]}
-            buttonText="Emitir"
+            buttonText={buttonText}
             address={address}
             setToken0Value={setUsdcValue}
             token0Value={usdcValue}
@@ -127,6 +140,7 @@ const Emigrar: NextPage = () => {
             hasAllowance={hasAllowance}
             connected={connected}
             runApprove={runApprove}
+            mainFunc={runMint}
             hasApprove={hasApprove}
             setAmountOfPe={setAmountOfPe}
             amountOfPe={amountOfPe}

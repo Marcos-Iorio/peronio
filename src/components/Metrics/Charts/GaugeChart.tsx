@@ -19,7 +19,7 @@ const GaugeChart = ({ pePrice }: IGauge) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { data } = usePeronioRead(undefined, "buyingPrice");
+  const { data } = usePeronioRead("buyingPrice");
 
   const intPePrice = Number(pePrice * 1000000).toFixed(0);
   const rest = buyingPrice - parseInt(intPePrice);
