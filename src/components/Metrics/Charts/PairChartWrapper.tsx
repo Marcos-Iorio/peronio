@@ -78,7 +78,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
             pairPrice.price
         };
       })
-      .splice(0, 31);
+      .splice(0, 215);
   }, [arsPriceData, historicArsPrices]);
 
   useEffect(() => {
@@ -115,6 +115,8 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
     setArsPriceData(data);
     setTimeWindow(time);
   };
+
+  console.log(pairPriceData);
   return (
     <>
       <div className="flex mobile:flex-col xl:flex-row w-full justify-between">

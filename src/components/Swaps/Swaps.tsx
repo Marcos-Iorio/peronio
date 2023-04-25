@@ -40,6 +40,7 @@ interface ISwaps {
   setAmountOfPe: Dispatch<SetStateAction<number>>;
   amountOfPe: number;
   mainFunc: () => void;
+  disableMainButton: boolean;
 }
 
 const Swaps = ({
@@ -57,7 +58,8 @@ const Swaps = ({
   hasApprove,
   setAmountOfPe,
   amountOfPe,
-  mainFunc
+  mainFunc,
+  disableMainButton
 }: ISwaps) => {
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
@@ -234,7 +236,7 @@ const Swaps = ({
                 ""
               )}
               <Button
-                isDisabled={!hasApprove}
+                isDisabled={!disableMainButton}
                 onClick={mainFunc}
                 key="emit-p"
                 text={buttonText}

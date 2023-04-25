@@ -12,6 +12,9 @@ import { Address, useAccount } from "wagmi";
 import { formatBalance } from "../../utils/formatPrice";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
@@ -41,6 +44,7 @@ const Emigrar: NextPage = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasAllowance, setHasAllowance] = useState<boolean>(false);
+  const [isMinted, setIsMinted] = useState<boolean>(false);
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
   const [buttonText, setButtonText] = useState<string>("Emitir");
@@ -63,10 +67,20 @@ const Emigrar: NextPage = () => {
     amountOfPe
   ]);
 
+  const notifySuccess = () => {
+    toast.success(
+      `Minteaste ${amountOfPe.toFixed(3)} P por ${usdcValue} USDC.`,
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
+  };
+
   const runApprove = async () => {
     try {
       await approve();
       setHasApprove(true);
+      setIsMinted(true);
     } catch (e: any) {
       setErrorMessage(e.message);
       setHasApprove(false);
@@ -76,9 +90,14 @@ const Emigrar: NextPage = () => {
   const runMint = async () => {
     try {
       setButtonText("Emitiendo...");
-      mint();
+      await mint();
       setUsdcValue("");
       setButtonText("Emitir");
+      setIsMinted(false);
+      notifySuccess();
+      setTimeout(() => {
+        setIsMinted(true);
+      }, 500);
     } catch (e: any) {
       setErrorMessage(e.message);
     }
@@ -156,12 +175,20 @@ const Emigrar: NextPage = () => {
             hasApprove={hasApprove}
             setAmountOfPe={setAmountOfPe}
             amountOfPe={amountOfPe}
+            disableMainButton={isMinted}
           />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
+        <ToastContainer
+          autoClose={5000}
+          bodyClassName={() => "text-md font-white font-Roboto block p-3"}
+          toastClassName={() =>
+            "relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer bg-black/70 backdrop-blur-md"
+          }
+        />
       </StyledMain>
     </>
   );
