@@ -32,7 +32,6 @@ interface ISwaps {
   address: string | undefined;
   setToken0Value: Dispatch<SetStateAction<string | undefined>>;
   token0Value: string | undefined;
-  errorMessage: string | undefined;
   allowanceLeft: string;
   hasAllowance: boolean;
   connected: boolean;
@@ -51,7 +50,6 @@ const Swaps = ({
   address,
   setToken0Value,
   token0Value,
-  errorMessage,
   allowanceLeft,
   hasAllowance,
   connected,
@@ -272,11 +270,6 @@ const Swaps = ({
           </span>
         </div>
       </div>
-      {errorMessage && (
-        <div className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300">
-          {errorMessage}
-        </div>
-      )}
     </section>
   );
 };

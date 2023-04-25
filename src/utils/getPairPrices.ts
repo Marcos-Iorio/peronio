@@ -35,6 +35,10 @@ const getPairPrices = async (
         false
       );
       return monthData;
+    case "YEAR":
+      const yearResult = await fetchPairDayDatas(365);
+      const yearData = createChartData(yearResult.data.pairDayDatas, historicArsPrice, false);
+      return yearData;
     default:
       return [];
   }

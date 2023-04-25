@@ -104,8 +104,10 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
       options = "DAY";
     } else if (time === 1) {
       options = "WEEK";
-    } else {
+    } else if (time === 2) {
       options = "MONTH";
+    } else {
+      options = "YEAR";
     }
 
     const data = await getPairPrices(options, historicArsPrices, false);
@@ -139,33 +141,46 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
             text="El gráfico muestra información sobre el precio del Peronio frente al Peso Argetino en tres períodos diferentes de tiempo."
           />
         </div>
-        <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid border-[#00B7C2] border bg-[#363636]/50 backdrop-blur-md gap-1 p-2">
+        <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid bg-[#242C2E] gap-1 p-2">
           <button
             onClick={() => changeTimeWindowHandler(0)}
             style={{
-              backgroundColor: timeWindow === 0 ? "#00B7C2" : "#1b1b1b"
+              backgroundColor: timeWindow === 0 ? "#00B7C2" : "#222",
+              color: timeWindow == 0 ? "#1b1b1b" : "white"
             }}
-            className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] px-2 rounded-md"
           >
             24H
           </button>
           <button
             onClick={() => changeTimeWindowHandler(1)}
             style={{
-              backgroundColor: timeWindow === 1 ? "#00B7C2" : "#1b1b1b"
+              backgroundColor: timeWindow === 1 ? "#00B7C2" : "#222",
+              color: timeWindow == 1 ? "#1b1b1b" : "white"
             }}
-            className="font-Abril text-lg font-normal bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-md font-bold bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
           >
-            1W
+            1S
           </button>
           <button
             onClick={() => changeTimeWindowHandler(2)}
             style={{
-              backgroundColor: timeWindow === 2 ? "#00B7C2" : "#1b1b1b"
+              backgroundColor: timeWindow === 2 ? "#00B7C2" : "#222",
+              color: timeWindow == 2 ? "#1b1b1b" : "white"
             }}
-            className="font-Abril text-lg font-normal  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
           >
             1M
+          </button>
+          <button
+            onClick={() => changeTimeWindowHandler(3)}
+            style={{
+              backgroundColor: timeWindow === 3 ? "#00B7C2" : "#222",
+              color: timeWindow == 3 ? "#1b1b1b" : "white"
+            }}
+            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+          >
+            1A
           </button>
         </div>
       </div>

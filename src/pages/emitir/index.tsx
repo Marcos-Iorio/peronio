@@ -43,8 +43,7 @@ const Emigrar: NextPage = () => {
   const [hasAllowance, setHasAllowance] = useState<boolean>(false);
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
-
-  let buttonText = "Emitir";
+  const [buttonText, setButtonText] = useState<string>("Emitir");
 
   const { address, isConnected } = useAccount();
 
@@ -76,10 +75,10 @@ const Emigrar: NextPage = () => {
 
   const runMint = async () => {
     try {
-      buttonText = "Emitiendo...";
+      setButtonText("Emitiendo...");
       mint();
       setUsdcValue("");
-      buttonText = "Emitir";
+      setButtonText("Emitir");
     } catch (e: any) {
       setErrorMessage(e.message);
     }
@@ -103,6 +102,12 @@ const Emigrar: NextPage = () => {
     }
   }, [allowanceLeft]);
 
+  if (errorMessage) {
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
+
   return (
     <>
       <Head>
@@ -115,17 +120,25 @@ const Emigrar: NextPage = () => {
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1, ease: "easeInOut" }}
-            className="xl:flex xl:flex-col laptop:h-full xl:basis-1/2 laptop:basis-1/3 laptop:flex laptop:flex-col laptop:justify-between "
+            className="xl:flex xl:flex-col laptop:h-full xl:basis-1/2 laptop:basis-1/3 laptop:flex laptop:flex-col laptop:justify-between laptop:gap-10"
           >
-            <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
-              ¿Que es &quot;Emitir&quot;?
-            </h1>
-            <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui sed
-              consectetur commodi dolorum mollitia molestias, iste, ab officia
-              culpa itaque debitis! Magnam deleniti doloribus aperiam molestiae
-              libero, non nobis at.
-            </p>
+            <div>
+              <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
+                ¿Que es &quot;Emitir&quot;?
+              </h1>
+              <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui
+                sed consectetur commodi dolorum mollitia molestias, iste, ab
+                officia culpa itaque debitis! Magnam deleniti doloribus aperiam
+                molestiae libero, non nobis at.
+              </p>
+            </div>
+            <div
+              style={{ visibility: errorMessage ? "visible" : "hidden" }}
+              className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300"
+            >
+              {errorMessage}
+            </div>
           </motion.div>
           <Swaps
             title={"Cambiá USDC para emitir P"}
@@ -135,7 +148,6 @@ const Emigrar: NextPage = () => {
             address={address}
             setToken0Value={setUsdcValue}
             token0Value={usdcValue}
-            errorMessage={errorMessage}
             allowanceLeft={allowanceLeft}
             hasAllowance={hasAllowance}
             connected={connected}

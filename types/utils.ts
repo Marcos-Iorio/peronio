@@ -5,4 +5,4 @@ export enum PairDataTimeWindowEnum {
   YEAR
 }
 
-export type PairDataTimeWindow = "DAY" | "WEEK" | "MONTH";
+export type PairDataTimeWindow = "DAY" | "WEEK" | "MONTH" | "YEAR";
