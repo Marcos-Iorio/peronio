@@ -146,10 +146,9 @@ const Emigrar: NextPage = () => {
                 ¿Que es &quot;Emitir&quot;?
               </h1>
               <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui
-                sed consectetur commodi dolorum mollitia molestias, iste, ab
-                officia culpa itaque debitis! Magnam deleniti doloribus aperiam
-                molestiae libero, non nobis at.
+                El USDC va a la boveda y se emiten una cantidad de especifica de
+                P por USDC. La bóveda cobra un markup del 5% que queda adentro
+                del contrato, beneficiando a todos los tenedores de PE.
               </p>
             </div>
             <div
