@@ -78,7 +78,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
             pairPrice.price
         };
       })
-      .splice(0, 215);
+      .splice(0, 365);
   }, [arsPriceData, historicArsPrices]);
 
   useEffect(() => {
@@ -143,14 +143,14 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
             text="El gráfico muestra información sobre el precio del Peronio frente al Peso Argetino en tres períodos diferentes de tiempo."
           />
         </div>
-        <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid bg-[#242C2E] gap-1 p-2">
+        <div className="flex flex-row mobile:justify-evenly laptop:justify-start laptop:w-fit rounded-md border-solid bg-[#242C2E] gap-1 p-2 h-10">
           <button
             onClick={() => changeTimeWindowHandler(0)}
             style={{
               backgroundColor: timeWindow === 0 ? "#00B7C2" : "#222",
               color: timeWindow == 0 ? "#1b1b1b" : "white"
             }}
-            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] px-2 rounded-md"
+            className="font-Roboto text-sm font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] px-2 rounded-md"
           >
             24H
           </button>
@@ -160,7 +160,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
               backgroundColor: timeWindow === 1 ? "#00B7C2" : "#222",
               color: timeWindow == 1 ? "#1b1b1b" : "white"
             }}
-            className="font-Roboto text-md font-bold bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-sm font-bold bg-[#1b1b1b]/30 hover:bg-[#3b3b3b]  px-2 rounded-md"
           >
             1S
           </button>
@@ -170,7 +170,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
               backgroundColor: timeWindow === 2 ? "#00B7C2" : "#222",
               color: timeWindow == 2 ? "#1b1b1b" : "white"
             }}
-            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-sm font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b]  px-2 rounded-md"
           >
             1M
           </button>
@@ -180,7 +180,7 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
               backgroundColor: timeWindow === 3 ? "#00B7C2" : "#222",
               color: timeWindow == 3 ? "#1b1b1b" : "white"
             }}
-            className="font-Roboto text-md font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b] py-1 px-3 rounded-md"
+            className="font-Roboto text-sm font-bold  bg-[#1b1b1b]/30 hover:bg-[#3b3b3b]  px-2 rounded-md"
           >
             1A
           </button>
