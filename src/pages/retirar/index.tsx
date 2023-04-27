@@ -42,8 +42,6 @@ const Retirar: NextPage = () => {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasWithdraw, setHasWithdraw] = useState<boolean>(false);
-  const [hasAllowance, setHasAllowance] = useState<boolean>(false);
-  const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [amountOfPe, setAmountOfPe] = useState<number>(0);
   const [buttonText, setButtonText] = useState<string>("Retirar");
 
@@ -52,7 +50,7 @@ const Retirar: NextPage = () => {
 
   const { data: withDrawData, writeAsync: withdraw } = usePeronioWrite(
     "withdraw",
-    [address as Address, pValue]
+    [address as Address, Number(pValue)]
   );
 
   const runWithdraw = async () => {
@@ -79,7 +77,7 @@ const Retirar: NextPage = () => {
 
   useEffect(() => {
     setAmountOfPe(Number(pValue) * pePrice);
-  }, [pValue]);
+  }, [pValue, pePrice]);
 
   return (
     <>
@@ -118,8 +116,9 @@ const Retirar: NextPage = () => {
             hasApprove={hasApprove}
             setAmountOfPe={setAmountOfPe}
             amountOfPe={amountOfPe}
-            disableMainButton={hasWithdraw}
+            disableMainButton={!hasWithdraw}
             pePrice={pePrice}
+            hasMarkup={false}
           />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">

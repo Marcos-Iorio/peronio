@@ -75,14 +75,14 @@ const GaugeChart = ({ pePrice }: IGauge) => {
             </p>
           </div>
           <div className="mt-auto h-full relative">
-            <p className="absolute left-16 top-1 font-Roboto">0%</p>
-            <p className="absolute right-14 top-1 font-Roboto">+5%</p>
+            <p className="absolute left-10 top-8 font-Roboto">0%</p>
+            <p className="absolute right-16 top-0 font-Roboto">+5%</p>
             <Gauge
               id="gauge-chart4"
               colors={["#ff4e4e", "#FACC15", "#31D0AA"]}
               animate={false}
               nrOfLevels={3}
-              arcsLength={[0.3, 0.4, 0.3]}
+              arcsLength={[0.2, 0.45, 0.35]}
               arcWidth={0.2}
               arcPadding={0}
               cornerRadius={0}

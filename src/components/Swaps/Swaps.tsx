@@ -11,7 +11,6 @@ import {
 } from "react";
 import MaxButton from "./MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
-import usePairs from "../../hooks/usePairs";
 import * as Icon from "react-icons/tb";
 import { useModal } from "connectkit";
 import Button from "../Button/Button";
@@ -42,6 +41,7 @@ interface ISwaps {
   mainFunc: () => void;
   disableMainButton: boolean;
   pePrice: number;
+  hasMarkup: boolean;
 }
 
 const Swaps = ({
@@ -61,7 +61,8 @@ const Swaps = ({
   amountOfPe,
   mainFunc,
   disableMainButton,
-  pePrice
+  pePrice,
+  hasMarkup
 }: ISwaps) => {
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
@@ -203,23 +204,11 @@ const Swaps = ({
             </button>
           </div>
           {!connected ? (
-            <Button
-              key="connect-wallet"
-              text="Conectar monedero"
-              onClick={connectWalletHandler}
-            />
+            <Button text="Conectar monedero" onClick={connectWalletHandler} />
           ) : token0Value === undefined || token0Value === "" ? (
-            <Button
-              key="enter-amount"
-              isDisabled={isWindowReady}
-              text="Ingrese una cantidad"
-            />
+            <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
           ) : token0Value > (token0Balance?.data?.formatted ?? 0) ? (
-            <Button
-              key="insufficient-balance"
-              isDisabled={isWindowReady}
-              text="Saldo insuficiente"
-            />
+            <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
           ) : (
             <div className="flex flex-row gap-4">
               {allowanceLeft !== undefined ? (
@@ -241,7 +230,6 @@ const Swaps = ({
               <Button
                 isDisabled={!disableMainButton}
                 onClick={mainFunc}
-                key="emit-p"
                 text={buttonText}
               />
             </div>
@@ -262,20 +250,22 @@ const Swaps = ({
             {amountOfPe.toFixed(2)} {token1Info.name}
           </span>
         </div>
-        <div className="flex flex-row w-full gap-2">
-          <h5 className="font-bold font-Roboto text-[#00B7C2]">
-            Markup (5.00%)
-          </h5>
-          <InfoPopover
-            sm={true}
-            ydirection={"TOP"}
-            title={"Markup"}
-            text="La bóveda cobra un markup del 5% que queda adentro del contrato, beneficiando a todos los tenedores de PE."
-          />
-          <span className="ml-auto font-Roboto">
-            USDC {(Number(token0Value) * 5) / 100}
-          </span>
-        </div>
+        {hasMarkup && (
+          <div className="flex flex-row w-full gap-2">
+            <h5 className="font-bold font-Roboto text-[#00B7C2]">
+              Markup (5.00%)
+            </h5>
+            <InfoPopover
+              sm={true}
+              ydirection={"TOP"}
+              title={"Markup"}
+              text="La bóveda cobra un markup del 5% que queda adentro del contrato, beneficiando a todos los tenedores de PE."
+            />
+            <span className="ml-auto font-Roboto">
+              USDC {(Number(token0Value) * 5) / 100}
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

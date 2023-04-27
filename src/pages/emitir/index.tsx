@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Head from "next/head";
 import Swaps from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
 import { Address, useAccount } from "wagmi";
@@ -60,7 +60,7 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    Number(usdcValue)
+    usdcValue
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
@@ -131,7 +131,7 @@ const Emigrar: NextPage = () => {
 
   useEffect(() => {
     setAmountOfPe(Number(usdcValue) / pePrice);
-  }, [usdcValue]);
+  }, [usdcValue, pePrice]);
 
   return (
     <>
@@ -182,6 +182,7 @@ const Emigrar: NextPage = () => {
             amountOfPe={amountOfPe}
             disableMainButton={isMinted}
             pePrice={pePrice}
+            hasMarkup={true}
           />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">

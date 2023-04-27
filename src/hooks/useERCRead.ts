@@ -1,5 +1,5 @@
 import { Address, useContractRead } from "wagmi";
-import erc20ABI from '../../abi/IErc-20.json'
+import erc20ABI from "../../abi/IErc-20.json";
 import { tokens } from "../constants/addresses";
 
 /**
@@ -8,12 +8,9 @@ import { tokens } from "../constants/addresses";
  * @param args
  * @example https://wagmi.sh/react/hooks/useContractRead
  */
-export const useErc20Read = (
-  method: string,
-  args: any[] = []
-): any => {
+export const useErc20Read = (method: string, args: any[] = []): any => {
   const contractConfig = {
-    address: tokens['USDC'].address,
+    address: tokens["USDC"].address,
     abi: erc20ABI
   };
   /* const contract = usePeronio(); */
