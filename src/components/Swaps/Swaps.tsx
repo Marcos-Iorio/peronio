@@ -32,15 +32,16 @@ interface ISwaps {
   address: string | undefined;
   setToken0Value: Dispatch<SetStateAction<string | undefined>>;
   token0Value: string | undefined;
-  allowanceLeft: string;
-  hasAllowance: boolean;
+  allowanceLeft?: string;
+  hasAllowance?: boolean;
   connected: boolean;
-  runApprove: () => void;
+  runApprove?: () => void;
   hasApprove: boolean;
   setAmountOfPe: Dispatch<SetStateAction<number>>;
   amountOfPe: number;
   mainFunc: () => void;
   disableMainButton: boolean;
+  pePrice: number;
 }
 
 const Swaps = ({
@@ -59,14 +60,13 @@ const Swaps = ({
   setAmountOfPe,
   amountOfPe,
   mainFunc,
-  disableMainButton
+  disableMainButton,
+  pePrice
 }: ISwaps) => {
   const [token0Formatted, setToken0Formatted] = useState<string>();
   const [token1Formatted, setToken1Formatted] = useState<string>();
   const [toggleCurrencyText, setToggleCurrencyText] = useState<boolean>(true);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
-
-  const [, , pePrice] = usePairs();
 
   const { open, setOpen } = useModal();
 
@@ -94,7 +94,6 @@ const Swaps = ({
     const reg = /^-?\d*\.?\d*$/;
     if (reg.test(newValue) || newValue === "") {
       setToken0Value(newValue);
-      setAmountOfPe(Number(newValue) / pePrice);
     }
   };
 
@@ -223,15 +222,19 @@ const Swaps = ({
             />
           ) : (
             <div className="flex flex-row gap-4">
-              {!hasApprove && allowanceLeft < token0Value ? (
-                <button
-                  className={`${
-                    hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
-                  }`}
-                  onClick={runApprove}
-                >
-                  Aprobar
-                </button>
+              {allowanceLeft !== undefined ? (
+                !hasApprove && allowanceLeft < token0Value ? (
+                  <button
+                    className={`${
+                      hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
+                    }`}
+                    onClick={runApprove}
+                  >
+                    Aprobar
+                  </button>
+                ) : (
+                  ""
+                )
               ) : (
                 ""
               )}
@@ -255,7 +258,9 @@ const Swaps = ({
           <h5 className="font-bold font-Roboto text-[#00B7C2]">
             Minimo recibido
           </h5>
-          <span className="ml-auto font-Roboto">{amountOfPe.toFixed(2)} P</span>
+          <span className="ml-auto font-Roboto">
+            {amountOfPe.toFixed(2)} {token1Info.name}
+          </span>
         </div>
         <div className="flex flex-row w-full gap-2">
           <h5 className="font-bold font-Roboto text-[#00B7C2]">

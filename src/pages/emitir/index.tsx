@@ -14,6 +14,7 @@ import usePeronioWrite from "../../hooks/usePeronioWrite";
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import usePairs from "../../hooks/usePairs";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -50,6 +51,7 @@ const Emigrar: NextPage = () => {
   const [buttonText, setButtonText] = useState<string>("Emitir");
 
   const { address, isConnected } = useAccount();
+  const [, , pePrice] = usePairs();
 
   const { data: allowanceData } = useErc20Read("allowance", [
     address as Address,
@@ -127,6 +129,10 @@ const Emigrar: NextPage = () => {
     }, 3000);
   }
 
+  useEffect(() => {
+    setAmountOfPe(Number(usdcValue) / pePrice);
+  }, [usdcValue]);
+
   return (
     <>
       <Head>
@@ -175,6 +181,7 @@ const Emigrar: NextPage = () => {
             setAmountOfPe={setAmountOfPe}
             amountOfPe={amountOfPe}
             disableMainButton={isMinted}
+            pePrice={pePrice}
           />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">

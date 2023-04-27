@@ -6,6 +6,13 @@ import { motion } from "framer-motion";
 import tetherLogo from "/public/tether.svg";
 import pLogo from "/public/logoP.svg";
 import Head from "next/head";
+import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { useAccount, Address } from "wagmi";
+import Swaps from "../../components/Swaps/Swaps";
+import { tokens } from "../../constants/addresses";
+import usePeronioWrite from "../../hooks/usePeronioWrite";
+import usePairs from "../../hooks/usePairs";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -30,11 +37,55 @@ export const StyledMain = styled.main`
 `;
 
 const Retirar: NextPage = () => {
+  const [connected, setConnected] = useState(false);
+  const [pValue, setPValue] = useState<string | undefined>("");
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [hasApprove, setHasApprove] = useState<boolean>(false);
+  const [hasWithdraw, setHasWithdraw] = useState<boolean>(false);
+  const [hasAllowance, setHasAllowance] = useState<boolean>(false);
+  const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
+  const [amountOfPe, setAmountOfPe] = useState<number>(0);
+  const [buttonText, setButtonText] = useState<string>("Retirar");
+
+  const { address, isConnected } = useAccount();
+  const [, , pePrice] = usePairs();
+
+  const { data: withDrawData, writeAsync: withdraw } = usePeronioWrite(
+    "withdraw",
+    [address as Address, pValue]
+  );
+
+  const runWithdraw = async () => {
+    try {
+      await withdraw();
+      notifySuccess();
+    } catch (e: any) {
+      setErrorMessage(e.message);
+    }
+  };
+
+  const notifySuccess = () => {
+    toast.success(
+      `Retiraste ${Number(withDrawData._hex)} USDC por ${amountOfPe} P.`,
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
+  };
+
+  useEffect(() => {
+    setConnected(isConnected);
+  }, [isConnected]);
+
+  useEffect(() => {
+    setAmountOfPe(Number(pValue) * pePrice);
+  }, [pValue]);
+
   return (
     <>
       <Head>
-        <title>Retirar - Peronio</title>
-        <meta property="og:title" content="Retirar - Peronio" key="title" />
+        <title>Migrar - Peronio</title>
+        <meta property="og:title" content="Migrar - Peronio" key="title" />
       </Head>
       <StyledMain>
         <div className=" flex laptop:flex-row 2xl:flex-row md:flex-col-reverse gap-10 md:px-10 md:py-16 mobile:px-5 mobile:py-2 mobile:flex-col-reverse 2xl:h-full laptop:h-full xl:h-full w-full justify-evenly items-center">
@@ -45,7 +96,7 @@ const Retirar: NextPage = () => {
             className="xl:flex xl:flex-col h-full xl:basis-1/2 laptop:basis-1/3"
           >
             <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
-              ¿Cómo retirar USDT?
+              ¿Qué es la migración a la versión 2?
             </h1>
             <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui sed
@@ -54,70 +105,34 @@ const Retirar: NextPage = () => {
               libero, non nobis at.
             </p>
           </motion.div>
-          <motion.div
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="h-full w-full xl:basis-1/3 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
-          >
-            <div className="flex flex-col p-5 gap-10">
-              <h2 className="font-Roboto text-xl mb-7">
-                Depositá P para retirar USDT
-              </h2>
-              <div className="flex flex-col">
-                <div className="flex flex-row w-full gap-5 mb-3">
-                  <Image
-                    src={pLogo}
-                    width={25}
-                    height={25}
-                    alt="Peronio v2 Logo"
-                  />
-                  <div className="text-Roboto font-bold">P</div>
-                  <div className="ml-auto text-Roboto text-sm">Saldo: 2</div>
-                </div>
-                <div className="relative w-full xl:h-24">
-                  <input
-                    type="text"
-                    placeholder="0.0"
-                    className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
-                  />
-                  <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
-                    MAX
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex flex-row w-full gap-5 mb-3">
-                  <Image
-                    src={tetherLogo}
-                    width={25}
-                    height={25}
-                    alt="Tether Logo"
-                  />
-                  <div className="text-Roboto font-bold">USDT</div>
-                  <div className="ml-auto text-Roboto text-sm">Saldo: 0</div>
-                </div>
-                <div className="relative w-full xl:h-24">
-                  <input
-                    type="text"
-                    placeholder="0.0"
-                    className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
-                  />
-                  <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
-                    MAX
-                  </button>
-                </div>
-              </div>
-              <button className="rounded-md border-solid border-2 border-[#00B7C2] py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30">
-                Retirar USDT
-              </button>
-            </div>
-          </motion.div>
+          <Swaps
+            title="Ingresá P para retirar los USDC"
+            token0Info={tokens["P"]}
+            token1Info={tokens["USDC"]}
+            buttonText={buttonText}
+            address={address}
+            setToken0Value={setPValue}
+            token0Value={pValue}
+            connected={connected}
+            mainFunc={runWithdraw}
+            hasApprove={hasApprove}
+            setAmountOfPe={setAmountOfPe}
+            amountOfPe={amountOfPe}
+            disableMainButton={hasWithdraw}
+            pePrice={pePrice}
+          />
         </div>
         <h3 className="mobile:mt-16 text-4xl mobile:2xl font-Abril text-center">
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
+        <ToastContainer
+          autoClose={5000}
+          bodyClassName={() => "text-md font-white font-Roboto block p-3"}
+          toastClassName={() =>
+            "relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer bg-black/70 backdrop-blur-md"
+          }
+        />
       </StyledMain>
     </>
   );
