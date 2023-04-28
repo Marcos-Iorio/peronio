@@ -15,6 +15,8 @@ import usePeronioWrite from "../../hooks/usePeronioWrite";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import usePairs from "../../hooks/usePairs";
+import BigNumber from "bignumber.js";
+import { ethers } from "ethers";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -40,18 +42,24 @@ export const StyledMain = styled.main`
 `;
 
 const Emigrar: NextPage = () => {
-  const [usdcValue, setUsdcValue] = useState<string | undefined>("");
+  const [usdcValue, setUsdcValue] = useState<number>(0.0);
   const [connected, setConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasAllowance, setHasAllowance] = useState<boolean>(false);
   const [isMinted, setIsMinted] = useState<boolean>(false);
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
-  const [amountOfPe, setAmountOfPe] = useState<number>(0);
+  const [amountOfPe, setAmountOfPe] = useState<string>("0.0");
   const [buttonText, setButtonText] = useState<string>("Emitir");
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
+
+  const bnValue = new BigNumber(usdcValue.toString());
+  const amountIn = bnValue.times(new BigNumber("10").pow(6));
+
+  const amountOutBn = new BigNumber(amountOfPe.toString());
+  const amountOut = amountOutBn.times(new BigNumber("10").pow(6));
 
   const { data: allowanceData } = useErc20Read("allowance", [
     address as Address,
@@ -60,23 +68,14 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    usdcValue
+    amountIn
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
     address as Address,
-    usdcValue,
-    amountOfPe
+    amountIn,
+    amountOut
   ]);
-
-  const notifySuccess = () => {
-    toast.success(
-      `Minteaste ${amountOfPe.toFixed(3)} P por ${usdcValue} USDC.`,
-      {
-        position: toast.POSITION.TOP_RIGHT
-      }
-    );
-  };
 
   const runApprove = async () => {
     try {
@@ -93,7 +92,7 @@ const Emigrar: NextPage = () => {
     try {
       setButtonText("Emitiendo...");
       await mint();
-      setUsdcValue("");
+      setUsdcValue(0.0);
       setButtonText("Emitir");
       setIsMinted(false);
       notifySuccess();
@@ -103,6 +102,15 @@ const Emigrar: NextPage = () => {
     } catch (e: any) {
       setErrorMessage(e.message);
     }
+  };
+
+  const notifySuccess = () => {
+    toast.success(
+      `Minteaste ${Number(amountOfPe).toFixed(3)} P por ${usdcValue} USDC.`,
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
   };
 
   useEffect(() => {
@@ -130,7 +138,7 @@ const Emigrar: NextPage = () => {
   }
 
   useEffect(() => {
-    setAmountOfPe(Number(usdcValue) / pePrice);
+    setAmountOfPe(String(Number(usdcValue) / pePrice));
   }, [usdcValue, pePrice]);
 
   return (

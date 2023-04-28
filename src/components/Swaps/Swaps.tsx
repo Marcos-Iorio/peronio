@@ -29,15 +29,15 @@ interface ISwaps {
   token1Info: TokenInfo;
   buttonText: string;
   address: string | undefined;
-  setToken0Value: Dispatch<SetStateAction<string | undefined>>;
-  token0Value: string | undefined;
+  setToken0Value: Dispatch<SetStateAction<number>>;
+  token0Value: number | undefined;
   allowanceLeft?: string;
   hasAllowance?: boolean;
   connected: boolean;
   runApprove?: () => void;
   hasApprove: boolean;
-  setAmountOfPe: Dispatch<SetStateAction<number>>;
-  amountOfPe: number;
+  setAmountOfPe: Dispatch<SetStateAction<string>>;
+  amountOfPe: string;
   mainFunc: () => void;
   disableMainButton: boolean;
   pePrice: number;
@@ -94,7 +94,7 @@ const Swaps = ({
     const newValue = event.target.value;
     const reg = /^-?\d*\.?\d*$/;
     if (reg.test(newValue) || newValue === "") {
-      setToken0Value(newValue);
+      setToken0Value(Number(newValue));
     }
   };
 
@@ -154,7 +154,7 @@ const Swaps = ({
               />
               <MaxButton
                 setInputValue={setToken0Value}
-                maxValue={token0Balance.data?.formatted}
+                maxValue={token0Balance.data?.formatted ?? "0"}
               />
             </div>
           </div>
@@ -187,7 +187,7 @@ const Swaps = ({
           </div>
 
           <div
-            style={{ visibility: token0Value !== "" ? "visible" : "hidden" }}
+            style={{ visibility: token0Value !== 0.0 ? "visible" : "hidden" }}
             className="flex flex-row w-full gap-3"
           >
             <h4 className="font-bold font-Roboto text-[#00B7C2]">Precio</h4>
@@ -205,14 +205,14 @@ const Swaps = ({
           </div>
           {!connected ? (
             <Button text="Conectar monedero" onClick={connectWalletHandler} />
-          ) : token0Value === undefined || token0Value === "" ? (
+          ) : token0Value === undefined || token0Value === 0.0 ? (
             <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
-          ) : token0Value > (token0Balance?.data?.formatted ?? 0) ? (
+          ) : token0Value > Number(token0Balance?.data?.formatted ?? 0) ? (
             <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
           ) : (
             <div className="flex flex-row gap-4">
               {allowanceLeft !== undefined ? (
-                !hasApprove && allowanceLeft < token0Value ? (
+                !hasApprove && Number(allowanceLeft) < token0Value ? (
                   <button
                     className={`${
                       hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
@@ -238,7 +238,7 @@ const Swaps = ({
       </motion.div>
       <div
         style={{
-          visibility: token0Value !== "" ? "visible" : "hidden"
+          visibility: token0Value !== 0.0 ? "visible" : "hidden"
         }}
         className="flex flex-col border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm p-5"
       >
@@ -247,7 +247,7 @@ const Swaps = ({
             Minimo recibido
           </h5>
           <span className="ml-auto font-Roboto">
-            {amountOfPe.toFixed(2)} {token1Info.name}
+            {Number(amountOfPe).toFixed(2)} {token1Info.name}
           </span>
         </div>
         {hasMarkup && (

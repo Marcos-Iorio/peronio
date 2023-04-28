@@ -1,14 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 
 interface IMaxButton {
-  setInputValue: Dispatch<SetStateAction<string | undefined>>;
-  maxValue: string | undefined;
+  setInputValue: Dispatch<SetStateAction<number>>;
+  maxValue: string;
 }
 
 const MaxButton = ({ setInputValue, maxValue }: IMaxButton) => {
   return (
     <button
-      onClick={() => setInputValue(maxValue)}
+      onClick={() => setInputValue(Number(maxValue))}
       className="absolute bottom-2 right-2 text-sm rounded-lg border-solid p-1 bg-[#0B4D76]/50"
     >
       MAX

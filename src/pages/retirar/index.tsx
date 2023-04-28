@@ -38,11 +38,11 @@ export const StyledMain = styled.main`
 
 const Retirar: NextPage = () => {
   const [connected, setConnected] = useState(false);
-  const [pValue, setPValue] = useState<string | undefined>("");
+  const [pValue, setPValue] = useState<number>(0.0);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasWithdraw, setHasWithdraw] = useState<boolean>(false);
-  const [amountOfPe, setAmountOfPe] = useState<number>(0);
+  const [amountOfPe, setAmountOfPe] = useState<string>("0");
   const [buttonText, setButtonText] = useState<string>("Retirar");
 
   const { address, isConnected } = useAccount();
@@ -76,7 +76,7 @@ const Retirar: NextPage = () => {
   }, [isConnected]);
 
   useEffect(() => {
-    setAmountOfPe(Number(pValue) * pePrice);
+    setAmountOfPe(String(Number(pValue) * pePrice));
   }, [pValue, pePrice]);
 
   return (
