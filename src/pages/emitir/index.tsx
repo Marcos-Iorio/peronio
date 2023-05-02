@@ -15,6 +15,7 @@ import usePeronioWrite from "../../hooks/usePeronioWrite";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import usePairs from "../../hooks/usePairs";
+import BigNumber from "bignumber.js";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -58,14 +59,17 @@ const Emigrar: NextPage = () => {
     tokens["USDC"].address as Address
   ]);
 
+  const bnValue = new BigNumber(usdcValue || 0);
+  const amountIn = bnValue.times(new BigNumber("10").pow(6));
+
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    usdcValue
+    amountIn
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
     address as Address,
-    usdcValue,
+    amountIn,
     amountOfPe
   ]);
 
