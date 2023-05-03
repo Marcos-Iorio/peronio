@@ -7,7 +7,7 @@ export const formatDecimals = (
     const formattedNumber =
       Number(value) % 1 === 0
         ? Number(value).toFixed(0)
-        : Number(value).toFixed(5);
+        : Number(value).toFixed(2);
     return formattedNumber;
   }
   return "";

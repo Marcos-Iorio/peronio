@@ -1,11 +1,7 @@
 import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
 import { Address, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const usePeronioWrite = (
-  method: string,
-  args: any[] = []
-): any => {
-    
+const usePeronioWrite = (method: string, args: any[] = []): any => {
   const contractConfig = {
     address: peronioContract.address, //Spender, contract address
     abi: peronioContract.abi

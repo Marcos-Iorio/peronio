@@ -1,5 +1,5 @@
 import { Address, useContractRead } from "wagmi";
-import erc20ABI from "../../abi/IErc-20.json";
+import erc20ABI from "../../abi/IErc-20.abi.json";
 import { tokens } from "../constants/addresses";
 
 /**

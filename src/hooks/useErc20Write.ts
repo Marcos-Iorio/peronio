@@ -1,14 +1,10 @@
-import erc20ABI from '../../abi/IErc-20.json'
+import erc20ABI from "../../abi/IErc-20.abi.json";
 import { tokens } from "../constants/addresses";
 import { Address, useContractWrite, usePrepareContractWrite } from "wagmi";
 
-const useErc20Write = (
-  method: string,
-  args: any[] = []
-): any => {
-    
+const useErc20Write = (method: string, args: any[] = []): any => {
   const contractConfig = {
-    address: tokens['USDC'].address, //Spender, contract address
+    address: tokens["USDC"].address, //Spender, contract address
     abi: erc20ABI
   };
 
