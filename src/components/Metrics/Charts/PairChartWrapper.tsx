@@ -116,7 +116,6 @@ const PairChartWrapper = ({ arsPrice }: IChartWrapper) => {
     setTimeWindow(time);
   };
 
-  console.log(pairPriceData);
   return (
     <>
       <div className="flex mobile:flex-col xl:flex-row w-full justify-between">

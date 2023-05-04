@@ -68,7 +68,7 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    amountIn
+    usdcValue
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
