@@ -67,7 +67,7 @@ const Emigrar: NextPage = () => {
   ]);
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
-    tokens["USDC"].address as Address,
+    tokens["P"].address as Address,
     amountIn.toString()
   ]);
 
@@ -75,11 +75,12 @@ const Emigrar: NextPage = () => {
     address as Address,
     amountIn.toString(),
     amountOut.toString(),
-    { gasLimit: 65444 }
+    { gasLimit: 100000 }
   ]);
 
   const {
     data: tnxData,
+    error,
     isError,
     isLoading
   } = useWaitForTransaction({
