@@ -51,33 +51,6 @@
     "type": "function"
   },
   {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_from",
-        "type": "address"
-      },
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transferFrom",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "constant": true,
     "inputs": [],
     "name": "decimals",
@@ -112,43 +85,6 @@
   },
   {
     "constant": true,
-    "inputs": [],
-    "name": "symbol",
-    "outputs": [
-      {
-        "name": "",
-        "type": "string"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "transfer",
-    "outputs": [
-      {
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": true,
     "inputs": [
       {
         "name": "_owner",
@@ -162,7 +98,7 @@
     "name": "allowance",
     "outputs": [
       {
-        "name": "",
+        "name": "remaining",
         "type": "uint256"
       }
     ],
@@ -171,30 +107,25 @@
     "type": "function"
   },
   {
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "fallback"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
         "indexed": true,
-        "name": "owner",
+        "name": "_from",
         "type": "address"
       },
       {
         "indexed": true,
-        "name": "spender",
+        "name": "_to",
         "type": "address"
       },
       {
         "indexed": false,
-        "name": "value",
+        "name": "_value",
         "type": "uint256"
       }
     ],
-    "name": "Approval",
+    "name": "Transfer",
     "type": "event"
   },
   {
@@ -202,21 +133,21 @@
     "inputs": [
       {
         "indexed": true,
-        "name": "from",
+        "name": "_owner",
         "type": "address"
       },
       {
         "indexed": true,
-        "name": "to",
+        "name": "_spender",
         "type": "address"
       },
       {
         "indexed": false,
-        "name": "value",
+        "name": "_value",
         "type": "uint256"
       }
     ],
-    "name": "Transfer",
+    "name": "Approval",
     "type": "event"
   }
 ]
