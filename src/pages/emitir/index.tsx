@@ -67,7 +67,7 @@ const Emigrar: NextPage = () => {
   ]);
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
-    tokens["P"].address as Address,
+    tokens["USDC"].address as Address,
     amountIn.toString()
   ]);
 
