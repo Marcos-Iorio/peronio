@@ -8,7 +8,7 @@ import { tokens } from "../../constants/addresses";
 import { useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
-import { Address, useAccount } from "wagmi";
+import { Address, useAccount, useFeeData, useWaitForTransaction } from "wagmi";
 import { formatBalance } from "../../utils/formatPrice";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 
@@ -58,7 +58,7 @@ const Emigrar: NextPage = () => {
   const bnValue = new BigNumber(usdcValue.toString());
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
 
-  const amountOutBn = new BigNumber(amountOfPe.toString());
+  const amountOutBn = new BigNumber(Number(amountOfPe).toFixed(3));
   const amountOut = amountOutBn.times(new BigNumber("10").pow(6));
 
   const { data: allowanceData } = useErc20Read("allowance", [
@@ -68,14 +68,23 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    usdcValue
+    amountIn.toString()
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
     address as Address,
-    amountIn,
-    amountOut
+    amountIn.toString(),
+    amountOut.toString(),
+    { gasLimit: 65444 }
   ]);
+
+  const {
+    data: tnxData,
+    isError,
+    isLoading
+  } = useWaitForTransaction({
+    hash: mintingData?.hash
+  });
 
   const runApprove = async () => {
     try {
@@ -91,16 +100,17 @@ const Emigrar: NextPage = () => {
   const runMint = async () => {
     try {
       setButtonText("Emitiendo...");
-      await mint();
-      setUsdcValue(0.0);
-      setButtonText("Emitir");
+      const response = await mint();
       setIsMinted(false);
       notifySuccess();
       setTimeout(() => {
         setIsMinted(true);
+        setUsdcValue(0.0);
+        setButtonText("Emitir");
       }, 500);
     } catch (e: any) {
       setErrorMessage(e.message);
+      setButtonText("Emitir");
     }
   };
 
@@ -120,6 +130,7 @@ const Emigrar: NextPage = () => {
   useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
       setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
+      setIsMinted(true);
       setHasAllowance(true);
     }
   }, [allowanceData?._hex]);
