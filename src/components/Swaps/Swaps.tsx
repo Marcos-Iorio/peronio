@@ -29,8 +29,8 @@ interface ISwaps {
   token1Info: TokenInfo;
   buttonText: string;
   address: string | undefined;
-  setToken0Value: Dispatch<SetStateAction<number>>;
-  token0Value: number | undefined;
+  setToken0Value: Dispatch<SetStateAction<string>>;
+  token0Value: string | undefined;
   allowanceLeft?: string;
   hasAllowance?: boolean;
   connected: boolean;
@@ -94,7 +94,7 @@ const Swaps = ({
     const newValue = event.target.value;
     const reg = /^-?\d*\.?\d*$/;
     if (reg.test(newValue) || newValue === "") {
-      setToken0Value(Number(newValue));
+      setToken0Value(newValue);
     }
   };
 
@@ -187,7 +187,7 @@ const Swaps = ({
           </div>
 
           <div
-            style={{ visibility: token0Value !== 0.0 ? "visible" : "hidden" }}
+            style={{ visibility: token0Value !== "" ? "visible" : "hidden" }}
             className="flex flex-row w-full gap-3"
           >
             <h4 className="font-bold font-Roboto text-[#00B7C2]">Precio</h4>
@@ -205,14 +205,14 @@ const Swaps = ({
           </div>
           {!connected ? (
             <Button text="Conectar monedero" onClick={connectWalletHandler} />
-          ) : token0Value === undefined || token0Value === 0.0 ? (
+          ) : token0Value === undefined || token0Value === "0.0" ? (
             <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
-          ) : token0Value > Number(token0Balance?.data?.formatted ?? 0) ? (
+          ) : token0Value > (token0Balance?.data?.formatted ?? 0) ? (
             <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
           ) : (
             <div className="flex flex-row gap-4">
               {allowanceLeft !== undefined ? (
-                !hasApprove && Number(allowanceLeft) < token0Value ? (
+                !hasApprove && allowanceLeft < token0Value ? (
                   <button
                     className={`${
                       hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
@@ -238,7 +238,7 @@ const Swaps = ({
       </motion.div>
       <div
         style={{
-          visibility: token0Value !== 0.0 ? "visible" : "hidden"
+          visibility: token0Value !== "" ? "visible" : "hidden"
         }}
         className="flex flex-col border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm p-5"
       >

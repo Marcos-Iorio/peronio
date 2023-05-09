@@ -42,7 +42,7 @@ export const StyledMain = styled.main`
 `;
 
 const Emigrar: NextPage = () => {
-  const [usdcValue, setUsdcValue] = useState<number>(0.0);
+  const [usdcValue, setUsdcValue] = useState<string>("0.0");
   const [connected, setConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
@@ -106,7 +106,7 @@ const Emigrar: NextPage = () => {
       notifySuccess();
       setTimeout(() => {
         setIsMinted(true);
-        setUsdcValue(0.0);
+        setUsdcValue("0.0");
         setButtonText("Emitir");
       }, 500);
     } catch (e: any) {
