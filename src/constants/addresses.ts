@@ -25,5 +25,10 @@ export const tokens: TokenMap = {
     name: "MATIC",
     address: "0x0000000000000000000000000000000000001010",
     image: maticLogo
-  }
+  },
+  migratorV1: {
+    name: "migrator",
+    address: '0xfe672A4b063b1895b2f6531a78a69c014614B2D8',
+    image: ""
+  },
 };

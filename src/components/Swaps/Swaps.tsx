@@ -249,7 +249,7 @@ const Swaps = ({
           <span className="ml-auto font-Roboto">
             {(
               Number(Number(amountOfPe).toFixed(2)) -
-              (Number(amountOfPe) * 0.1) / 100
+              (Number(amountOfPe) * 5) / 100
             ).toFixed(1)}{" "}
             {token1Info.name}
           </span>

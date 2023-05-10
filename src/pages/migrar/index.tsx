@@ -7,6 +7,26 @@ import pLogo from "/public/logoP.svg";
 import peLogo from "/public/logoPE.svg";
 import Head from "next/head";
 
+import WizardModal from "../../components/WizardModal/WizardModal";
+import { WizardContext } from "../../contexts/WizardContext";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
+import {
+  usePrepareContractWrite,
+  Address,
+  useContractWrite,
+  useAccount,
+  useBalance,
+  useContractRead
+} from "wagmi";
+import { tokens } from "../../constants/addresses";
+import migratorAbi from "../../../abi/migrator.abi.json";
+import peronioV1Contract from "../../../abi/peronioV1.abi.json";
+import usePairs from "../../hooks/usePairs";
+import BigNumber from "bignumber.js";
+import { IDataAttributes } from "../../../types/contractRead";
+import MaxButton from "../../components/Swaps/MaxButton";
+import { formatDecimals } from "../../utils/formatDecimals";
+
 export const StyledMain = styled.main`
   display: flex;
   flex-direction: column;
@@ -32,7 +52,64 @@ export const StyledMain = styled.main`
 `;
 
 const Migrar: NextPage = () => {
-  const peAmount = 0;
+  const [peValue, setPeValue] = useState<string>("0.0");
+
+  const { address, isConnected } = useAccount();
+  const [, , pePrice] = usePairs();
+  const { isOpen } = useContext(WizardContext);
+
+  const peBalance = useBalance({
+    address: address as Address,
+    token: tokens["PE"].address as Address
+  });
+
+  const usdcBalance = useBalance({
+    address: address as Address,
+    token: tokens["USDC"].address as Address
+  });
+
+  const pBalance = useBalance({
+    address: address as Address,
+    token: tokens["P"].address as Address
+  });
+
+  const bnValue = new BigNumber(peValue.toString());
+  const amountIn = bnValue.times(new BigNumber("10").pow(6));
+
+  //read collateralRatio of V1
+  const { data: PeData }: { data: IDataAttributes | undefined } =
+    useContractRead({
+      address: peronioV1Contract.address as Address,
+      abi: peronioV1Contract.abi,
+      functionName: "collateralRatio"
+    });
+
+  const usdcPerPe = Number(peValue) * (Number(PeData?._hex) / 1000000);
+
+  //write into migrator to migrate pe into p
+  const contractConfig = {
+    address: tokens["migratorV1"].address, //Spender, contract address
+    abi: migratorAbi
+  };
+
+  const { config } = usePrepareContractWrite({
+    address: contractConfig.address as Address,
+    abi: contractConfig.abi,
+    functionName: "migrate",
+    args: [amountIn]
+  });
+
+  const { data, writeAsync: migrate } = useContractWrite({
+    ...config
+  });
+
+  const changePeValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    const reg = /^-?\d*\.?\d*$/;
+    if (reg.test(newValue) || newValue === "") {
+      setPeValue(newValue);
+    }
+  };
 
   return (
     <>
@@ -52,10 +129,7 @@ const Migrar: NextPage = () => {
               ¿Qué es la migración a la versión 2?
             </h1>
             <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui sed
-              consectetur commodi dolorum mollitia molestias, iste, ab officia
-              culpa itaque debitis! Magnam deleniti doloribus aperiam molestiae
-              libero, non nobis at.
+              Migramos de PE(V1) a P la nueva versión del Peronio.
             </p>
           </motion.div>
           <motion.div
@@ -71,43 +145,82 @@ const Migrar: NextPage = () => {
               <div className="flex flex-col">
                 <div className="flex flex-row w-full gap-5 mb-3">
                   <Image
-                    src={peLogo}
+                    src={tokens["PE"].image}
                     width={25}
                     height={25}
-                    className={peAmount == 0 ? "grayscale" : "grayscale-0"}
+                    className={
+                      peBalance.data?.formatted == "0.0"
+                        ? "grayscale"
+                        : "grayscale-0"
+                    }
                     alt="Peronio v2 Logo"
                   />
                   <div className="text-Roboto font-bold">PE(V1)</div>
                   <div className="ml-auto text-Roboto text-sm">
-                    Saldo: {peAmount}
+                    Saldo: {formatDecimals(peBalance.data?.formatted)}
                   </div>
                 </div>
                 <div className="relative w-full xl:h-24">
                   <input
                     type="text"
                     placeholder="0.0"
+                    onChange={changePeValueHandler}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
                   />
-                  <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
-                    MAX
-                  </button>
+                  <MaxButton
+                    setInputValue={setPeValue}
+                    maxValue={peBalance.data?.formatted ?? "0"}
+                  />
                 </div>
               </div>
               <div className="flex flex-col">
                 <div className="flex flex-row w-full gap-5 mb-3">
-                  <Image src={pLogo} width={25} height={25} alt="Tether Logo" />
-                  <div className="text-Roboto font-bold">P</div>
-                  <div className="ml-auto text-Roboto text-sm">Saldo: 0</div>
+                  <Image
+                    src={tokens["USDC"].image}
+                    width={25}
+                    height={25}
+                    alt="USDC Logo"
+                  />
+                  <div className="text-Roboto font-bold">USDC</div>
+                  <div className="ml-auto text-Roboto text-sm">
+                    Saldo: {formatDecimals(usdcBalance.data?.formatted)}
+                  </div>
                 </div>
                 <div className="relative w-full xl:h-24">
                   <input
                     type="text"
+                    inputMode="decimal"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
+                    value={usdcPerPe.toFixed(2)}
+                    className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
+                    readOnly={true}
                   />
-                  <button className="absolute bottom-2 right-2 rounded-lg border-solid border-2 border-[#0B4D76] p-1 bg-[#188DD6]/50">
-                    MAX
-                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex flex-row w-full gap-5 mb-3">
+                  <Image
+                    src={tokens["P"].image}
+                    width={25}
+                    height={25}
+                    alt="P Logo"
+                  />
+                  <div className="text-Roboto font-bold">P</div>
+                  <div className="ml-auto text-Roboto text-sm">
+                    Saldo: {formatDecimals(pBalance.data?.formatted)}
+                  </div>
+                </div>
+                <div className="relative w-full xl:h-24">
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
+                    placeholder="0.0"
+                    value={Number(usdcPerPe / pePrice).toFixed(2)}
+                    className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
+                    readOnly={true}
+                  />
                 </div>
               </div>
               <button className="rounded-md border-solid border-2 border-[#00B7C2] py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30">
@@ -121,6 +234,7 @@ const Migrar: NextPage = () => {
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
       </StyledMain>
+      {isOpen && <WizardModal />}
     </>
   );
 };

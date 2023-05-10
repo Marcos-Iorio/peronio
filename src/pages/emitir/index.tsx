@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Head from "next/head";
 import Emit from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
 import { Address, useAccount, useFeeData, useWaitForTransaction } from "wagmi";
@@ -16,6 +16,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
+import WizardModal from "../../components/WizardModal/WizardModal";
+import { WizardContext } from "../../contexts/WizardContext";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -53,11 +55,12 @@ const Emigrar: NextPage = () => {
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
+  const { isOpen } = useContext(WizardContext);
 
   const bnValue = new BigNumber(usdcValue.toString());
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
 
-  const slippage = (Number(amountOfPe) * 0.1) / 100;
+  const slippage = (Number(amountOfPe) * 5) / 100;
   const amountOutBn = new BigNumber((Number(amountOfPe) - slippage).toFixed(3));
   const amountOut = amountOutBn.times(new BigNumber("10").pow(6));
 
@@ -221,6 +224,7 @@ const Emigrar: NextPage = () => {
           }
         />
       </StyledMain>
+      {isOpen && <WizardModal />}
     </>
   );
 };

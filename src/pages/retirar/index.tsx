@@ -1,19 +1,18 @@
 import type { NextPage } from "next";
-import Image from "next/image";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 
-import tetherLogo from "/public/tether.svg";
-import pLogo from "/public/logoP.svg";
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { useAccount, Address, useWaitForTransaction } from "wagmi";
-import Swaps from "../../components/Swaps/Swaps";
+import Withdraw from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
+import WizardModal from "../../components/WizardModal/WizardModal";
+import { WizardContext } from "../../contexts/WizardContext";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -48,6 +47,7 @@ const Retirar: NextPage = () => {
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
+  const { isOpen } = useContext(WizardContext);
 
   const bnValue = new BigNumber(pValue.toString());
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
@@ -113,16 +113,14 @@ const Retirar: NextPage = () => {
             className="xl:flex xl:flex-col h-full xl:basis-1/2 laptop:basis-1/3"
           >
             <h1 className="xl:text-2xl mobile:text-2xl font-Abril mb-7">
-              ¿Qué es la migración a la versión 2?
+              ¿Cómo retirar?
             </h1>
             <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui sed
-              consectetur commodi dolorum mollitia molestias, iste, ab officia
-              culpa itaque debitis! Magnam deleniti doloribus aperiam molestiae
-              libero, non nobis at.
+              Ingresando tus P vas a poder retirar USDC de la boveda cuando
+              quieras. Nadie, ni nosotros podemos limitar esa posibilidad.
             </p>
           </motion.div>
-          <Swaps
+          <Withdraw
             title="Ingresá P para retirar los USDC"
             token0Info={tokens["P"]}
             token1Info={tokens["USDC"]}
@@ -152,6 +150,7 @@ const Retirar: NextPage = () => {
           }
         />
       </StyledMain>
+      {isOpen && <WizardModal />}
     </>
   );
 };
