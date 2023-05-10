@@ -26,6 +26,8 @@ import BigNumber from "bignumber.js";
 import { IDataAttributes } from "../../../types/contractRead";
 import MaxButton from "../../components/Swaps/MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
+import Button from "../../components/Button/Button";
+import { useModal } from "connectkit";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -51,12 +53,27 @@ export const StyledMain = styled.main`
   }
 `;
 
+const ButtonStyles = {
+  enabled:
+    "rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30 mx-auto w-full",
+  disabled:
+    "rounded-md py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-gray-400/20 text-gray-500 mx-auto w-full"
+};
+
 const Migrar: NextPage = () => {
   const [peValue, setPeValue] = useState<string>("0.0");
+  const [connected, setConnected] = useState<boolean>(false);
+  const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
+  const [usdcPerPe, setUsdcPerPe] = useState<string>("0.0");
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
   const { isOpen } = useContext(WizardContext);
+  const { open, setOpen } = useModal();
+
+  const connectWalletHandler = () => {
+    setOpen(true);
+  };
 
   const peBalance = useBalance({
     address: address as Address,
@@ -84,8 +101,6 @@ const Migrar: NextPage = () => {
       functionName: "collateralRatio"
     });
 
-  const usdcPerPe = Number(peValue) * (Number(PeData?._hex) / 1000000);
-
   //write into migrator to migrate pe into p
   const contractConfig = {
     address: tokens["migratorV1"].address, //Spender, contract address
@@ -96,7 +111,7 @@ const Migrar: NextPage = () => {
     address: contractConfig.address as Address,
     abi: contractConfig.abi,
     functionName: "migrate",
-    args: [amountIn]
+    args: [amountIn.toString()]
   });
 
   const { data, writeAsync: migrate } = useContractWrite({
@@ -110,6 +125,20 @@ const Migrar: NextPage = () => {
       setPeValue(newValue);
     }
   };
+
+  useEffect(() => {
+    setConnected(isConnected);
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsWindowReady(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    setUsdcPerPe(String(Number(peValue) * (Number(PeData?._hex) / 1000000)));
+  }, [PeData?._hex, peValue]);
 
   return (
     <>
@@ -136,7 +165,7 @@ const Migrar: NextPage = () => {
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="h-full w-full xl:basis-1/3 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
+            className="h-full w-full xl:basis-1/4 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
           >
             <div className="flex flex-col p-5 gap-10">
               <h2 className="font-Roboto text-xl mb-7">
@@ -149,7 +178,7 @@ const Migrar: NextPage = () => {
                     width={25}
                     height={25}
                     className={
-                      peBalance.data?.formatted == "0.0"
+                      isWindowReady && peBalance.data?.formatted === "0.0"
                         ? "grayscale"
                         : "grayscale-0"
                     }
@@ -165,6 +194,7 @@ const Migrar: NextPage = () => {
                     type="text"
                     placeholder="0.0"
                     onChange={changePeValueHandler}
+                    value={peValue}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-10"
                   />
                   <MaxButton
@@ -192,7 +222,7 @@ const Migrar: NextPage = () => {
                     inputMode="decimal"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    value={usdcPerPe.toFixed(2)}
+                    value={formatDecimals(usdcPerPe)}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
                     readOnly={true}
                   />
@@ -217,15 +247,29 @@ const Migrar: NextPage = () => {
                     inputMode="decimal"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    value={Number(usdcPerPe / pePrice).toFixed(2)}
+                    value={formatDecimals(String(Number(usdcPerPe) / pePrice))}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
                     readOnly={true}
                   />
                 </div>
               </div>
-              <button className="rounded-md border-solid border-2 border-[#00B7C2] py-2 font-Roboto font-bold laptop:text-xl mobile:text-lg bg-[#0B4D76]/30">
-                Migrar
-              </button>
+              {!connected ? (
+                <Button
+                  text="Conectar monedero"
+                  onClick={connectWalletHandler}
+                />
+              ) : peValue === undefined || peValue === "" ? (
+                <Button
+                  isDisabled={isWindowReady}
+                  text="Ingrese una cantidad"
+                />
+              ) : peValue > (peBalance?.data?.formatted ?? 0) ? (
+                <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
+              ) : (
+                <div className="flex flex-row gap-4">
+                  <Button onClick={migrate} text={"Migrar"} />
+                </div>
+              )}
             </div>
           </motion.div>
         </div>

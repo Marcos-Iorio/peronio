@@ -238,7 +238,7 @@ const Swaps = ({
       </motion.div>
       <div
         style={{
-          visibility: token0Value !== "" ? "visible" : "hidden"
+          visibility: token0Value !== "0.0" ? "visible" : "hidden"
         }}
         className="flex flex-col border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm p-5"
       >
