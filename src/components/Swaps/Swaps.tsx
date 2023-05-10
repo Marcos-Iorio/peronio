@@ -247,7 +247,11 @@ const Swaps = ({
             Minimo recibido
           </h5>
           <span className="ml-auto font-Roboto">
-            {Number(amountOfPe).toFixed(2)} {token1Info.name}
+            {(
+              Number(Number(amountOfPe).toFixed(2)) -
+              (Number(amountOfPe) * 0.1) / 100
+            ).toFixed(1)}{" "}
+            {token1Info.name}
           </span>
         </div>
         {hasMarkup && (

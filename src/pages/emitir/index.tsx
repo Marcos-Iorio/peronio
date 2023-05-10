@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { motion } from "framer-motion";
 
 import Head from "next/head";
-import Swaps from "../../components/Swaps/Swaps";
+import Emit from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
 import { useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
@@ -16,7 +16,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
-import { ethers } from "ethers";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -58,7 +57,8 @@ const Emigrar: NextPage = () => {
   const bnValue = new BigNumber(usdcValue.toString());
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
 
-  const amountOutBn = new BigNumber(Number(amountOfPe).toFixed(3));
+  const slippage = (Number(amountOfPe) * 0.1) / 100;
+  const amountOutBn = new BigNumber((Number(amountOfPe) - slippage).toFixed(3));
   const amountOut = amountOutBn.times(new BigNumber("10").pow(6));
 
   const { data: allowanceData } = useErc20Read("allowance", [
@@ -67,22 +67,22 @@ const Emigrar: NextPage = () => {
   ]);
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
-    tokens["P"].address as Address,
+    tokens["USDC"].address as Address,
     amountIn.toString()
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
     address as Address,
     amountIn.toString(),
-    amountOut.toString(),
-    { gasLimit: 100000 }
+    amountOut.toString()
   ]);
 
   const {
     data: tnxData,
     error,
     isError,
-    isLoading
+    isLoading,
+    isSuccess
   } = useWaitForTransaction({
     hash: mintingData?.hash
   });
@@ -102,8 +102,12 @@ const Emigrar: NextPage = () => {
     try {
       setButtonText("Emitiendo...");
       const response = await mint();
+      if (error) {
+        throw new Error(error?.message);
+      } else {
+        notifySuccess();
+      }
       setIsMinted(false);
-      notifySuccess();
       setTimeout(() => {
         setIsMinted(true);
         setUsdcValue(0.0);
@@ -184,7 +188,7 @@ const Emigrar: NextPage = () => {
               {errorMessage}
             </div>
           </motion.div>
-          <Swaps
+          <Emit
             title={"Cambiá USDC para emitir P"}
             token0Info={tokens["USDC"]}
             token1Info={tokens["P"]}

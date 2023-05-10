@@ -8,11 +8,12 @@ import pLogo from "/public/logoP.svg";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { useAccount, Address } from "wagmi";
+import { useAccount, Address, useWaitForTransaction } from "wagmi";
 import Swaps from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 import usePairs from "../../hooks/usePairs";
+import BigNumber from "bignumber.js";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -38,7 +39,7 @@ export const StyledMain = styled.main`
 
 const Retirar: NextPage = () => {
   const [connected, setConnected] = useState(false);
-  const [pValue, setPValue] = useState<number>(0.0);
+  const [pValue, setPValue] = useState<string>("0.0");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasWithdraw, setHasWithdraw] = useState<boolean>(false);
@@ -48,14 +49,32 @@ const Retirar: NextPage = () => {
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
 
+  const bnValue = new BigNumber(pValue.toString());
+  const amountIn = bnValue.times(new BigNumber("10").pow(6));
+
   const { data: withDrawData, writeAsync: withdraw } = usePeronioWrite(
     "withdraw",
-    [address as Address, Number(pValue)]
+    [address as Address, amountIn.toString()]
   );
+
+  const {
+    data: tnxData,
+    error,
+    isError,
+    isLoading,
+    isSuccess
+  } = useWaitForTransaction({
+    hash: withDrawData?.hash
+  });
 
   const runWithdraw = async () => {
     try {
       await withdraw();
+      if (error) {
+        throw new Error(error?.message);
+      } else {
+        notifySuccess();
+      }
       notifySuccess();
     } catch (e: any) {
       setErrorMessage(e.message);
