@@ -93,8 +93,11 @@ const Swaps = ({
   const changeToken0ValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     const reg = /^-?\d*\.?\d*$/;
-    if (reg.test(newValue) || newValue === "") {
+    if (reg.test(newValue)) {
       setToken0Value(newValue);
+    }
+    if (newValue == "") {
+      setToken0Value("");
     }
   };
 
@@ -205,7 +208,7 @@ const Swaps = ({
           </div>
           {!connected ? (
             <Button text="Conectar monedero" onClick={connectWalletHandler} />
-          ) : token0Value === undefined || token0Value === "0.0" ? (
+          ) : token0Value === undefined || token0Value === "" ? (
             <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
           ) : token0Value > (token0Balance?.data?.formatted ?? 0) ? (
             <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
@@ -238,7 +241,7 @@ const Swaps = ({
       </motion.div>
       <div
         style={{
-          visibility: token0Value !== "0.0" ? "visible" : "hidden"
+          visibility: token0Value !== "" ? "visible" : "hidden"
         }}
         className="flex flex-col border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm p-5"
       >
@@ -266,7 +269,7 @@ const Swaps = ({
               text="La bóveda cobra un markup del 5% que queda adentro del contrato, beneficiando a todos los tenedores de PE."
             />
             <span className="ml-auto font-Roboto">
-              USDC {(Number(token0Value) * 5) / 100}
+              USDC {(Number(token0Value) * 10) / 100}
             </span>
           </div>
         )}

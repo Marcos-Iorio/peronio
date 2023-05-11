@@ -26,7 +26,7 @@ import MaxButton from "../../components/Swaps/MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
 import Button from "../../components/Button/Button";
 import { useModal } from "connectkit";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { formatBalance } from "../../utils/formatPrice";
 
 export const StyledMain = styled.main`
@@ -65,12 +65,17 @@ const Migrar: NextPage = () => {
   const [connected, setConnected] = useState<boolean>(false);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
   const [usdcPerPe, setUsdcPerPe] = useState<string>("0.0");
-  const [buttonText, setButtonText] = useState<string>("Emitir");
+  const [buttonText, setButtonText] = useState<string>("Migrar");
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasAllowance, setHasAllowance] = useState<boolean>(false);
   const [isMigrated, setIsMigrated] = useState<boolean>(false);
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [tokensBalanceFormatted, setTokensBalanceFormatted] = useState({
+    pe: "0",
+    usdc: "0",
+    p: "0"
+  });
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
@@ -239,6 +244,18 @@ const Migrar: NextPage = () => {
     }, 3000);
   }
 
+  useEffect(() => {
+    setTokensBalanceFormatted((tokensBalanceFormatted) => ({
+      pe: formatDecimals(peBalance.data?.formatted),
+      usdc: formatDecimals(usdcBalance.data?.formatted),
+      p: formatDecimals(pBalance.data?.formatted)
+    }));
+  }, [
+    peBalance.data?.formatted,
+    usdcBalance.data?.formatted,
+    pBalance.data?.formatted
+  ]);
+
   return (
     <>
       <Head>
@@ -259,6 +276,12 @@ const Migrar: NextPage = () => {
             <p className="xl:text-lg mobile:text-xl font-Roboto xl:w-3/4">
               Migramos de PE(V1) a P la nueva versión del Peronio.
             </p>
+            <div
+              style={{ visibility: errorMessage ? "visible" : "hidden" }}
+              className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300"
+            >
+              {errorMessage}
+            </div>
           </motion.div>
           <motion.div
             initial={{ x: 100, opacity: 0 }}
@@ -267,9 +290,12 @@ const Migrar: NextPage = () => {
             className="h-full w-full xl:basis-1/4 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
           >
             <div className="flex flex-col p-5 gap-10">
-              <h2 className="font-Roboto text-xl mb-7">
+              <h2 className="font-Roboto text-xl mb-1">
                 Depositá PE(V1) y recibí P.
               </h2>
+              <p className="mb-auto h-full font-Roboto">
+                Tenés disponible para gastar: {allowanceLeft}
+              </p>
               <div className="flex flex-col">
                 <div className="flex flex-row w-full gap-5 mb-3">
                   <Image
@@ -285,7 +311,7 @@ const Migrar: NextPage = () => {
                   />
                   <div className="text-Roboto font-bold">PE(V1)</div>
                   <div className="ml-auto text-Roboto text-sm">
-                    Saldo: {formatDecimals(peBalance.data?.formatted)}
+                    Saldo: {tokensBalanceFormatted.pe}
                   </div>
                 </div>
                 <div className="relative w-full xl:h-24">
@@ -312,7 +338,7 @@ const Migrar: NextPage = () => {
                   />
                   <div className="text-Roboto font-bold">USDC</div>
                   <div className="ml-auto text-Roboto text-sm">
-                    Saldo: {formatDecimals(usdcBalance.data?.formatted)}
+                    Saldo: {tokensBalanceFormatted.usdc}
                   </div>
                 </div>
                 <div className="relative w-full xl:h-24">
@@ -337,7 +363,7 @@ const Migrar: NextPage = () => {
                   />
                   <div className="text-Roboto font-bold">P</div>
                   <div className="ml-auto text-Roboto text-sm">
-                    Saldo: {pBalance.data?.formatted}
+                    Saldo: {tokensBalanceFormatted.p}
                   </div>
                 </div>
                 <div className="relative w-full xl:h-24">
@@ -398,6 +424,13 @@ const Migrar: NextPage = () => {
           Chequeá nuestro exchange{" "}
           <span className="text-yellow-400">BLOCKS</span>
         </h3>
+        <ToastContainer
+          autoClose={5000}
+          bodyClassName={() => "text-md font-white font-Roboto block p-3"}
+          toastClassName={() =>
+            "relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer bg-black/70 backdrop-blur-md"
+          }
+        />
       </StyledMain>
       {isOpen && <WizardModal />}
     </>

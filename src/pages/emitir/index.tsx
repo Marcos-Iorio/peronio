@@ -8,7 +8,7 @@ import { tokens } from "../../constants/addresses";
 import { useContext, useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
-import { Address, useAccount, useFeeData, useWaitForTransaction } from "wagmi";
+import { Address, useAccount, useWaitForTransaction } from "wagmi";
 import { formatBalance } from "../../utils/formatPrice";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 
@@ -43,7 +43,7 @@ export const StyledMain = styled.main`
 `;
 
 const Emigrar: NextPage = () => {
-  const [usdcValue, setUsdcValue] = useState<string>("0.0");
+  const [usdcValue, setUsdcValue] = useState<string>("");
   const [connected, setConnected] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
@@ -80,13 +80,7 @@ const Emigrar: NextPage = () => {
     amountOut.toString()
   ]);
 
-  const {
-    data: tnxData,
-    error,
-    isError,
-    isLoading,
-    isSuccess
-  } = useWaitForTransaction({
+  const { data: tnxData, error } = useWaitForTransaction({
     hash: mintingData?.hash
   });
 
