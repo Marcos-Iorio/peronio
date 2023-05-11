@@ -212,7 +212,7 @@ const Swaps = ({
           ) : (
             <div className="flex flex-row gap-4">
               {allowanceLeft !== undefined ? (
-                !hasApprove && allowanceLeft < token0Value ? (
+                Number(allowanceLeft) === 0 ? (
                   <button
                     className={`${
                       hasApprove ? ButtonStyles.disabled : ButtonStyles.enabled
@@ -228,7 +228,7 @@ const Swaps = ({
                 ""
               )}
               <Button
-                isDisabled={!disableMainButton}
+                isDisabled={disableMainButton}
                 onClick={mainFunc}
                 text={buttonText}
               />

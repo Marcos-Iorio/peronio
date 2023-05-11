@@ -94,10 +94,10 @@ const Emigrar: NextPage = () => {
     try {
       await approve();
       setHasApprove(true);
-      setIsMinted(true);
+      setIsMinted(false);
     } catch (e: any) {
       setErrorMessage(e.message);
-      setHasApprove(false);
+      setHasApprove(true);
     }
   };
 
@@ -138,7 +138,7 @@ const Emigrar: NextPage = () => {
   useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
       setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
-      setIsMinted(true);
+      setIsMinted(false);
       setHasAllowance(true);
     }
   }, [allowanceData?._hex]);
@@ -147,6 +147,7 @@ const Emigrar: NextPage = () => {
     if (allowanceLeft === "0") {
       setHasAllowance(false);
       setHasApprove(false);
+      setIsMinted(false);
     }
   }, [allowanceLeft]);
 

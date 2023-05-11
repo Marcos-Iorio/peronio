@@ -2,9 +2,6 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
-
-import pLogo from "/public/logoP.svg";
-import peLogo from "/public/logoPE.svg";
 import Head from "next/head";
 
 import WizardModal from "../../components/WizardModal/WizardModal";
@@ -16,7 +13,8 @@ import {
   useContractWrite,
   useAccount,
   useBalance,
-  useContractRead
+  useContractRead,
+  useWaitForTransaction
 } from "wagmi";
 import { tokens } from "../../constants/addresses";
 import migratorAbi from "../../../abi/migrator.abi.json";
@@ -28,6 +26,8 @@ import MaxButton from "../../components/Swaps/MaxButton";
 import { formatDecimals } from "../../utils/formatDecimals";
 import Button from "../../components/Button/Button";
 import { useModal } from "connectkit";
+import { toast } from "react-toastify";
+import { formatBalance } from "../../utils/formatPrice";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -65,6 +65,12 @@ const Migrar: NextPage = () => {
   const [connected, setConnected] = useState<boolean>(false);
   const [isWindowReady, setIsWindowReady] = useState<boolean>(false);
   const [usdcPerPe, setUsdcPerPe] = useState<string>("0.0");
+  const [buttonText, setButtonText] = useState<string>("Emitir");
+  const [hasApprove, setHasApprove] = useState<boolean>(false);
+  const [hasAllowance, setHasAllowance] = useState<boolean>(false);
+  const [isMigrated, setIsMigrated] = useState<boolean>(false);
+  const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
@@ -101,6 +107,25 @@ const Migrar: NextPage = () => {
       functionName: "collateralRatio"
     });
 
+  //allowance and approve
+  const { data: allowanceData } = useContractRead({
+    address: peronioV1Contract.address as Address,
+    abi: peronioV1Contract.abi,
+    functionName: "allowance",
+    args: [address as Address, tokens["PE"].address as Address]
+  });
+
+  const { config: approveConfig } = usePrepareContractWrite({
+    address: peronioV1Contract.address as Address,
+    abi: peronioV1Contract.abi,
+    functionName: "approve",
+    args: [tokens["PE"].address as Address, amountIn.toString()]
+  });
+
+  const { data: approveData, writeAsync: approve } = useContractWrite({
+    ...approveConfig
+  });
+
   //write into migrator to migrate pe into p
   const contractConfig = {
     address: tokens["migratorV1"].address, //Spender, contract address
@@ -117,6 +142,59 @@ const Migrar: NextPage = () => {
   const { data, writeAsync: migrate } = useContractWrite({
     ...config
   });
+
+  const {
+    data: tnxData,
+    error,
+    isError,
+    isLoading,
+    isSuccess
+  } = useWaitForTransaction({
+    hash: data?.hash
+  });
+
+  const runApprove = async () => {
+    try {
+      await approve?.();
+      setHasApprove(true);
+      setIsMigrated(true);
+    } catch (e: any) {
+      setErrorMessage(e.message);
+      setHasApprove(false);
+    }
+  };
+
+  const runMigrate = async () => {
+    try {
+      setButtonText("Migrando...");
+      const response = await migrate?.();
+      if (error) {
+        throw new Error(error?.message);
+      } else {
+        notifySuccess();
+      }
+      setIsMigrated(false);
+      setTimeout(() => {
+        setIsMigrated(true);
+        setPeValue("0.0");
+        setButtonText("Migrar");
+      }, 500);
+    } catch (e: any) {
+      setErrorMessage(e.message);
+      setButtonText("Emitir");
+    }
+  };
+
+  const notifySuccess = () => {
+    toast.success(
+      `Migraste ${Number(peValue).toFixed(3)} PE por ${
+        Number(usdcPerPe) / pePrice
+      } P.`,
+      {
+        position: toast.POSITION.TOP_RIGHT
+      }
+    );
+  };
 
   const changePeValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -139,6 +217,27 @@ const Migrar: NextPage = () => {
   useEffect(() => {
     setUsdcPerPe(String(Number(peValue) * (Number(PeData?._hex) / 1000000)));
   }, [PeData?._hex, peValue]);
+
+  /* useEffect(() => {
+    if (Number(allowanceData?._hex) > 0) {
+      setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
+      setIsMigrated(true);
+      setHasAllowance(true);
+    }
+  }, [allowanceData?._hex]); */
+
+  useEffect(() => {
+    if (allowanceLeft === "0") {
+      setHasAllowance(false);
+      setHasApprove(false);
+    }
+  }, [allowanceLeft]);
+
+  if (errorMessage) {
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000);
+  }
 
   return (
     <>
@@ -222,7 +321,7 @@ const Migrar: NextPage = () => {
                     inputMode="decimal"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    value={formatDecimals(usdcPerPe)}
+                    value={usdcPerPe}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
                     readOnly={true}
                   />
@@ -238,7 +337,7 @@ const Migrar: NextPage = () => {
                   />
                   <div className="text-Roboto font-bold">P</div>
                   <div className="ml-auto text-Roboto text-sm">
-                    Saldo: {formatDecimals(pBalance.data?.formatted)}
+                    Saldo: {pBalance.data?.formatted}
                   </div>
                 </div>
                 <div className="relative w-full xl:h-24">
@@ -258,7 +357,7 @@ const Migrar: NextPage = () => {
                   text="Conectar monedero"
                   onClick={connectWalletHandler}
                 />
-              ) : peValue === undefined || peValue === "" ? (
+              ) : peValue === undefined || peValue === "0.0" ? (
                 <Button
                   isDisabled={isWindowReady}
                   text="Ingrese una cantidad"
@@ -267,7 +366,29 @@ const Migrar: NextPage = () => {
                 <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
               ) : (
                 <div className="flex flex-row gap-4">
-                  <Button onClick={migrate} text={"Migrar"} />
+                  {allowanceLeft !== undefined ? (
+                    !hasApprove && allowanceLeft < peValue ? (
+                      <button
+                        className={`${
+                          hasApprove
+                            ? ButtonStyles.disabled
+                            : ButtonStyles.enabled
+                        }`}
+                        onClick={runApprove}
+                      >
+                        Aprobar
+                      </button>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )}
+                  <Button
+                    isDisabled={!isMigrated}
+                    onClick={runMigrate}
+                    text={buttonText}
+                  />
                 </div>
               )}
             </div>
