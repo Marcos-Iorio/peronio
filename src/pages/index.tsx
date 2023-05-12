@@ -7,6 +7,8 @@ import { WizardContext } from "../contexts/WizardContext";
 import AnimatedUnderline from "../components/animatedUnderline/AnimatedUnderline";
 import Metrics from "../components/Metrics/Metrics";
 import Head from "next/head";
+import useARSPrice from "../hooks/useARSPrice";
+import usePairs from "../hooks/usePairs";
 
 const Main = styled.main`
   display: flex;
@@ -31,11 +33,14 @@ const Main = styled.main`
 
 const Home: NextPage = () => {
   const { isOpen } = useContext(WizardContext);
+  const arsPrice = useARSPrice();
+  const [usdcReserve, , pePrice] = usePairs();
+  const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
 
   return (
     <>
       <Head>
-        <title>Peronio</title>
+        <title>Peronio - {arsPricePerPe}</title>
         <meta property="og:title" content="Peronio Inicio" key="title" />
       </Head>
       <Main>

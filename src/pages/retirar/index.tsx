@@ -38,7 +38,7 @@ export const StyledMain = styled.main`
 
 const Retirar: NextPage = () => {
   const [connected, setConnected] = useState(false);
-  const [pValue, setPValue] = useState<string>("0.0");
+  const [pValue, setPValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>();
   const [hasApprove, setHasApprove] = useState<boolean>(false);
   const [hasWithdraw, setHasWithdraw] = useState<boolean>(false);
@@ -119,6 +119,12 @@ const Retirar: NextPage = () => {
               Ingresando tus P vas a poder retirar USDC de la boveda cuando
               quieras. Nadie, ni nosotros podemos limitar esa posibilidad.
             </p>
+            <div
+              style={{ visibility: errorMessage ? "visible" : "hidden" }}
+              className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300"
+            >
+              {errorMessage}
+            </div>
           </motion.div>
           <Withdraw
             title="Ingresá P para retirar los USDC"

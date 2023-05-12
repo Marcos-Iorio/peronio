@@ -71,7 +71,7 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    amountIn.toString()
+    usdcValue == "" ? "1000000" : amountIn.toString()
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
@@ -88,7 +88,7 @@ const Emigrar: NextPage = () => {
     try {
       await approve();
       setHasApprove(true);
-      setIsMinted(false);
+      setIsMinted(true);
     } catch (e: any) {
       setErrorMessage(e.message);
       setHasApprove(true);
@@ -132,7 +132,7 @@ const Emigrar: NextPage = () => {
   useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
       setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
-      setIsMinted(false);
+      setIsMinted(true);
       setHasAllowance(true);
     }
   }, [allowanceData?._hex]);
@@ -184,6 +184,17 @@ const Emigrar: NextPage = () => {
               className="rounded-md border-2 border-red-600 p-2 bg-[#363636]/50 backdrop-blur-sm text-red-300"
             >
               {errorMessage}
+            </div>
+            <div className="flex flex-col gap-4 justify-center">
+              <h3 className="font-Abril text-xl">
+                ¿Necesitás más saldo(allowance)?
+              </h3>
+              <button
+                onClick={runApprove}
+                className="border-[#00B7C2] border-solid border-2 rounded-xl laptop:text-[16px] font-normal laptop:py-1 laptop:px-5 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
+              >
+                Incrementar
+              </button>
             </div>
           </motion.div>
           <Emit

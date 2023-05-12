@@ -128,9 +128,11 @@ const Swaps = ({
       >
         <div className="flex flex-col p-5 gap-5 h-full">
           <h2 className="font-Roboto text-xl mb-1">{title}</h2>
-          <p className="mb-auto h-full font-Roboto">
-            Tenés disponible para gastar: {allowanceLeft}
-          </p>
+          {allowanceLeft && (
+            <p className="mb-auto h-full font-Roboto">
+              Tenés disponible para gastar: {allowanceLeft}
+            </p>
+          )}
           <div className="flex flex-col">
             <div className="flex flex-row w-full gap-5 mb-3">
               <Image
@@ -231,7 +233,7 @@ const Swaps = ({
                 ""
               )}
               <Button
-                isDisabled={disableMainButton}
+                isDisabled={!disableMainButton}
                 onClick={mainFunc}
                 text={buttonText}
               />

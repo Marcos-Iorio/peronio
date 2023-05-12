@@ -17,8 +17,6 @@ import {
   useWaitForTransaction
 } from "wagmi";
 import { tokens } from "../../constants/addresses";
-import migratorAbi from "../../../abi/migrator.abi.json";
-import peronioV1Contract from "../../../abi/peronioV1.abi.json";
 import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
 import { IDataAttributes } from "../../../types/contractRead";
@@ -28,6 +26,9 @@ import Button from "../../components/Button/Button";
 import { useModal } from "connectkit";
 import { ToastContainer, toast } from "react-toastify";
 import { formatBalance } from "../../utils/formatPrice";
+import usePeronioV1Read from "../../hooks/PeronioV1/usePeronioV1Read";
+import usePeronioV1Write from "../../hooks/PeronioV1/usePeronioV1Write";
+import useMigrate from "../../hooks/PeronioV1/useMigrate";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -101,66 +102,36 @@ const Migrar: NextPage = () => {
     token: tokens["P"].address as Address
   });
 
-  const bnValue = new BigNumber(peValue.toString());
+  const slippage = (Number(peValue) * 5) / 100;
+  const bnValue = new BigNumber((Number(peValue) - slippage).toFixed(3));
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
 
   //read collateralRatio of V1
   const { data: PeData }: { data: IDataAttributes | undefined } =
-    useContractRead({
-      address: peronioV1Contract.address as Address,
-      abi: peronioV1Contract.abi,
-      functionName: "collateralRatio"
-    });
+    usePeronioV1Read("collateralRatio");
 
   //allowance and approve
-  const { data: allowanceData } = useContractRead({
-    address: peronioV1Contract.address as Address,
-    abi: peronioV1Contract.abi,
-    functionName: "allowance",
-    args: [address as Address, tokens["PE"].address as Address]
-  });
+  const { data: allowanceData } = usePeronioV1Read("allowance", [
+    address as Address,
+    tokens["PE"].address as Address
+  ]);
 
-  const { config: approveConfig } = usePrepareContractWrite({
-    address: peronioV1Contract.address as Address,
-    abi: peronioV1Contract.abi,
-    functionName: "approve",
-    args: [tokens["PE"].address as Address, amountIn.toString()]
-  });
-
-  const { data: approveData, writeAsync: approve } = useContractWrite({
-    ...approveConfig
-  });
-
+  const { data: approveData, writeAsync: approve } = usePeronioV1Write(
+    "approve",
+    [tokens["PE"].address as Address, amountIn.toString()]
+  );
   //write into migrator to migrate pe into p
-  const contractConfig = {
-    address: tokens["migratorV1"].address, //Spender, contract address
-    abi: migratorAbi
-  };
+  const { data: migrationData, writeAsync: migrate } = useMigrate("migrate", [
+    amountIn.toString()
+  ]);
 
-  const { config } = usePrepareContractWrite({
-    address: contractConfig.address as Address,
-    abi: contractConfig.abi,
-    functionName: "migrate",
-    args: [amountIn.toString()]
-  });
-
-  const { data, writeAsync: migrate } = useContractWrite({
-    ...config
-  });
-
-  const {
-    data: tnxData,
-    error,
-    isError,
-    isLoading,
-    isSuccess
-  } = useWaitForTransaction({
-    hash: data?.hash
+  const { data: tnxData, error } = useWaitForTransaction({
+    hash: migrationData?.hash
   });
 
   const runApprove = async () => {
     try {
-      await approve?.();
+      await approve();
       setHasApprove(true);
       setIsMigrated(true);
     } catch (e: any) {
@@ -172,7 +143,7 @@ const Migrar: NextPage = () => {
   const runMigrate = async () => {
     try {
       setButtonText("Migrando...");
-      const response = await migrate?.();
+      const response = await migrate();
       if (error) {
         throw new Error(error?.message);
       } else {
@@ -181,12 +152,13 @@ const Migrar: NextPage = () => {
       setIsMigrated(false);
       setTimeout(() => {
         setIsMigrated(true);
-        setPeValue("0.0");
+        setPeValue("");
         setButtonText("Migrar");
       }, 500);
     } catch (e: any) {
       setErrorMessage(e.message);
-      setButtonText("Emitir");
+      setButtonText("Migrar");
+      setIsMigrated(true);
     }
   };
 
@@ -223,13 +195,13 @@ const Migrar: NextPage = () => {
     setUsdcPerPe(String(Number(peValue) * (Number(PeData?._hex) / 1000000)));
   }, [PeData?._hex, peValue]);
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
       setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
       setIsMigrated(true);
       setHasAllowance(true);
     }
-  }, [allowanceData?._hex]); */
+  }, [allowanceData?._hex]);
 
   useEffect(() => {
     if (allowanceLeft === "0") {
@@ -383,7 +355,7 @@ const Migrar: NextPage = () => {
                   text="Conectar monedero"
                   onClick={connectWalletHandler}
                 />
-              ) : peValue === undefined || peValue === "0.0" ? (
+              ) : peValue === undefined || peValue === "" ? (
                 <Button
                   isDisabled={isWindowReady}
                   text="Ingrese una cantidad"
@@ -396,7 +368,7 @@ const Migrar: NextPage = () => {
                     !hasApprove && allowanceLeft < peValue ? (
                       <button
                         className={`${
-                          hasApprove
+                          !hasApprove
                             ? ButtonStyles.disabled
                             : ButtonStyles.enabled
                         }`}
