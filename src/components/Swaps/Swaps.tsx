@@ -130,7 +130,7 @@ const Swaps = ({
           <h2 className="font-Roboto text-xl mb-1">{title}</h2>
           {allowanceLeft && (
             <p className="mb-auto h-full font-Roboto">
-              Tenés disponible para gastar: {allowanceLeft}
+              Tenés disponible para gastar: {formatDecimals(allowanceLeft)}
             </p>
           )}
           <div className="flex flex-col">
@@ -210,9 +210,11 @@ const Swaps = ({
           </div>
           {!connected ? (
             <Button text="Conectar monedero" onClick={connectWalletHandler} />
-          ) : token0Value === undefined || token0Value === "" ? (
+          ) : token0Value === undefined ||
+            token0Value === "" ||
+            token0Value == "0" ? (
             <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
-          ) : token0Value > (token0Balance?.data?.formatted ?? 0) ? (
+          ) : Number(token0Value) > Number(token0Balance?.data?.formatted) ? (
             <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
           ) : (
             <div className="flex flex-row gap-4">

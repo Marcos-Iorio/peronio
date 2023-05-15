@@ -266,7 +266,7 @@ const Migrar: NextPage = () => {
                 Depositá PE(V1) y recibí P.
               </h2>
               <p className="mb-auto h-full font-Roboto">
-                Tenés disponible para gastar: {allowanceLeft}
+                Tenés disponible para gastar: {formatDecimals(allowanceLeft)}
               </p>
               <div className="flex flex-col">
                 <div className="flex flex-row w-full gap-5 mb-3">

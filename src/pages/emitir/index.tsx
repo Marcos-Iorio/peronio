@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Head from "next/head";
 import Emit from "../../components/Swaps/Swaps";
 import { tokens } from "../../constants/addresses";
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
 import { Address, useAccount, useWaitForTransaction } from "wagmi";
@@ -52,6 +52,7 @@ const Emigrar: NextPage = () => {
   const [allowanceLeft, setAllowanceLeft] = useState<string>("0");
   const [amountOfPe, setAmountOfPe] = useState<string>("0.0");
   const [buttonText, setButtonText] = useState<string>("Emitir");
+  const [amountAllowance, setAmountAllowance] = useState<string>("0");
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
@@ -64,10 +65,25 @@ const Emigrar: NextPage = () => {
   const amountOutBn = new BigNumber((Number(amountOfPe) - slippage).toFixed(3));
   const amountOut = amountOutBn.times(new BigNumber("10").pow(6));
 
+  const allowance = new BigNumber(Number(amountAllowance).toFixed(3));
+  const allowanceBn = allowance.times(new BigNumber("10").pow(6));
+
   const { data: allowanceData } = useErc20Read("allowance", [
     address as Address,
     tokens["USDC"].address as Address
   ]);
+
+  const { data: decreasedAllowance, writeAsync: decreaseAllowance } =
+    useErc20Write("decreaseAllowance", [
+      tokens["USDC"].address as Address,
+      allowanceBn.toString()
+    ]);
+
+  const { data: increasedAllowance, writeAsync: increaseAllowance } =
+    useErc20Write("increaseAllowance", [
+      tokens["USDC"].address as Address,
+      allowanceBn.toString()
+    ]);
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
@@ -86,12 +102,12 @@ const Emigrar: NextPage = () => {
 
   const runApprove = async () => {
     try {
-      await approve();
+      const tx = await approve();
       setHasApprove(true);
       setIsMinted(true);
     } catch (e: any) {
       setErrorMessage(e.message);
-      setHasApprove(true);
+      setHasApprove(false);
     }
   };
 
@@ -99,6 +115,7 @@ const Emigrar: NextPage = () => {
     try {
       setButtonText("Emitiendo...");
       const response = await mint();
+      await decreaseAllowance();
       if (error) {
         throw new Error(error?.message);
       } else {
@@ -112,7 +129,20 @@ const Emigrar: NextPage = () => {
       }, 500);
     } catch (e: any) {
       setErrorMessage(e.message);
-      setButtonText("Emitir");
+      setIsMinted(false);
+      setTimeout(() => {
+        setIsMinted(true);
+        setUsdcValue("0.0");
+        setButtonText("Emitir");
+      }, 500);
+    }
+  };
+
+  const runIncreaseAllowance = async () => {
+    try {
+      await increaseAllowance();
+    } catch (e: any) {
+      setErrorMessage(e.message);
     }
   };
 
@@ -125,25 +155,38 @@ const Emigrar: NextPage = () => {
     );
   };
 
+  const allowanceHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    const reg = /^-?\d*\.?\d*$/;
+    if (reg.test(newValue)) {
+      setAmountAllowance(newValue);
+    }
+    if (newValue == "") {
+      setAmountAllowance("");
+    }
+  };
+
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
 
   useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
-      setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3));
-      setIsMinted(true);
+      /* setAllowanceLeft(formatBalance(Number(allowanceData._hex), 0, 3)); */
+      setAllowanceLeft(String(Number(allowanceData._hex) / 1000000));
+      /* setIsMinted(true); */
       setHasAllowance(true);
     }
   }, [allowanceData?._hex]);
 
   useEffect(() => {
-    if (allowanceLeft === "0") {
+    if (allowanceLeft === "0.0" || usdcValue > allowanceLeft) {
       setHasAllowance(false);
       setHasApprove(false);
       setIsMinted(false);
     }
-  }, [allowanceLeft]);
+    setIsMinted(true);
+  }, [allowanceLeft, usdcValue]);
 
   if (errorMessage) {
     setTimeout(() => {
@@ -189,12 +232,22 @@ const Emigrar: NextPage = () => {
               <h3 className="font-Abril text-xl">
                 ¿Necesitás más saldo(allowance)?
               </h3>
-              <button
-                onClick={runApprove}
-                className="border-[#00B7C2] border-solid border-2 rounded-xl laptop:text-[16px] font-normal laptop:py-1 laptop:px-5 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
-              >
-                Incrementar
-              </button>
+              <div className="flex flex-row gap-5 items-center">
+                <input
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0.0"
+                  value={amountAllowance}
+                  className="placeholder:text-white rounded-md bg-[#00B7C2] h-2 w-20 text-right p-5"
+                  onChange={allowanceHandler}
+                />
+                <button
+                  onClick={runIncreaseAllowance}
+                  className="border-[#00B7C2] border-solid border-2 rounded-xl laptop:text-[16px] font-normal laptop:py-1 laptop:px-5 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
+                >
+                  Incrementar
+                </button>
+              </div>
             </div>
           </motion.div>
           <Emit
