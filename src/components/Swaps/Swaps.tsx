@@ -226,7 +226,7 @@ const Swaps = ({
                     }`}
                     onClick={runApprove}
                   >
-                    Aprobar
+                    Habilitar USDC
                   </button>
                 ) : (
                   ""

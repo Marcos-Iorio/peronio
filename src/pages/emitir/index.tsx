@@ -73,12 +73,6 @@ const Emigrar: NextPage = () => {
     tokens["USDC"].address as Address
   ]);
 
-  const { data: decreasedAllowance, writeAsync: decreaseAllowance } =
-    useErc20Write("decreaseAllowance", [
-      tokens["USDC"].address as Address,
-      allowanceBn.toString()
-    ]);
-
   const { data: increasedAllowance, writeAsync: increaseAllowance } =
     useErc20Write("increaseAllowance", [
       tokens["USDC"].address as Address,
@@ -87,7 +81,7 @@ const Emigrar: NextPage = () => {
 
   const { data, writeAsync: approve } = useErc20Write("approve", [
     tokens["USDC"].address as Address,
-    usdcValue == "" ? "1000000" : amountIn.toString()
+    amountIn.toString()
   ]);
 
   const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
@@ -113,18 +107,22 @@ const Emigrar: NextPage = () => {
 
   const runMint = async () => {
     try {
-      setButtonText("Emitiendo...");
-      const response = await mint();
-      await decreaseAllowance();
+      if (allowanceLeft > usdcValue) {
+        setButtonText("Emitiendo...");
+        const response = await mint();
+      }
+
       if (error) {
         throw new Error(error?.message);
       } else {
-        notifySuccess();
+        notifySuccess(
+          `Minteaste ${Number(amountOfPe).toFixed(3)} P por ${usdcValue} USDC.`
+        );
       }
       setIsMinted(false);
       setTimeout(() => {
         setIsMinted(true);
-        setUsdcValue("0.0");
+        setUsdcValue("");
         setButtonText("Emitir");
       }, 500);
     } catch (e: any) {
@@ -132,7 +130,7 @@ const Emigrar: NextPage = () => {
       setIsMinted(false);
       setTimeout(() => {
         setIsMinted(true);
-        setUsdcValue("0.0");
+        setUsdcValue("");
         setButtonText("Emitir");
       }, 500);
     }
@@ -140,19 +138,16 @@ const Emigrar: NextPage = () => {
 
   const runIncreaseAllowance = async () => {
     try {
-      await increaseAllowance();
+      await increaseAllowance(`Aumentaste ${amountAllowance} el saldo!`);
     } catch (e: any) {
       setErrorMessage(e.message);
     }
   };
 
-  const notifySuccess = () => {
-    toast.success(
-      `Minteaste ${Number(amountOfPe).toFixed(3)} P por ${usdcValue} USDC.`,
-      {
-        position: toast.POSITION.TOP_RIGHT
-      }
-    );
+  const notifySuccess = (message: string) => {
+    toast.success(message, {
+      position: toast.POSITION.TOP_RIGHT
+    });
   };
 
   const allowanceHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -232,18 +227,18 @@ const Emigrar: NextPage = () => {
               <h3 className="font-Abril text-xl">
                 ¿Necesitás más saldo(allowance)?
               </h3>
-              <div className="flex flex-row gap-5 items-center">
+              <div className="flex flex-row gap-5 items-center mobile:items-center">
                 <input
                   type="text"
                   inputMode="decimal"
                   placeholder="0.0"
                   value={amountAllowance}
-                  className="placeholder:text-white rounded-md bg-[#00B7C2] h-2 w-20 text-right p-5"
+                  className="placeholder:text-white rounded-md bg-[#00B7C2] mobile:h-full laptop:h-5 mobile:w-20 laptop:w-20 text-right mobile:p-3 laptop:p-5"
                   onChange={allowanceHandler}
                 />
                 <button
                   onClick={runIncreaseAllowance}
-                  className="border-[#00B7C2] border-solid border-2 rounded-xl laptop:text-[16px] font-normal laptop:py-1 laptop:px-5 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:mt-10 mobile:font-Abril mobile:text-2xl mobile:py-5"
+                  className="border-[#00B7C2] border-solid border-2 rounded-xl laptop:text-[16px] mobile:text-sm font-normal laptop:py-2 laptop:px-5 laptop:w-fit laptop:mt-0 text-white shadow-wizard-button mobile:font-Abril mobile:py-3 mobile:px-2"
                 >
                   Incrementar
                 </button>

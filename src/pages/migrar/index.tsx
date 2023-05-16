@@ -259,7 +259,7 @@ const Migrar: NextPage = () => {
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="h-full w-full xl:basis-1/4 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
+            className="h-full w-full xl:basis-1/3 2xl:basis-1/5 laptop:basis-1/2 border-solid border rounded-md border-[#00B7C2] bg-[#363636]/50 backdrop-blur-sm"
           >
             <div className="flex flex-col p-5 gap-10">
               <h2 className="font-Roboto text-xl mb-1">
@@ -374,7 +374,7 @@ const Migrar: NextPage = () => {
                         }`}
                         onClick={runApprove}
                       >
-                        Aprobar
+                        Habilitar PE
                       </button>
                     ) : (
                       ""
