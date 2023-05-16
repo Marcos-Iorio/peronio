@@ -7,15 +7,7 @@ import Head from "next/head";
 import WizardModal from "../../components/WizardModal/WizardModal";
 import { WizardContext } from "../../contexts/WizardContext";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
-import {
-  usePrepareContractWrite,
-  Address,
-  useContractWrite,
-  useAccount,
-  useBalance,
-  useContractRead,
-  useWaitForTransaction
-} from "wagmi";
+import { Address, useAccount, useBalance, useWaitForTransaction } from "wagmi";
 import { tokens } from "../../constants/addresses";
 import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
@@ -28,7 +20,8 @@ import { ToastContainer, toast } from "react-toastify";
 import { formatBalance } from "../../utils/formatPrice";
 import usePeronioV1Read from "../../hooks/PeronioV1/usePeronioV1Read";
 import usePeronioV1Write from "../../hooks/PeronioV1/usePeronioV1Write";
-import useMigrate from "../../hooks/PeronioV1/useMigrate";
+import { useMigrateWrite } from "../../hooks/PeronioV1/useMigrateWrite";
+import { useMigrateRead } from "../../hooks/PeronioV1/useMigrateRead";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -77,6 +70,7 @@ const Migrar: NextPage = () => {
     usdc: "0",
     p: "0"
   });
+  const [pValue, setPValue] = useState<string>("0.0");
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
@@ -102,13 +96,16 @@ const Migrar: NextPage = () => {
     token: tokens["P"].address as Address
   });
 
-  const slippage = (Number(peValue) * 5) / 100;
-  const bnValue = new BigNumber((Number(peValue) - slippage).toFixed(3));
+  /* const slippage = (Number(peValue) * 5) / 100; */
+  const bnValue = new BigNumber(Number(peValue).toFixed(3));
   const amountIn = bnValue.times(new BigNumber("10").pow(6));
 
   //read collateralRatio of V1
   const { data: PeData }: { data: IDataAttributes | undefined } =
     usePeronioV1Read("collateralRatio");
+
+  //read price of usdc and P from PE
+  const { data: pricesData } = useMigrateRead("quote", [amountIn.toString()]);
 
   //allowance and approve
   const { data: allowanceData } = usePeronioV1Read("allowance", [
@@ -121,9 +118,10 @@ const Migrar: NextPage = () => {
     [tokens["PE"].address as Address, amountIn.toString()]
   );
   //write into migrator to migrate pe into p
-  const { data: migrationData, writeAsync: migrate } = useMigrate("migrate", [
-    amountIn.toString()
-  ]);
+  const { data: migrationData, writeAsync: migrate } = useMigrateWrite(
+    "migrate",
+    [amountIn.toString()]
+  );
 
   const { data: tnxData, error } = useWaitForTransaction({
     hash: migrationData?.hash
@@ -192,8 +190,16 @@ const Migrar: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    setUsdcPerPe(String(Number(peValue) * (Number(PeData?._hex) / 1000000)));
-  }, [PeData?._hex, peValue]);
+    if (pricesData && pricesData.usdc && pricesData.usdc._hex) {
+      setUsdcPerPe(String(Number(pricesData.usdc._hex) / 1000000));
+    }
+  }, [pricesData]);
+
+  useEffect(() => {
+    if (pricesData && pricesData.pe && pricesData.pe._hex) {
+      setPValue(String(Number(pricesData.pe._hex) / 1000000));
+    }
+  }, [pricesData]);
 
   useEffect(() => {
     if (Number(allowanceData?._hex) > 0) {
@@ -319,7 +325,7 @@ const Migrar: NextPage = () => {
                     inputMode="decimal"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    value={usdcPerPe}
+                    value={formatDecimals(usdcPerPe)}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
                     readOnly={true}
                   />
@@ -344,7 +350,7 @@ const Migrar: NextPage = () => {
                     inputMode="decimal"
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     placeholder="0.0"
-                    value={formatDecimals(String(Number(usdcPerPe) / pePrice))}
+                    value={formatDecimals(Number(pValue).toFixed(3))}
                     className="placeholder:text-white rounded-md bg-[#00B7C2] h-full w-full text-right p-5 pb-5"
                     readOnly={true}
                   />
@@ -360,7 +366,7 @@ const Migrar: NextPage = () => {
                   isDisabled={isWindowReady}
                   text="Ingrese una cantidad"
                 />
-              ) : peValue > (peBalance?.data?.formatted ?? 0) ? (
+              ) : Number(peValue) > Number(peBalance?.data?.formatted) ? (
                 <Button isDisabled={isWindowReady} text="Saldo insuficiente" />
               ) : (
                 <div className="flex flex-row gap-4">
