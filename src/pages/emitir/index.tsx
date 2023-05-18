@@ -8,7 +8,12 @@ import { tokens } from "../../constants/addresses";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
-import { Address, useAccount, useWaitForTransaction } from "wagmi";
+import {
+  Address,
+  useAccount,
+  useContractWrite,
+  useWaitForTransaction
+} from "wagmi";
 import { formatBalance } from "../../utils/formatPrice";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 
@@ -41,6 +46,8 @@ export const StyledMain = styled.main`
     padding: 0.5rem;
   }
 `;
+
+import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
 
 const Emigrar: NextPage = () => {
   const [usdcValue, setUsdcValue] = useState<string>("");
@@ -84,19 +91,20 @@ const Emigrar: NextPage = () => {
     amountIn.toString()
   ]);
 
-  const { data: mintingData, writeAsync: mint } = usePeronioWrite("mint", [
+  const { data: mintData, write: mint } = usePeronioWrite("mint", [
     address as Address,
     amountIn.toString(),
     amountOut.toString()
   ]);
 
   const { data: tnxData, error } = useWaitForTransaction({
-    hash: mintingData?.hash
+    hash: mintData?.hash
   });
 
   const runApprove = async () => {
     try {
       const tx = await approve();
+      await tx.wait();
       setHasApprove(true);
       setIsMinted(true);
     } catch (e: any) {
@@ -110,6 +118,7 @@ const Emigrar: NextPage = () => {
       if (allowanceLeft > usdcValue) {
         setButtonText("Emitiendo...");
         const response = await mint();
+        await response.wait();
       }
 
       if (error) {

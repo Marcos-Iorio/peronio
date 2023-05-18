@@ -212,7 +212,9 @@ const Swaps = ({
             <Button text="Conectar monedero" onClick={connectWalletHandler} />
           ) : token0Value === undefined ||
             token0Value === "" ||
-            token0Value == "0" ? (
+            token0Value == "0.0" ||
+            token0Value == "0" ||
+            token0Value == "0." ? (
             <Button isDisabled={isWindowReady} text="Ingrese una cantidad" />
           ) : Number(token0Value) > Number(token0Balance?.data?.formatted) ? (
             <Button isDisabled={isWindowReady} text="Saldo insuficiente" />

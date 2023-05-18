@@ -6,7 +6,6 @@ import MobileNavbar from "../components/Navbar/MobileNavbar";
 import { WagmiConfig, createClient } from "wagmi";
 import { polygon } from "wagmi/chains";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
-import { useFeeData } from "wagmi";
 
 import useMediaQuery from "../hooks/useMediaQuery";
 import WizardProvider from "../contexts/WizardContext";
