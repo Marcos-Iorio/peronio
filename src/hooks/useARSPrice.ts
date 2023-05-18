@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const USD_URL = "https://api.bluelytics.com.ar/v2/latest";
+const USD_URL = "https://criptoya.com/api/usdt/ars/0.1";
 
 const useARSPrice = () => {
   const [price, setPrice] = useState<number>(0);
@@ -9,7 +9,9 @@ const useARSPrice = () => {
     try {
       const response = await fetch(USD_URL);
       const data = await response.json();
-      setPrice(data.blue?.value_avg);
+
+      console.log();
+      setPrice(data["lemoncash"].ask);
     } catch (e: any) {
       setPrice(0);
     }

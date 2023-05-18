@@ -87,12 +87,12 @@ const Metrics = () => {
         >
           <div className="flex flex-col items-center justify-center w-full h-full">
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
-              <p className="text-lg font-Roboto text-center">USDT/PE</p>
+              <p className="text-lg font-Roboto text-center">USDC/PE</p>
               <p className="text-center text-6xl">{usdcPerPe.toFixed(2)}</p>
             </div>
             <div className="w-full h-[1px] my-2 bg-[#00B7C2]"></div>
             <div className="bg-[#1b1b1b]/30 w-full p-5 rounded-md">
-              <p className="text-lg font-Roboto text-center">Dólar Blue.</p>
+              <p className="text-lg font-Roboto text-center">USDT/ARS.</p>
               <p className="text-center text-6xl">{arsPrice}</p>
             </div>
           </div>
