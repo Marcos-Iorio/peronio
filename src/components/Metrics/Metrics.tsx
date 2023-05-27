@@ -144,7 +144,7 @@ const Metrics = () => {
             <div className="flex flex-col gap-2 py-2 px-5 w-full h-fit">
               <div className="flex flex-col w-full">
                 <p className=" font-Roboto text-md">Respaldo en USDT</p>
-                <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
+                <div className=" bg-[#0D0D0D]/30 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     {fmtBalance}
                   </p>
@@ -152,7 +152,7 @@ const Metrics = () => {
               </div>
               <div className="flex flex-col w-full">
                 <p className=" font-Roboto text-md">PE en circulación</p>
-                <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
+                <div className=" bg-[#0D0D0D]/30 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     {fmtTotalSupply}
                   </p>
@@ -160,7 +160,7 @@ const Metrics = () => {
               </div>
               <div className="flex flex-col w-full">
                 <p className=" font-Roboto text-md">Precio PE por USDT</p>
-                <div className="border border-solid border-[#00B7C2] bg-[#0D0D0D]/50 rounded-md p-2 w-full">
+                <div className=" bg-[#0D0D0D]/30 rounded-md p-2 w-full">
                   <p className="text-center font-Roboto mobile:text-2xl xl:text-2xl 2xl:text-3xl">
                     {pePrice.toFixed(6)}
                   </p>

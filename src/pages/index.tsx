@@ -40,7 +40,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Peronio - {arsPricePerPe}</title>
+        <title>Peronio - ${String(arsPricePerPe)}</title>
         <meta property="og:title" content="Peronio Inicio" key="title" />
       </Head>
       <Main>

@@ -8,7 +8,7 @@ const usePeronioWrite = (method: string, args: any[] = []): any => {
   };
 
   const { config } = usePrepareContractWrite({
-    address: "0x78a486306D15E7111cca541F2f1307a1cFCaF5C4" as Address,
+    address: peronioContract.address as Address,
     abi: contractConfig.abi,
     functionName: method,
     args: args

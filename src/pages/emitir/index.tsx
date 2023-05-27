@@ -8,13 +8,7 @@ import { tokens } from "../../constants/addresses";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import useErc20Read from "../../hooks/useERCRead";
 import useErc20Write from "../../hooks/useErc20Write";
-import {
-  Address,
-  useAccount,
-  useContractWrite,
-  useWaitForTransaction
-} from "wagmi";
-import { formatBalance } from "../../utils/formatPrice";
+import { Address, useAccount, useWaitForTransaction } from "wagmi";
 import usePeronioWrite from "../../hooks/usePeronioWrite";
 
 import { toast, ToastContainer } from "react-toastify";
@@ -23,6 +17,7 @@ import usePairs from "../../hooks/usePairs";
 import BigNumber from "bignumber.js";
 import WizardModal from "../../components/WizardModal/WizardModal";
 import { WizardContext } from "../../contexts/WizardContext";
+import useARSPrice from "../../hooks/useARSPrice";
 
 export const StyledMain = styled.main`
   display: flex;
@@ -47,8 +42,6 @@ export const StyledMain = styled.main`
   }
 `;
 
-import peronioContract from "@peronio/core/deployments/matic/Peronio.json";
-
 const Emigrar: NextPage = () => {
   const [usdcValue, setUsdcValue] = useState<string>("");
   const [connected, setConnected] = useState(false);
@@ -63,6 +56,8 @@ const Emigrar: NextPage = () => {
 
   const { address, isConnected } = useAccount();
   const [, , pePrice] = usePairs();
+  const arsPrice = useARSPrice();
+  const arsPricePerPe = Number(pePrice * arsPrice).toFixed(3);
   const { isOpen } = useContext(WizardContext);
 
   const bnValue = new BigNumber(usdcValue.toString());
@@ -91,7 +86,7 @@ const Emigrar: NextPage = () => {
     amountIn.toString()
   ]);
 
-  const { data: mintData, write: mint } = usePeronioWrite("mint", [
+  const { data: mintData, writeAsync: mint } = usePeronioWrite("mint", [
     address as Address,
     amountIn.toString(),
     amountOut.toString()
@@ -118,7 +113,6 @@ const Emigrar: NextPage = () => {
       if (allowanceLeft > usdcValue) {
         setButtonText("Emitiendo...");
         const response = await mint();
-        await response.wait();
       }
 
       if (error) {
@@ -205,7 +199,7 @@ const Emigrar: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Emitir - Peronio</title>
+        <title>Emitir | Peronio - ${String(arsPricePerPe)}</title>
         <meta property="og:title" content="Emitir - Peronio" key="title" />
       </Head>
       <StyledMain>
